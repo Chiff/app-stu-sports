@@ -8,4 +8,4 @@ Cielom tímového projektu je vytvoriť informačný systém pre správu športo
 3. Implementované riešenie otestujte a porovnajte s už existujúcimi systemami
 ---
 * Zadávateľ tímového projektu: Martin Kranec, martin.kranec@stuba.sk
-* Web: doplnit
+* Web: [stu-sports.online](stu-sports.online)
