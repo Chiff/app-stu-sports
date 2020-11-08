@@ -8,6 +8,127 @@
 	<!-- TRANSACTIONS -->
 	<!-- ROLES -->
 	<!-- DATA -->
+	<data type="enumeration">
+		<id>podujatie_typ</id>
+		<title>Typ podujatia</title>
+		<placeholder>placeholder</placeholder>
+		<values>A</values>
+		<values>B</values>
+		<values>C</values>
+		<init>option1</init>
+	</data>
+	<data type="boolean">
+		<id>is_podujatie_timove</id>
+		<title>Timove podujatie</title>
+		<init>false</init>
+	</data>
+	<data type="number">
+		<id>tim_hraci_min</id>
+		<title>Minimalny pocet clenov v time</title>
+		<placeholder>placeholder</placeholder>
+		<init>0</init>
+	</data>
+	<data type="number">
+		<id>tim_hraci_max</id>
+		<title>Maximalny pocet clenov v time</title>
+		<placeholder>placeholder</placeholder>
+		<desc>description</desc>
+		<init>0</init>
+	</data>
+	<data type="boolean">
+		<id>is_podujatie_sukromne</id>
+		<title>Sukromne podujatie</title>
+		<init>false</init>
+	</data>
+	<data type="text">
+		<id>podujatie_rozhodca</id>
+		<title>Rozhodca</title>
+		<placeholder>placeholder</placeholder>
+		<init>value</init>
+	</data>
+	<data type="text">
+		<id>podujatie_nazov</id>
+		<title>Nazov podujatia</title>
+		<placeholder>placeholder</placeholder>
+		<init>value</init>
+	</data>
+	<data type="date">
+		<id>podujatie_zaciatok</id>
+		<title>Zaciatok</title>
+		<placeholder>placeholder</placeholder>
+	</data>
+	<data type="date">
+		<id>podujatie_koniec</id>
+		<title>Koniec</title>
+		<placeholder>placeholder</placeholder>
+		<desc>nepovinne</desc>
+	</data>
+	<data type="date">
+		<id>podujatie_prihlasovanie_zaciatok</id>
+		<title>Prihlasovanie od</title>
+		<placeholder>placeholder</placeholder>
+	</data>
+	<data type="date">
+		<id>podujatie_prihlasovanie_koniec</id>
+		<title>Prihlasovanie do</title>
+		<placeholder>placeholder</placeholder>
+	</data>
+	<data type="text">
+		<id>podujatie_tim</id>
+		<title>Vyberte tim</title>
+		<placeholder>placeholder</placeholder>
+		<desc>zobrazi sa len ak je podujatie timove</desc>
+		<init>value</init>
+	</data>
+	<data type="button">
+		<id>podujatie_event_start</id>
+		<title>Spusti podujatie</title>
+		<placeholder>(iba ak uz je po case startu podujatia)</placeholder>
+	</data>
+	<data type="text">
+		<id>podujatie_tim_body</id>
+		<title>Zadajte body</title>
+		<placeholder>placeholder</placeholder>
+		<desc>zobrazi sa len ak je podujatie timove</desc>
+		<init>value</init>
+	</data>
+	<data type="text">
+		<id>podujatie_hrac</id>
+		<title>Vyberte hraca</title>
+		<placeholder>placeholder</placeholder>
+		<desc>zobrazi sa len ak podujatie  nie je timove</desc>
+		<init>value</init>
+	</data>
+	<data type="enumeration">
+		<id>podujate_hrac_idk</id>
+		<title>vyberte hraca</title>
+		<placeholder>placeholder</placeholder>
+		<desc>zobrazi sa len ak podujatie  nie je timove</desc>
+		<values>option1</values>
+		<values>option2</values>
+		<values>option3</values>
+		<init>option1</init>
+	</data>
+	<data type="multichoice">
+		<id>multichoice_0</id>
+		<title>Vitaz(i)</title>
+		<placeholder>placeholder</placeholder>
+		<desc>(hraci)</desc>
+		<values>option1</values>
+		<values>option2</values>
+		<values>option3</values>
+		<init>option1, option2</init>
+	</data>
+	<data type="multichoice">
+		<id>multichoice_1</id>
+		<title>Vitaz(i)</title>
+		<placeholder>placeholder</placeholder>
+		<desc>(timy)</desc>
+		<values>option1</values>
+		<values>option2</values>
+		<values>option3</values>
+		<init>option1, option2</init>
+	</data>
 	<!-- I18NS -->
 	<!-- TRANSITIONS -->
 	<transition>
@@ -18,6 +139,25 @@
 			<offset>0</offset>
 		</layout>
 		<label>prihlasenie timu \ user</label>
+		<dataGroup>
+			<id>DataGroup_0</id>
+			<layout>grid</layout>
+			<dataRef>
+				<id>podujatie_tim</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>4</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
 	</transition>
 	<transition>
 		<id>2</id>
@@ -27,6 +167,178 @@
 			<offset>0</offset>
 		</layout>
 		<label>vytvorenie podujatia \ user</label>
+		<dataGroup>
+			<id>DataGroup_0</id>
+			<layout>grid</layout>
+			<dataRef>
+				<id>podujatie_typ</id>
+				<logic>
+					<behavior>editable</behavior>
+					<behavior>required</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>1</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>boolean_0</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>2</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>netgrif</template>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>tim_hraci_min</id>
+				<logic>
+					<behavior>editable</behavior>
+					<behavior>required</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>3</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>tim_hraci_max</id>
+				<logic>
+					<behavior>editable</behavior>
+					<behavior>required</behavior>
+				</logic>
+				<layout>
+					<x>1</x>
+					<y>3</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>is_podujatie_sukromne</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>2</x>
+					<y>3</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>netgrif</template>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>podujatie_rozhodca</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>2</x>
+					<y>2</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>podujatie_nazov</id>
+				<logic>
+					<behavior>editable</behavior>
+					<behavior>required</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>podujatie_zaciatok</id>
+				<logic>
+					<behavior>editable</behavior>
+					<behavior>required</behavior>
+				</logic>
+				<layout>
+					<x>2</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>podujatie_koniec</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>3</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>podujatie_prihlasovanie_zaciatok</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>2</x>
+					<y>1</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>podujatie_prihlasovanie_koniec</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>3</x>
+					<y>1</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
 	</transition>
 	<transition>
 		<id>3</id>
@@ -63,6 +375,25 @@
 			<offset>0</offset>
 		</layout>
 		<label>vykonanie podujatia \ owner</label>
+		<dataGroup>
+			<id>DataGroup_0</id>
+			<layout>grid</layout>
+			<dataRef>
+				<id>podujatie_event_start</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>fill</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
 	</transition>
 	<transition>
 		<id>7</id>
@@ -72,6 +403,122 @@
 			<offset>0</offset>
 		</layout>
 		<label>vyhodnotenie podujatia \ owner</label>
+		<dataGroup>
+			<id>DataGroup_0</id>
+			<layout>grid</layout>
+			<dataRef>
+				<id>multichoice_0</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>4</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>multichoice_1</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>1</y>
+					<rows>1</rows>
+					<cols>4</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
+	</transition>
+	<transition>
+		<id>33</id>
+		<x>620</x>
+		<y>620</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>zadanie noveho skore \ rozhodca?</label>
+		<dataGroup>
+			<id>DataGroup_0</id>
+			<layout>grid</layout>
+			<dataRef>
+				<id>podujatie_tim</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>podujatie_tim_body</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>2</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>podujatie_hrac</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>2</x>
+					<y>1</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>podujate_hrac_idk</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>1</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
+	</transition>
+	<transition>
+		<id>37</id>
+		<x>860</x>
+		<y>620</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>vytvorit notifikaciu? \ system</label>
 	</transition>
 	<!-- PLACES -->
 	<place>
@@ -130,6 +577,14 @@
 		<tokens>0</tokens>
 		<static>false</static>
 	</place>
+	<place>
+		<id>36</id>
+		<x>740</x>
+		<y>620</y>
+		<label></label>
+		<tokens>0</tokens>
+		<static>false</static>
+	</place>
 	<!-- ARCS -->
 	<arc>
 		<id>11</id>
@@ -151,7 +606,7 @@
 		<sourceId>9</sourceId>
 		<destinationId>1</destinationId>
 		<multiplicity>1</multiplicity>
-		<breakPoint><x>574</x><y>236</y></breakPoint>
+		<breakPoint><x>580</x><y>260</y></breakPoint>
 	</arc>
 	<arc>
 		<id>14</id>
@@ -244,5 +699,60 @@
 		<sourceId>3</sourceId>
 		<destinationId>9</destinationId>
 		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>34</id>
+		<type>regular</type>
+		<sourceId>21</sourceId>
+		<destinationId>33</destinationId>
+		<multiplicity>1</multiplicity>
+		<breakPoint><x>540</x><y>660</y></breakPoint>
+	</arc>
+	<arc>
+		<id>35</id>
+		<type>regular</type>
+		<sourceId>33</sourceId>
+		<destinationId>21</destinationId>
+		<multiplicity>1</multiplicity>
+		<breakPoint><x>540</x><y>700</y></breakPoint>
+	</arc>
+	<arc>
+		<id>38</id>
+		<type>regular</type>
+		<sourceId>33</sourceId>
+		<destinationId>36</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>39</id>
+		<type>regular</type>
+		<sourceId>36</sourceId>
+		<destinationId>37</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>40</id>
+		<type>regular</type>
+		<sourceId>7</sourceId>
+		<destinationId>36</destinationId>
+		<multiplicity>1</multiplicity>
+		<breakPoint><x>620</x><y>820</y></breakPoint>
+	</arc>
+	<arc>
+		<id>41</id>
+		<type>regular</type>
+		<sourceId>6</sourceId>
+		<destinationId>36</destinationId>
+		<multiplicity>1</multiplicity>
+		<breakPoint><x>620</x><y>580</y></breakPoint>
+	</arc>
+	<arc>
+		<id>42</id>
+		<type>regular</type>
+		<sourceId>5</sourceId>
+		<destinationId>36</destinationId>
+		<multiplicity>1</multiplicity>
+		<breakPoint><x>980</x><y>580</y></breakPoint>
+		<breakPoint><x>860</x><y>580</y></breakPoint>
 	</arc>
 </document>
