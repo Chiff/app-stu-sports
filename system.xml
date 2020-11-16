@@ -15,47 +15,6 @@
 		<desc>description</desc>
 		<init>option1</init>
 	</data>
-	<data type="taskRef">
-		<id>taskRef_0</id>
-		<title>osoba</title>
-		<placeholder>placeholder</placeholder>
-		<desc>description</desc>
-		<init>value</init>
-	</data>
-	<data type="taskRef">
-		<id>taskRef_1</id>
-		<title>osoba_vis</title>
-		<placeholder>placeholder</placeholder>
-		<desc>description</desc>
-		<init>value</init>
-	</data>
-	<data type="text">
-		<id>text_3</id>
-		<title>Meno</title>
-		<placeholder>placeholder</placeholder>
-		<desc>description</desc>
-		<init>value</init>
-	</data>
-	<data type="text">
-		<id>text_4</id>
-		<title>Priezvisko</title>
-		<placeholder>placeholder</placeholder>
-		<desc>description</desc>
-		<init>value</init>
-	</data>
-	<data type="text">
-		<id>text_5</id>
-		<title>Prezývka</title>
-		<placeholder>placeholder</placeholder>
-		<desc>description</desc>
-		<init>value</init>
-	</data>
-	<data type="date">
-		<id>date_1</id>
-		<title>datum narodenia</title>
-		<placeholder>placeholder</placeholder>
-		<desc>description</desc>
-	</data>
 	<!-- I18NS -->
 	<!-- TRANSITIONS -->
 	<transition>
@@ -75,6 +34,15 @@
 			<offset>0</offset>
 		</layout>
 		<label>Vyhladat podujatie / user</label>
+	</transition>
+	<transition>
+		<id>40</id>
+		<x>620</x>
+		<y>900</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>Zobrazit profil</label>
 	</transition>
 	<transition>
 		<id>42</id>
@@ -141,96 +109,17 @@
 	</transition>
 	<transition>
 		<id>81</id>
-		<x>747</x>
-		<y>1075</y>
+		<x>540</x>
+		<y>1140</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
 		<label>Editovat udaje / usr</label>
-		<dataGroup>
-			<id>DataGroup_0</id>
-			<layout>grid</layout>
-			<dataRef>
-				<id>taskRef_0</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>2</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>text_4</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>2</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>date_1</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>2</x>
-					<y>1</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>text_3</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>text_5</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>1</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
 	</transition>
 	<transition>
 		<id>82</id>
-		<x>618</x>
-		<y>1204</y>
+		<x>700</x>
+		<y>1140</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
@@ -282,6 +171,7 @@
 		<label>Prihlasenie timu</label>
 		<dataGroup>
 			<id>DataGroup_0</id>
+			<layout>grid</layout>
 			<dataRef>
 				<id>enumeration_0</id>
 				<logic>
@@ -307,141 +197,6 @@
 			<offset>0</offset>
 		</layout>
 		<label>Vytvorit tim</label>
-	</transition>
-	<transition>
-		<id>132</id>
-		<x>616</x>
-		<y>901</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Osobne udaje</label>
-		<dataGroup>
-			<id>DataGroup_0</id>
-			<layout>grid</layout>
-			<dataRef>
-				<id>taskRef_0</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-		<event type="finish">
-			<id>132_finish</id>
-			<actions phase="pre">
-				<action id="1">osoba_ref_visible: f.taskRef_1,
-osoba_ref: f.taskRef_0;
-
-					def konstruktor = findTask(osoba_ref.value[0])
-                    finishTask(konstruktor)
-
-					def edit_task = findTask({ it.caseId.eq(konstruktor.caseId).and(it.transitionId.eq("8"))})
-					change osoba_ref value {
-						[edit_task.stringId]
-					}
-					def view_task = findTask({ it.caseId.eq(konstruktor.caseId).and(it.transitionId.eq("4"))})
-					change osoba_ref_visible value {
-						[view_task.stringId]
-					}</action>
-			</actions>
-		</event>
-	</transition>
-	<transition>
-		<id>135</id>
-		<x>485</x>
-		<y>1072</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Zobrazit udaje / usr</label>
-		<dataGroup>
-			<id>DataGroup_0</id>
-			<layout>grid</layout>
-			<dataRef>
-				<id>taskRef_1</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>2</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>text_3</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>text_4</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-				<layout>
-					<x>2</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>text_5</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>1</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>date_1</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-				<layout>
-					<x>2</x>
-					<y>1</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
 	</transition>
 	<!-- PLACES -->
 	<place>
@@ -486,8 +241,8 @@ osoba_ref: f.taskRef_0;
 	</place>
 	<place>
 		<id>64</id>
-		<x>599</x>
-		<y>1075</y>
+		<x>620</x>
+		<y>1020</y>
 		<label></label>
 		<tokens>0</tokens>
 		<static>false</static>
@@ -519,7 +274,7 @@ osoba_ref: f.taskRef_0;
 	<place>
 		<id>85</id>
 		<x>620</x>
-		<y>1314</y>
+		<y>1300</y>
 		<label></label>
 		<tokens>0</tokens>
 		<static>false</static>
@@ -564,14 +319,6 @@ osoba_ref: f.taskRef_0;
 		<tokens>0</tokens>
 		<static>false</static>
 	</place>
-	<place>
-		<id>137</id>
-		<x>653</x>
-		<y>1075</y>
-		<label></label>
-		<tokens>0</tokens>
-		<static>false</static>
-	</place>
 	<!-- ARCS -->
 	<arc>
 		<id>36</id>
@@ -594,6 +341,13 @@ osoba_ref: f.taskRef_0;
 		<destinationId>39</destinationId>
 		<multiplicity>1</multiplicity>
 		<breakPoint><x>300</x><y>820</y></breakPoint>
+	</arc>
+	<arc>
+		<id>45</id>
+		<type>regular</type>
+		<sourceId>37</sourceId>
+		<destinationId>40</destinationId>
+		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
 		<id>47</id>
@@ -646,6 +400,13 @@ osoba_ref: f.taskRef_0;
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
+		<id>65</id>
+		<type>regular</type>
+		<sourceId>40</sourceId>
+		<destinationId>64</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
 		<id>69</id>
 		<type>regular</type>
 		<sourceId>42</sourceId>
@@ -685,6 +446,13 @@ osoba_ref: f.taskRef_0;
 		<type>regular</type>
 		<sourceId>74</sourceId>
 		<destinationId>78</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>83</id>
+		<type>regular</type>
+		<sourceId>64</sourceId>
+		<destinationId>81</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
@@ -785,54 +553,5 @@ osoba_ref: f.taskRef_0;
 		<destinationId>130</destinationId>
 		<multiplicity>1</multiplicity>
 		<breakPoint><x>1479</x><y>812</y></breakPoint>
-	</arc>
-	<arc>
-		<id>133</id>
-		<type>regular</type>
-		<sourceId>37</sourceId>
-		<destinationId>132</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>134</id>
-		<type>regular</type>
-		<sourceId>132</sourceId>
-		<destinationId>64</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>138</id>
-		<type>regular</type>
-		<sourceId>132</sourceId>
-		<destinationId>137</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>140</id>
-		<type>regular</type>
-		<sourceId>137</sourceId>
-		<destinationId>82</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>142</id>
-		<type>regular</type>
-		<sourceId>137</sourceId>
-		<destinationId>81</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>143</id>
-		<type>regular</type>
-		<sourceId>81</sourceId>
-		<destinationId>137</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>144</id>
-		<type>read</type>
-		<sourceId>64</sourceId>
-		<destinationId>135</destinationId>
-		<multiplicity>1</multiplicity>
 	</arc>
 </document>

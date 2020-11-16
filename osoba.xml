@@ -47,34 +47,6 @@
 		<placeholder>placeholder</placeholder>
 		<desc>description</desc>
 	</data>
-	<data type="text">
-		<id>text_3</id>
-		<title>Prezývka</title>
-		<placeholder>placeholder</placeholder>
-		<desc>description</desc>
-		<init>value</init>
-	</data>
-	<data type="text">
-		<id>text_4</id>
-		<title>Prezývka</title>
-		<placeholder>placeholder</placeholder>
-		<desc>description</desc>
-		<init>value</init>
-	</data>
-	<data type="text">
-		<id>text_6</id>
-		<title>email</title>
-		<placeholder>placeholder</placeholder>
-		<desc>description</desc>
-		<init>value</init>
-	</data>
-	<data type="number">
-		<id>number_0</id>
-		<title>cislo</title>
-		<placeholder>placeholder</placeholder>
-		<desc>description</desc>
-		<init>0</init>
-	</data>
 	<!-- I18NS -->
 	<!-- TRANSITIONS -->
 	<transition>
@@ -86,58 +58,6 @@
 		</layout>
 		<label>osobne udaje</label>
 		<dataGroup>
-			<id>DataGroup_1</id>
-			<layout>grid</layout>
-			<dataRef>
-				<id>text_3</id>
-				<logic>
-					<behavior>editable</behavior>
-					<behavior>optional</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>1</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>text_6</id>
-				<logic>
-					<behavior>editable</behavior>
-					<behavior>required</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>2</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>number_0</id>
-				<logic>
-					<behavior>editable</behavior>
-					<behavior>required</behavior>
-				</logic>
-				<layout>
-					<x>2</x>
-					<y>2</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-		<dataGroup>
 			<id>DataGroup_0</id>
 			<dataRef>
 				<id>text_0</id>
@@ -145,15 +65,6 @@
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
 				</logic>
-				<layout>
-					<x>2</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
 			</dataRef>
 			<dataRef>
 				<id>text_1</id>
@@ -161,200 +72,53 @@
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
 				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
 			</dataRef>
 			<dataRef>
 				<id>date_0</id>
 				<logic>
 					<behavior>editable</behavior>
-					<behavior>optional</behavior>
 				</logic>
-				<layout>
-					<x>2</x>
-					<y>1</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
 			</dataRef>
 		</dataGroup>
 	</transition>
 	<transition>
 		<id>7</id>
-		<x>540</x>
-		<y>140</y>
+		<x>620</x>
+		<y>220</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
 		<label>zobrazit udaje</label>
 		<dataGroup>
-			<id>DataGroup_1</id>
-			<layout>grid</layout>
-			<dataRef>
-				<id>text_3</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>1</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>text_6</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>2</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>number_0</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-				<layout>
-					<x>2</x>
-					<y>2</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-		<dataGroup>
 			<id>DataGroup_0</id>
 			<dataRef>
 				<id>text_0</id>
 				<logic>
 					<behavior>visible</behavior>
 				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
 			</dataRef>
 			<dataRef>
 				<id>text_1</id>
 				<logic>
 					<behavior>visible</behavior>
 				</logic>
-				<layout>
-					<x>2</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
 			</dataRef>
 			<dataRef>
 				<id>date_0</id>
 				<logic>
 					<behavior>visible</behavior>
 				</logic>
-				<layout>
-					<x>2</x>
-					<y>1</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
 			</dataRef>
 		</dataGroup>
 	</transition>
 	<transition>
 		<id>8</id>
-		<x>700</x>
-		<y>140</y>
+		<x>528</x>
+		<y>422</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
 		<label>editovat udaje</label>
-		<dataGroup>
-			<id>DataGroup_1</id>
-			<layout>grid</layout>
-			<dataRef>
-				<id>text_3</id>
-				<logic>
-					<behavior>editable</behavior>
-					<behavior>optional</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>2</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>text_6</id>
-				<logic>
-					<behavior>editable</behavior>
-					<behavior>required</behavior>
-				</logic>
-				<layout>
-					<x>2</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>number_0</id>
-				<logic>
-					<behavior>editable</behavior>
-					<behavior>required</behavior>
-				</logic>
-				<layout>
-					<x>2</x>
-					<y>2</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
 		<dataGroup>
 			<id>DataGroup_0</id>
 			<dataRef>
@@ -363,15 +127,6 @@
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
 				</logic>
-				<layout>
-					<x>0</x>
-					<y>1</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
 			</dataRef>
 			<dataRef>
 				<id>text_1</id>
@@ -379,85 +134,72 @@
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
 				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
 			</dataRef>
 			<dataRef>
 				<id>date_0</id>
 				<logic>
 					<behavior>editable</behavior>
-					<behavior>optional</behavior>
+					<behavior>required</behavior>
 				</logic>
-				<layout>
-					<x>2</x>
-					<y>1</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
 			</dataRef>
 		</dataGroup>
 	</transition>
 	<transition>
 		<id>9</id>
-		<x>620</x>
-		<y>420</y>
+		<x>780</x>
+		<y>300</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
-		<label>Vymazat ucet / usr</label>
+		<label>zmazat</label>
 		<dataGroup>
 			<id>DataGroup_0</id>
 			<dataRef>
 				<id>text_2</id>
 				<logic>
 					<behavior>editable</behavior>
-					<behavior>optional</behavior>
 				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
 			</dataRef>
 			<dataRef>
 				<id>date_1</id>
 				<logic>
 					<behavior>visible</behavior>
 				</logic>
-				<layout>
-					<x>2</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
+			</dataRef>
+		</dataGroup>
+	</transition>
+	<transition>
+		<id>17</id>
+		<x>980</x>
+		<y>300</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>zmazane</label>
+		<dataGroup>
+			<id>DataGroup_0</id>
+			<dataRef>
+				<id>date_1</id>
+				<logic>
+					<behavior>visible</behavior>
+				</logic>
+			</dataRef>
+			<dataRef>
+				<id>text_2</id>
+				<logic>
+					<behavior>visible</behavior>
+				</logic>
 			</dataRef>
 		</dataGroup>
 	</transition>
 	<transition>
 		<id>20</id>
-		<x>860</x>
-		<y>300</y>
+		<x>692</x>
+		<y>425</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
-		<label>zobrazit sportove podujatia, # list podujati na, ktore je prihlaseny user</label>
+		<label>sportove podujatia</label>
 		<dataGroup>
 			<id>DataGroup_0</id>
 			<dataRef>
@@ -471,49 +213,13 @@
 			<id>20_finish</id>
 		</event>
 	</transition>
-	<transition>
-		<id>32</id>
-		<x>620</x>
-		<y>660</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Kontrola, ci usr nema podujatia / sys</label>
-	</transition>
-	<transition>
-		<id>34</id>
-		<x>780</x>
-		<y>780</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Zrusit podujatia / usr</label>
-	</transition>
-	<transition>
-		<id>35</id>
-		<x>620</x>
-		<y>1060</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Odhlasenie uzivatela z podujati / sys</label>
-	</transition>
-	<transition>
-		<id>36</id>
-		<x>620</x>
-		<y>1300</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Zrusit ucet / sys</label>
-	</transition>
 	<!-- PLACES -->
 	<place>
 		<id>1</id>
 		<x>380</x>
 		<y>300</y>
 		<label></label>
-		<tokens>1</tokens>
+		<tokens>0</tokens>
 		<static>false</static>
 	</place>
 	<place>
@@ -525,43 +231,11 @@
 		<static>false</static>
 	</place>
 	<place>
-		<id>30</id>
-		<x>620</x>
-		<y>540</y>
+		<id>15</id>
+		<x>900</x>
+		<y>300</y>
 		<label></label>
-		<tokens>0</tokens>
-		<static>false</static>
-	</place>
-	<place>
-		<id>38</id>
-		<x>780</x>
-		<y>660</y>
-		<label>Ma</label>
-		<tokens>0</tokens>
-		<static>false</static>
-	</place>
-	<place>
-		<id>39</id>
-		<x>620</x>
-		<y>900</y>
-		<label>Nema</label>
-		<tokens>0</tokens>
-		<static>false</static>
-	</place>
-	<place>
-		<id>40</id>
-		<x>620</x>
-		<y>1180</y>
-		<label>Odhlaseny</label>
-		<tokens>0</tokens>
-		<static>false</static>
-	</place>
-	<place>
-		<id>41</id>
-		<x>620</x>
-		<y>1420</y>
-		<label>Ucet zruseny</label>
-		<tokens>0</tokens>
+		<tokens>1</tokens>
 		<static>false</static>
 	</place>
 	<!-- ARCS -->
@@ -580,10 +254,31 @@
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
+		<id>16</id>
+		<type>regular</type>
+		<sourceId>9</sourceId>
+		<destinationId>15</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>18</id>
+		<type>read</type>
+		<sourceId>15</sourceId>
+		<destinationId>17</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
 		<id>19</id>
 		<type>regular</type>
 		<sourceId>1</sourceId>
 		<destinationId>2</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>23</id>
+		<type>read</type>
+		<sourceId>3</sourceId>
+		<destinationId>8</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
@@ -598,90 +293,6 @@
 		<type>read</type>
 		<sourceId>3</sourceId>
 		<destinationId>7</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>26</id>
-		<type>regular</type>
-		<sourceId>3</sourceId>
-		<destinationId>8</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>27</id>
-		<type>regular</type>
-		<sourceId>8</sourceId>
-		<destinationId>3</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>31</id>
-		<type>regular</type>
-		<sourceId>9</sourceId>
-		<destinationId>30</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>42</id>
-		<type>regular</type>
-		<sourceId>30</sourceId>
-		<destinationId>32</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>43</id>
-		<type>regular</type>
-		<sourceId>32</sourceId>
-		<destinationId>38</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>44</id>
-		<type>regular</type>
-		<sourceId>34</sourceId>
-		<destinationId>39</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>45</id>
-		<type>regular</type>
-		<sourceId>38</sourceId>
-		<destinationId>34</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>46</id>
-		<type>regular</type>
-		<sourceId>32</sourceId>
-		<destinationId>39</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>47</id>
-		<type>regular</type>
-		<sourceId>39</sourceId>
-		<destinationId>35</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>48</id>
-		<type>regular</type>
-		<sourceId>35</sourceId>
-		<destinationId>40</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>49</id>
-		<type>regular</type>
-		<sourceId>40</sourceId>
-		<destinationId>36</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>50</id>
-		<type>regular</type>
-		<sourceId>36</sourceId>
-		<destinationId>41</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 </document>
