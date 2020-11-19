@@ -1,19 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://modeler.netgrif.com/petriflow_schema.xsd">
-	<id>new_model</id>
+	<id>podujatie</id>
 	<initials>NEW</initials>
-	<title>New Model</title>
+	<title>podujatie</title>
 	<defaultRole>true</defaultRole>
 	<transitionRole>false</transitionRole>
 	<!-- TRANSACTIONS -->
 	<!-- ROLES -->
 	<!-- DATA -->
+	<data type="enumeration">
+		<id>podujatie_typ</id>
+		<title>Typ podujatia</title>
+		<placeholder>placeholder</placeholder>
+		<values>A</values>
+		<values>B</values>
+		<values>C</values>
+		<init>option1</init>
+	</data>
+	<data type="boolean">
+		<id>is_podujatie_timove</id>
+		<title>Timove podujatie</title>
+		<init>false</init>
+	</data>
+	<data type="number">
+		<id>tim_hraci_min</id>
+		<title>Minimalny pocet clenov v time</title>
+		<placeholder>placeholder</placeholder>
+		<init>0</init>
+	</data>
+	<data type="number">
+		<id>300</id>
+		<title>Maximalny pocet timov</title>
+		<placeholder>placeholder</placeholder>
+		<desc>description</desc>
+		<init>3</init>
+	</data>
+	<data type="boolean">
+		<id>is_podujatie_sukromne</id>
+		<title>Sukromne podujatie</title>
+		<init>false</init>
+	</data>
+	<data type="text">
+		<id>podujatie_rozhodca</id>
+		<title>Rozhodca</title>
+		<placeholder>placeholder</placeholder>
+		<init>value</init>
+	</data>
+	<data type="text">
+		<id>podujatie_nazov</id>
+		<title>Nazov podujatia</title>
+		<placeholder>placeholder</placeholder>
+		<init>value</init>
+	</data>
+	<data type="date">
+		<id>podujatie_zaciatok</id>
+		<title>Zaciatok</title>
+		<placeholder>placeholder</placeholder>
+	</data>
+	<data type="date">
+		<id>podujatie_koniec</id>
+		<title>Koniec</title>
+		<placeholder>placeholder</placeholder>
+		<desc>nepovinne</desc>
+	</data>
+	<data type="date">
+		<id>podujatie_prihlasovanie_zaciatok</id>
+		<title>Prihlasovanie od</title>
+		<placeholder>placeholder</placeholder>
+	</data>
+	<data type="date">
+		<id>podujatie_prihlasovanie_koniec</id>
+		<title>Prihlasovanie do</title>
+		<placeholder>placeholder</placeholder>
+	</data>
+	<data type="text">
+		<id>podujatie_tim</id>
+		<title>Vyberte tim</title>
+		<placeholder>placeholder</placeholder>
+		<desc>zobrazi sa len ak je podujatie timove</desc>
+		<init>value</init>
+	</data>
+	<data type="button">
+		<id>podujatie_event_start</id>
+		<title>Spusti podujatie</title>
+		<placeholder>(iba ak uz je po case startu podujatia)</placeholder>
+	</data>
+	<data type="text">
+		<id>podujatie_tim_body</id>
+		<title>Zadajte body</title>
+		<placeholder>placeholder</placeholder>
+		<desc>zobrazi sa len ak je podujatie timove</desc>
+		<init>value</init>
+	</data>
+	<data type="text">
+		<id>podujatie_hrac</id>
+		<title>Vyberte hraca</title>
+		<placeholder>placeholder</placeholder>
+		<desc>zobrazi sa len ak podujatie  nie je timove</desc>
+		<init>value</init>
+	</data>
+	<data type="enumeration">
+		<id>podujate_hrac_idk</id>
+		<title>vyberte hraca</title>
+		<placeholder>placeholder</placeholder>
+		<desc>zobrazi sa len ak podujatie  nie je timove</desc>
+		<values>option1</values>
+		<values>option2</values>
+		<values>option3</values>
+		<init>option1</init>
+	</data>
+	<data type="multichoice">
+		<id>multichoice_0</id>
+		<title>Vitaz(i)</title>
+		<placeholder>placeholder</placeholder>
+		<desc>(hraci)</desc>
+		<values>option1</values>
+		<values>option2</values>
+		<values>option3</values>
+		<init>option1, option2</init>
+	</data>
+	<data type="multichoice">
+		<id>multichoice_1</id>
+		<title>Vitaz(i)</title>
+		<placeholder>placeholder</placeholder>
+		<desc>(timy)</desc>
+		<values>option1</values>
+		<values>option2</values>
+		<values>option3</values>
+		<init>option1, option2</init>
+	</data>
+	<data type="number">
+		<id>400</id>
+		<title>Minimalny pocet timov</title>
+		<placeholder>placeholder</placeholder>
+		<desc>description</desc>
+		<init>2</init>
+	</data>
 	<!-- I18NS -->
 	<!-- TRANSITIONS -->
 	<transition>
 		<id>1</id>
-		<x>460</x>
-		<y>180</y>
+		<x>260</x>
+		<y>60</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
@@ -21,17 +149,111 @@
 	</transition>
 	<transition>
 		<id>2</id>
-		<x>460</x>
-		<y>340</y>
+		<x>380</x>
+		<y>420</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
 		<label>vytvorenie podujatia \ user</label>
+		<dataGroup>
+			<id>DataGroup_0</id>
+			<layout>grid</layout>
+			<dataRef>
+				<id>podujatie_koniec</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>300</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>1</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>tim_hraci_min</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>2</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>podujatie_nazov</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>3</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>podujatie_zaciatok</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>4</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>400</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>5</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
 	</transition>
 	<transition>
 		<id>3</id>
 		<x>860</x>
-		<y>340</y>
+		<y>420</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
@@ -40,7 +262,7 @@
 	<transition>
 		<id>4</id>
 		<x>660</x>
-		<y>180</y>
+		<y>300</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
@@ -48,8 +270,8 @@
 	</transition>
 	<transition>
 		<id>5</id>
-		<x>1060</x>
-		<y>460</y>
+		<x>1020</x>
+		<y>180</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
@@ -58,7 +280,7 @@
 	<transition>
 		<id>6</id>
 		<x>660</x>
-		<y>460</y>
+		<y>540</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
@@ -67,26 +289,53 @@
 	<transition>
 		<id>7</id>
 		<x>660</x>
-		<y>660</y>
+		<y>740</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
 		<label>vyhodnotenie podujatia \ owner</label>
 	</transition>
 	<transition>
-		<id>36</id>
-		<x>451</x>
-		<y>476</y>
+		<id>56</id>
+		<x>660</x>
+		<y>980</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
-		<label>editovat podujatie</label>
+		<label>info o podujati</label>
+	</transition>
+	<transition>
+		<id>57</id>
+		<x>780</x>
+		<y>860</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>Zaslat notifikaciu</label>
+	</transition>
+	<transition>
+		<id>59</id>
+		<x>540</x>
+		<y>860</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>zobraz vysledky</label>
+	</transition>
+	<transition>
+		<id>66</id>
+		<x>580</x>
+		<y>180</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>odhlasenie</label>
 	</transition>
 	<!-- PLACES -->
 	<place>
 		<id>8</id>
-		<x>260</x>
-		<y>340</y>
+		<x>100</x>
+		<y>420</y>
 		<label></label>
 		<tokens>1</tokens>
 		<static>false</static>
@@ -94,23 +343,23 @@
 	<place>
 		<id>9</id>
 		<x>660</x>
-		<y>340</y>
+		<y>420</y>
 		<label>podujatie dostupne</label>
 		<tokens>0</tokens>
 		<static>false</static>
 	</place>
 	<place>
 		<id>10</id>
-		<x>1060</x>
-		<y>180</y>
+		<x>1020</x>
+		<y>300</y>
 		<label>podujatie nedostupne</label>
 		<tokens>0</tokens>
 		<static>false</static>
 	</place>
 	<place>
 		<id>20</id>
-		<x>1060</x>
-		<y>620</y>
+		<x>1020</x>
+		<y>60</y>
 		<label>podujatie zrusene</label>
 		<tokens>0</tokens>
 		<static>false</static>
@@ -118,7 +367,7 @@
 	<place>
 		<id>21</id>
 		<x>660</x>
-		<y>580</y>
+		<y>660</y>
 		<label></label>
 		<tokens>0</tokens>
 		<static>false</static>
@@ -126,8 +375,32 @@
 	<place>
 		<id>23</id>
 		<x>660</x>
-		<y>740</y>
+		<y>860</y>
 		<label>podujatie ukoncene</label>
+		<tokens>0</tokens>
+		<static>false</static>
+	</place>
+	<place>
+		<id>61</id>
+		<x>260</x>
+		<y>300</y>
+		<label>pocet prihlasenych timov</label>
+		<tokens>0</tokens>
+		<static>false</static>
+	</place>
+	<place>
+		<id>73</id>
+		<x>860</x>
+		<y>60</y>
+		<label></label>
+		<tokens>0</tokens>
+		<static>false</static>
+	</place>
+	<place>
+		<id>84</id>
+		<x>380</x>
+		<y>620</y>
+		<label></label>
 		<tokens>0</tokens>
 		<static>false</static>
 	</place>
@@ -168,13 +441,6 @@
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>18</id>
-		<type>regular</type>
-		<sourceId>10</sourceId>
-		<destinationId>5</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
 		<id>26</id>
 		<type>regular</type>
 		<sourceId>5</sourceId>
@@ -210,31 +476,132 @@
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>33</id>
-		<type>regular</type>
-		<sourceId>9</sourceId>
-		<destinationId>5</destinationId>
+		<id>58</id>
+		<type>read</type>
+		<sourceId>23</sourceId>
+		<destinationId>57</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>34</id>
+		<id>60</id>
+		<type>read</type>
+		<sourceId>23</sourceId>
+		<destinationId>59</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>62</id>
+		<type>regular</type>
+		<sourceId>1</sourceId>
+		<destinationId>61</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>64</id>
+		<type>inhibitor</type>
+		<sourceId>61</sourceId>
+		<destinationId>1</destinationId>
+		<multiplicity>3</multiplicity>
+		<reference>300</reference>
+		<breakPoint><x>100</x><y>300</y></breakPoint>
+		<breakPoint><x>100</x><y>60</y></breakPoint>
+	</arc>
+	<arc>
+		<id>67</id>
+		<type>regular</type>
+		<sourceId>61</sourceId>
+		<destinationId>66</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>68</id>
 		<type>read</type>
 		<sourceId>9</sourceId>
 		<destinationId>1</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>35</id>
+		<id>69</id>
+		<type>read</type>
+		<sourceId>61</sourceId>
+		<destinationId>4</destinationId>
+		<multiplicity>3</multiplicity>
+		<reference>300</reference>
+	</arc>
+	<arc>
+		<id>74</id>
 		<type>regular</type>
+		<sourceId>66</sourceId>
+		<destinationId>73</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>78</id>
+		<type>regular</type>
+		<sourceId>73</sourceId>
+		<destinationId>3</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>79</id>
+		<type>reset</type>
+		<sourceId>73</sourceId>
+		<destinationId>1</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>81</id>
+		<type>read</type>
+		<sourceId>61</sourceId>
+		<destinationId>6</destinationId>
+		<multiplicity>2</multiplicity>
+		<reference>400</reference>
+		<breakPoint><x>260</x><y>540</y></breakPoint>
+	</arc>
+	<arc>
+		<id>82</id>
+		<type>reset</type>
+		<sourceId>10</sourceId>
+		<destinationId>6</destinationId>
+		<multiplicity>1</multiplicity>
+		<breakPoint><x>1020</x><y>540</y></breakPoint>
+	</arc>
+	<arc>
+		<id>83</id>
+		<type>reset</type>
 		<sourceId>9</sourceId>
 		<destinationId>6</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>37</id>
-		<type>read</type>
-		<sourceId>9</sourceId>
-		<destinationId>36</destinationId>
+		<id>85</id>
+		<type>regular</type>
+		<sourceId>2</sourceId>
+		<destinationId>84</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>86</id>
+		<type>regular</type>
+		<sourceId>84</sourceId>
+		<destinationId>6</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>87</id>
+		<type>regular</type>
+		<sourceId>84</sourceId>
+		<destinationId>5</destinationId>
+		<multiplicity>1</multiplicity>
+		<breakPoint><x>380</x><y>1060</y></breakPoint>
+		<breakPoint><x>1180</x><y>1060</y></breakPoint>
+		<breakPoint><x>1180</x><y>180</y></breakPoint>
+	</arc>
+	<arc>
+		<id>88</id>
+		<type>reset</type>
+		<sourceId>10</sourceId>
+		<destinationId>5</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 </document>
