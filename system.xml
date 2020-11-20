@@ -15,6 +15,13 @@
 		<desc>description</desc>
 		<init>option1</init>
 	</data>
+	<data type="taskRef">
+		<id>taskRef_podujatie_vytvorenie</id>
+		<title>TakRef vytvorene podujatie</title>
+		<placeholder>placeholder</placeholder>
+		<desc>description</desc>
+		<init>value</init>
+	</data>
 	<!-- I18NS -->
 	<!-- TRANSITIONS -->
 	<transition>
@@ -25,6 +32,8 @@
 			<offset>0</offset>
 		</layout>
 		<label>Domovska stranka / user</label>
+		<assignPolicy>auto</assignPolicy>
+		<finishPolicy>auto_no_data</finishPolicy>
 	</transition>
 	<transition>
 		<id>39</id>
@@ -52,6 +61,59 @@
 			<offset>0</offset>
 		</layout>
 		<label>Vytvorit podujatie / usr</label>
+		<dataGroup>
+			<id>DataGroup_1</id>
+			<layout>grid</layout>
+			<dataRef>
+				<id>taskRef_podujatie_vytvorenie</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
+		<dataGroup>
+			<id>DataGroup_0</id>
+			<dataRef>
+				<id>taskRef_1</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
+		<event type="finish">
+			<id>42_finish</id>
+			<actions phase="post">
+				<action>
+
+					vytvorenie_podujatia_ref: f.taskRef_podujatie_vytvorenie;
+
+					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
+					def podujatie = createCase("${groupId}_podujatie" as String)
+					def konstruktor = assignTask("2", podujatie)
+					change vytvorenie_podujatia_ref value {
+					[konstruktor.stringId]
+					}
+				</action>
+			</actions>
+		</event>
 	</transition>
 	<transition>
 		<id>43</id>
@@ -88,6 +150,24 @@
 			<offset>0</offset>
 		</layout>
 		<label>Vyplnit udaje / usr</label>
+		<dataGroup>
+			<id>DataGroup_0</id>
+			<dataRef>
+				<id>taskRef_podujatie_vytvorenie</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
 	</transition>
 	<transition>
 		<id>77</id>
@@ -171,7 +251,6 @@
 		<label>Prihlasenie timu</label>
 		<dataGroup>
 			<id>DataGroup_0</id>
-			<layout>grid</layout>
 			<dataRef>
 				<id>enumeration_0</id>
 				<logic>
@@ -197,6 +276,15 @@
 			<offset>0</offset>
 		</layout>
 		<label>Vytvorit tim</label>
+	</transition>
+	<transition>
+		<id>132</id>
+		<x>1026</x>
+		<y>659</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>prihlasenie</label>
 	</transition>
 	<!-- PLACES -->
 	<place>
@@ -553,5 +641,19 @@
 		<destinationId>130</destinationId>
 		<multiplicity>1</multiplicity>
 		<breakPoint><x>1479</x><y>812</y></breakPoint>
+	</arc>
+	<arc>
+		<id>133</id>
+		<type>regular</type>
+		<sourceId>37</sourceId>
+		<destinationId>132</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>134</id>
+		<type>regular</type>
+		<sourceId>132</sourceId>
+		<destinationId>25</destinationId>
+		<multiplicity>1</multiplicity>
 	</arc>
 </document>
