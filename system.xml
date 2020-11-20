@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://modeler.netgrif.com/petriflow_schema.xsd">
-	<id>new_model</id>
+	<id>system</id>
 	<initials>NEW</initials>
-	<title>New Model</title>
+	<title>system</title>
 	<defaultRole>true</defaultRole>
 	<transitionRole>false</transitionRole>
 	<!-- TRANSACTIONS -->
@@ -18,6 +18,13 @@
 	<data type="taskRef">
 		<id>taskRef_podujatie_vytvorenie</id>
 		<title>TakRef vytvorene podujatie</title>
+		<placeholder>placeholder</placeholder>
+		<desc>description</desc>
+		<init>value</init>
+	</data>
+	<data type="taskRef">
+		<id>taskRef_osoba_udaje</id>
+		<title>taskRef osoba udaje</title>
 		<placeholder>placeholder</placeholder>
 		<desc>description</desc>
 		<init>value</init>
@@ -63,27 +70,8 @@
 		<label>Vytvorit podujatie / usr</label>
 		<dataGroup>
 			<id>DataGroup_1</id>
-			<layout>grid</layout>
 			<dataRef>
 				<id>taskRef_podujatie_vytvorenie</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-		<dataGroup>
-			<id>DataGroup_0</id>
-			<dataRef>
-				<id>taskRef_1</id>
 				<logic>
 					<behavior>editable</behavior>
 				</logic>
@@ -150,6 +138,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>Vyplnit udaje / usr</label>
+		<assignPolicy>auto</assignPolicy>
 		<dataGroup>
 			<id>DataGroup_0</id>
 			<dataRef>
@@ -168,6 +157,16 @@
 				</layout>
 			</dataRef>
 		</dataGroup>
+		<event type="finish">
+			<id>68_finish</id>
+			<actions phase="post">
+				<action>
+					podujatie_udaje_ref: f.taskRef_podujatie_vytvorenie;
+					def konstruktor = findTask(podujatie_udaje_ref.value[0])
+					finishTask(konstruktor)
+				</action>
+			</actions>
+		</event>
 	</transition>
 	<transition>
 		<id>77</id>
@@ -270,8 +269,8 @@
 	</transition>
 	<transition>
 		<id>130</id>
-		<x>1476</x>
-		<y>872</y>
+		<x>1460</x>
+		<y>860</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
@@ -279,12 +278,91 @@
 	</transition>
 	<transition>
 		<id>132</id>
-		<x>1026</x>
-		<y>659</y>
+		<x>1020</x>
+		<y>660</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
-		<label>prihlasenie</label>
+		<label>prihlasenie / user</label>
+	</transition>
+	<transition>
+		<id>137</id>
+		<x>460</x>
+		<y>660</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>registracia / user</label>
+		<dataGroup>
+			<id>DataGroup_0</id>
+			<dataRef>
+				<id>taskRef_osoba_udaje</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
+		<event type="finish">
+			<id>137_finish</id>
+			<actions phase="post">
+				<action>
+
+					nova_osoba_ref: f.taskRef_osoba_udaje;
+
+					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
+					def osoba = createCase("${groupId}_osoba" as String)
+					def konstruktor = assignTask("2", osoba)
+					change nova_osoba_ref value {
+					[konstruktor.stringId]
+					}
+				</action>
+			</actions>
+		</event>
+	</transition>
+	<transition>
+		<id>141</id>
+		<x>260</x>
+		<y>660</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>vyplnenie udajov / user</label>
+		<assignPolicy>auto</assignPolicy>
+		<dataGroup>
+			<id>DataGroup_0</id>
+			<dataRef>
+				<id>taskRef_osoba_udaje</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
+		<event type="finish">
+			<id>141_finish</id>
+			<actions phase="post">
+				<action>					osoba_udaje_ref: f.taskRef_osoba_udaje;
+					def konstruktor = findTask(osoba_udaje_ref.value[0])
+					finishTask(konstruktor)</action>
+			</actions>
+		</event>
 	</transition>
 	<!-- PLACES -->
 	<place>
@@ -403,6 +481,14 @@
 		<id>126</id>
 		<x>180</x>
 		<y>1260</y>
+		<label></label>
+		<tokens>0</tokens>
+		<static>false</static>
+	</place>
+	<place>
+		<id>140</id>
+		<x>359</x>
+		<y>661</y>
 		<label></label>
 		<tokens>0</tokens>
 		<static>false</static>
@@ -640,7 +726,7 @@
 		<sourceId>37</sourceId>
 		<destinationId>130</destinationId>
 		<multiplicity>1</multiplicity>
-		<breakPoint><x>1479</x><y>812</y></breakPoint>
+		<breakPoint><x>1460</x><y>820</y></breakPoint>
 	</arc>
 	<arc>
 		<id>133</id>
@@ -654,6 +740,42 @@
 		<type>regular</type>
 		<sourceId>132</sourceId>
 		<destinationId>25</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>138</id>
+		<type>regular</type>
+		<sourceId>37</sourceId>
+		<destinationId>137</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>142</id>
+		<type>regular</type>
+		<sourceId>137</sourceId>
+		<destinationId>140</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>143</id>
+		<type>regular</type>
+		<sourceId>140</sourceId>
+		<destinationId>141</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>144</id>
+		<type>regular</type>
+		<sourceId>141</sourceId>
+		<destinationId>25</destinationId>
+		<multiplicity>1</multiplicity>
+		<breakPoint><x>260</x><y>500</y></breakPoint>
+	</arc>
+	<arc>
+		<id>145</id>
+		<type>regular</type>
+		<sourceId>68</sourceId>
+		<destinationId>37</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 </document>

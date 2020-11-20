@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://modeler.netgrif.com/petriflow_schema.xsd">
-	<id>new_model</id>
+	<id>osoba</id>
 	<initials>NEW</initials>
-	<title>New Model</title>
+	<title>osoba</title>
 	<defaultRole>true</defaultRole>
 	<transitionRole>false</transitionRole>
 	<!-- TRANSACTIONS -->
@@ -219,7 +219,7 @@
 		<x>380</x>
 		<y>300</y>
 		<label></label>
-		<tokens>0</tokens>
+		<tokens>1</tokens>
 		<static>false</static>
 	</place>
 	<place>
@@ -235,7 +235,7 @@
 		<x>900</x>
 		<y>300</y>
 		<label></label>
-		<tokens>1</tokens>
+		<tokens>0</tokens>
 		<static>false</static>
 	</place>
 	<!-- ARCS -->
