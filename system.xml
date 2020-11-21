@@ -39,6 +39,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>Domovska stranka / user</label>
+		<icon>settings</icon>
 		<assignPolicy>auto</assignPolicy>
 		<finishPolicy>auto_no_data</finishPolicy>
 	</transition>
@@ -62,8 +63,8 @@
 	</transition>
 	<transition>
 		<id>42</id>
-		<x>860</x>
-		<y>900</y>
+		<x>862</x>
+		<y>893</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
@@ -89,12 +90,12 @@
 		<event type="finish">
 			<id>42_finish</id>
 			<actions phase="post">
-				<action>
+				<action id="1">
 
 					vytvorenie_podujatia_ref: f.taskRef_podujatie_vytvorenie;
 
 					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
-					def podujatie = createCase("${groupId}_podujatie" as String)
+					def podujatie = createCase("${groupId}_podujatie" as String, "Nové podujatie")
 					def konstruktor = assignTask("2", podujatie)
 					change vytvorenie_podujatia_ref value {
 					[konstruktor.stringId]
