@@ -90,7 +90,7 @@
 		<event type="finish">
 			<id>42_finish</id>
 			<actions phase="post">
-				<action id="1">
+				<action>
 
 					vytvorenie_podujatia_ref: f.taskRef_podujatie_vytvorenie;
 
