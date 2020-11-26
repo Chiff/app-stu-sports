@@ -23,12 +23,6 @@
 		<init>false</init>
 	</data>
 	<data type="number">
-		<id>tim_hraci_min</id>
-		<title>Minimalny pocet clenov v time</title>
-		<placeholder>placeholder</placeholder>
-		<init>0</init>
-	</data>
-	<data type="number">
 		<id>300</id>
 		<title>Maximalny pocet timov</title>
 		<placeholder>placeholder</placeholder>
@@ -50,7 +44,6 @@
 		<id>podujatie_nazov</id>
 		<title>Nazov podujatia</title>
 		<placeholder>placeholder</placeholder>
-		<init>value</init>
 	</data>
 	<data type="date">
 		<id>podujatie_datum</id>
@@ -131,12 +124,10 @@
 		<desc>description</desc>
 		<init>1</init>
 	</data>
-	<data type="number">
-		<id>number_0</id>
-		<title>Maximalny pocet clenov</title>
+	<data type="text">
+		<id>podujatie_owner_email</id>
+		<title>Owner email</title>
 		<placeholder>placeholder</placeholder>
-		<desc>description</desc>
-		<init>0</init>
 	</data>
 	<!-- I18NS -->
 	<!-- TRANSITIONS -->
@@ -158,18 +149,19 @@
 		</layout>
 		<label>vytvorenie podujatia \ user</label>
 		<dataGroup>
-			<id>DataGroup_1</id>
+			<id>DataGroup_2</id>
 			<dataRef>
-				<id>number_0</id>
+				<id>podujatie_owner_email</id>
 				<logic>
+					<behavior>visible</behavior>
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
 				</logic>
 				<layout>
-					<x>1</x>
-					<y>2</y>
+					<x>0</x>
+					<y>3</y>
 					<rows>1</rows>
-					<cols>1</cols>
+					<cols>4</cols>
 					<offset>0</offset>
 					<template>material</template>
 					<appearance>outline</appearance>
@@ -188,7 +180,7 @@
 					<x>0</x>
 					<y>0</y>
 					<rows>1</rows>
-					<cols>2</cols>
+					<cols>4</cols>
 					<offset>0</offset>
 					<template>material</template>
 					<appearance>outline</appearance>
@@ -201,26 +193,10 @@
 					<behavior>required</behavior>
 				</logic>
 				<layout>
-					<x>1</x>
+					<x>2</x>
 					<y>1</y>
 					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>tim_hraci_min</id>
-				<logic>
-					<behavior>editable</behavior>
-					<behavior>required</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>2</y>
-					<rows>1</rows>
-					<cols>1</cols>
+					<cols>2</cols>
 					<offset>0</offset>
 					<template>material</template>
 					<appearance>outline</appearance>
@@ -234,9 +210,9 @@
 				</logic>
 				<layout>
 					<x>0</x>
-					<y>3</y>
+					<y>2</y>
 					<rows>1</rows>
-					<cols>2</cols>
+					<cols>4</cols>
 					<offset>0</offset>
 					<template>material</template>
 					<appearance>outline</appearance>
@@ -252,13 +228,24 @@
 					<x>0</x>
 					<y>1</y>
 					<rows>1</rows>
-					<cols>1</cols>
+					<cols>2</cols>
 					<offset>0</offset>
 					<template>material</template>
 					<appearance>outline</appearance>
 				</layout>
 			</dataRef>
 		</dataGroup>
+		<event type="assign">
+			<id>2_assign</id>
+			<actions phase="post">
+				<action>
+					email: f.podujatie_owner_email;
+
+				    def user = userService.findById(loggedUser().id, false)
+				    email = user.email
+				</action>
+			</actions>
+		</event>
 	</transition>
 	<transition>
 		<id>3</id>
@@ -319,6 +306,87 @@
 			<offset>0</offset>
 		</layout>
 		<label>info o podujati</label>
+		<dataGroup>
+			<id>DataGroup_2</id>
+			<dataRef>
+				<id>podujatie_owner_email</id>
+				<logic>
+					<behavior>visible</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>3</y>
+					<rows>1</rows>
+					<cols>4</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
+		<dataGroup>
+			<id>DataGroup_0</id>
+			<dataRef>
+				<id>podujatie_datum</id>
+				<logic>
+					<behavior>visible</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>4</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>300</id>
+				<logic>
+					<behavior>visible</behavior>
+				</logic>
+				<layout>
+					<x>2</x>
+					<y>1</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>podujatie_nazov</id>
+				<logic>
+					<behavior>visible</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>2</y>
+					<rows>1</rows>
+					<cols>4</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>400</id>
+				<logic>
+					<behavior>visible</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>1</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
 	</transition>
 	<transition>
 		<id>57</id>
@@ -360,7 +428,6 @@
 		<label>Editovat podujatie</label>
 		<dataGroup>
 			<id>DataGroup_0</id>
-			<layout>grid</layout>
 			<dataRef>
 				<id>podujatie_datum</id>
 				<logic>
@@ -371,39 +438,7 @@
 					<x>0</x>
 					<y>0</y>
 					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>number_0</id>
-				<logic>
-					<behavior>editable</behavior>
-					<behavior>required</behavior>
-				</logic>
-				<layout>
-					<x>1</x>
-					<y>2</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>tim_hraci_min</id>
-				<logic>
-					<behavior>editable</behavior>
-					<behavior>required</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>2</y>
-					<rows>1</rows>
-					<cols>1</cols>
+					<cols>4</cols>
 					<offset>0</offset>
 					<template>material</template>
 					<appearance>outline</appearance>
@@ -419,7 +454,7 @@
 					<x>0</x>
 					<y>1</y>
 					<rows>1</rows>
-					<cols>1</cols>
+					<cols>2</cols>
 					<offset>0</offset>
 					<template>material</template>
 					<appearance>outline</appearance>
@@ -432,10 +467,10 @@
 					<behavior>required</behavior>
 				</logic>
 				<layout>
-					<x>1</x>
+					<x>2</x>
 					<y>1</y>
 					<rows>1</rows>
-					<cols>1</cols>
+					<cols>2</cols>
 					<offset>0</offset>
 					<template>material</template>
 					<appearance>outline</appearance>
@@ -449,9 +484,9 @@
 				</logic>
 				<layout>
 					<x>0</x>
-					<y>3</y>
+					<y>2</y>
 					<rows>1</rows>
-					<cols>2</cols>
+					<cols>4</cols>
 					<offset>0</offset>
 					<template>material</template>
 					<appearance>outline</appearance>
@@ -744,25 +779,28 @@
 	</arc>
 	<arc>
 		<id>98</id>
-		<type>variable</type>
+		<type>regular</type>
 		<sourceId>61</sourceId>
 		<destinationId>4</destinationId>
-		<multiplicity>300</multiplicity>
+		<multiplicity></multiplicity>
+		<reference>300</reference>
 	</arc>
 	<arc>
 		<id>99</id>
-		<type>variable</type>
+		<type>regular</type>
 		<sourceId>4</sourceId>
 		<destinationId>61</destinationId>
-		<multiplicity>300</multiplicity>
+		<multiplicity></multiplicity>
+		<reference>300</reference>
 		<breakPoint><x>450</x><y>333</y></breakPoint>
 	</arc>
 	<arc>
 		<id>100</id>
-		<type>variable</type>
+		<type>regular</type>
 		<sourceId>61</sourceId>
 		<destinationId>6</destinationId>
-		<multiplicity>400</multiplicity>
+		<multiplicity></multiplicity>
+		<reference>400</reference>
 		<breakPoint><x>255</x><y>538</y></breakPoint>
 	</arc>
 </document>
