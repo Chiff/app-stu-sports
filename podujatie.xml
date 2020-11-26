@@ -156,7 +156,6 @@
 				<id>podujatie_owner_email</id>
 				<logic>
 					<behavior>visible</behavior>
-					<behavior>editable</behavior>
 					<behavior>required</behavior>
 				</logic>
 				<layout>
@@ -242,9 +241,10 @@
 			<actions phase="post">
 				<action>
 					email: f.podujatie_owner_email;
+					change email value {
+						loggedUser().email
+					}
 
-				    def user = userService.findById(loggedUser().id, false)
-				    email = user.email
 				</action>
 			</actions>
 		</event>
