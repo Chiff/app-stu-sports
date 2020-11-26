@@ -139,6 +139,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>prihlasenie timu \ user</label>
+		<icon>add_circle</icon>
 	</transition>
 	<transition>
 		<id>2</id>
@@ -148,6 +149,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>vytvorenie podujatia \ user</label>
+		<icon>note_add</icon>
 		<dataGroup>
 			<id>DataGroup_2</id>
 			<dataRef>
@@ -279,6 +281,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>zrusenie podujatia \ owner</label>
+		<icon>clear</icon>
 	</transition>
 	<transition>
 		<id>6</id>
@@ -288,6 +291,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>vykonanie podujatia \ owner</label>
+		<icon>alarm_on</icon>
 	</transition>
 	<transition>
 		<id>7</id>
@@ -297,6 +301,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>vyhodnotenie podujatia \ owner</label>
+		<icon>assignment</icon>
 	</transition>
 	<transition>
 		<id>56</id>
@@ -306,6 +311,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>info o podujati</label>
+		<icon>info</icon>
 		<dataGroup>
 			<id>DataGroup_2</id>
 			<dataRef>
@@ -408,6 +414,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>zobraz vysledky</label>
+		<icon>zoom_in</icon>
 	</transition>
 	<transition>
 		<id>66</id>
@@ -417,6 +424,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>odhlasenie</label>
+		<icon>remove_circle</icon>
 	</transition>
 	<transition>
 		<id>96</id>
@@ -426,6 +434,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>Editovat podujatie</label>
+		<icon>create</icon>
 		<dataGroup>
 			<id>DataGroup_0</id>
 			<dataRef>
@@ -782,16 +791,14 @@
 		<type>regular</type>
 		<sourceId>61</sourceId>
 		<destinationId>4</destinationId>
-		<multiplicity></multiplicity>
-		<reference>300</reference>
+		<multiplicity>300</multiplicity>
 	</arc>
 	<arc>
 		<id>99</id>
 		<type>regular</type>
 		<sourceId>4</sourceId>
 		<destinationId>61</destinationId>
-		<multiplicity></multiplicity>
-		<reference>300</reference>
+		<multiplicity>300</multiplicity>
 		<breakPoint><x>450</x><y>333</y></breakPoint>
 	</arc>
 	<arc>
@@ -799,8 +806,7 @@
 		<type>regular</type>
 		<sourceId>61</sourceId>
 		<destinationId>6</destinationId>
-		<multiplicity></multiplicity>
-		<reference>400</reference>
+		<multiplicity>400</multiplicity>
 		<breakPoint><x>255</x><y>538</y></breakPoint>
 	</arc>
 </document>
