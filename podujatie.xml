@@ -33,7 +33,7 @@
 		<title>Maximalny pocet timov</title>
 		<placeholder>placeholder</placeholder>
 		<desc>description</desc>
-		<init>3</init>
+		<init>1</init>
 	</data>
 	<data type="boolean">
 		<id>is_podujatie_sukromne</id>
@@ -129,7 +129,7 @@
 		<title>Minimalny pocet timov</title>
 		<placeholder>placeholder</placeholder>
 		<desc>description</desc>
-		<init>2</init>
+		<init>1</init>
 	</data>
 	<data type="number">
 		<id>number_0</id>
@@ -626,16 +626,6 @@
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>64</id>
-		<type>inhibitor</type>
-		<sourceId>61</sourceId>
-		<destinationId>1</destinationId>
-		<multiplicity>3</multiplicity>
-		<reference>300</reference>
-		<breakPoint><x>100</x><y>300</y></breakPoint>
-		<breakPoint><x>100</x><y>60</y></breakPoint>
-	</arc>
-	<arc>
 		<id>67</id>
 		<type>regular</type>
 		<sourceId>61</sourceId>
@@ -648,14 +638,6 @@
 		<sourceId>9</sourceId>
 		<destinationId>1</destinationId>
 		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>69</id>
-		<type>read</type>
-		<sourceId>61</sourceId>
-		<destinationId>4</destinationId>
-		<multiplicity>3</multiplicity>
-		<reference>300</reference>
 	</arc>
 	<arc>
 		<id>74</id>
@@ -677,15 +659,6 @@
 		<sourceId>73</sourceId>
 		<destinationId>1</destinationId>
 		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>81</id>
-		<type>read</type>
-		<sourceId>61</sourceId>
-		<destinationId>6</destinationId>
-		<multiplicity>2</multiplicity>
-		<reference>400</reference>
-		<breakPoint><x>260</x><y>540</y></breakPoint>
 	</arc>
 	<arc>
 		<id>82</id>
@@ -739,7 +712,7 @@
 		<sourceId>61</sourceId>
 		<destinationId>6</destinationId>
 		<multiplicity>1</multiplicity>
-		<breakPoint><x>260</x><y>580</y></breakPoint>
+		<breakPoint><x>450</x><y>415</y></breakPoint>
 	</arc>
 	<arc>
 		<id>91</id>
@@ -768,5 +741,28 @@
 		<sourceId>84</sourceId>
 		<destinationId>96</destinationId>
 		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>98</id>
+		<type>variable</type>
+		<sourceId>61</sourceId>
+		<destinationId>4</destinationId>
+		<multiplicity>300</multiplicity>
+	</arc>
+	<arc>
+		<id>99</id>
+		<type>variable</type>
+		<sourceId>4</sourceId>
+		<destinationId>61</destinationId>
+		<multiplicity>300</multiplicity>
+		<breakPoint><x>450</x><y>333</y></breakPoint>
+	</arc>
+	<arc>
+		<id>100</id>
+		<type>variable</type>
+		<sourceId>61</sourceId>
+		<destinationId>6</destinationId>
+		<multiplicity>400</multiplicity>
+		<breakPoint><x>255</x><y>538</y></breakPoint>
 	</arc>
 </document>
