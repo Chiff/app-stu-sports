@@ -23,11 +23,17 @@
 		<init>false</init>
 	</data>
 	<data type="number">
+		<id>tim_hraci_min</id>
+		<title>Minimalny pocet clenov v time</title>
+		<placeholder>placeholder</placeholder>
+		<init>0</init>
+	</data>
+	<data type="number">
 		<id>300</id>
 		<title>Maximalny pocet timov</title>
 		<placeholder>placeholder</placeholder>
 		<desc>description</desc>
-		<init>1</init>
+		<init>3</init>
 	</data>
 	<data type="boolean">
 		<id>is_podujatie_sukromne</id>
@@ -44,6 +50,7 @@
 		<id>podujatie_nazov</id>
 		<title>Nazov podujatia</title>
 		<placeholder>placeholder</placeholder>
+		<init>value</init>
 	</data>
 	<data type="date">
 		<id>podujatie_datum</id>
@@ -122,32 +129,14 @@
 		<title>Minimalny pocet timov</title>
 		<placeholder>placeholder</placeholder>
 		<desc>description</desc>
-		<init>1</init>
+		<init>2</init>
 	</data>
-	<data type="text">
-		<id>podujatie_owner_email</id>
-		<title>Owner email</title>
+	<data type="number">
+		<id>number_0</id>
+		<title>Maximalny pocet clenov</title>
 		<placeholder>placeholder</placeholder>
-	</data>
-	<data type="text">
-		<id>podujatie_owner_id</id>
-		<title>Owner ID</title>
-	</data>
-	<data type="enumeration">
-		<id>enumeration_0</id>
-		<title>Nazov timu</title>
-		<values>option1</values>
-		<values>option2</values>
-		<values>option3</values>
-		<init>option1</init>
-	</data>
-	<data type="text">
-		<id>text_1</id>
-		<title>ID timu</title>
-	</data>
-	<data type="taskRef">
-		<id>taskref_tim_podujatie_add</id>
-		<title>taskref_tim_podujatie_add</title>
+		<desc>description</desc>
+		<init>0</init>
 	</data>
 	<!-- I18NS -->
 	<!-- TRANSITIONS -->
@@ -159,56 +148,6 @@
 			<offset>0</offset>
 		</layout>
 		<label>prihlasenie timu \ user</label>
-		<icon>add_circle</icon>
-		<dataGroup>
-			<id>DataGroup_0</id>
-			<layout>grid</layout>
-			<dataRef>
-				<id>enumeration_0</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>text_1</id>
-				<logic>
-					<behavior>hidden</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>1</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>taskref_tim_podujatie_add</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>2</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
 	</transition>
 	<transition>
 		<id>2</id>
@@ -218,40 +157,19 @@
 			<offset>0</offset>
 		</layout>
 		<label>vytvorenie podujatia \ user</label>
-		<icon>note_add</icon>
 		<dataGroup>
 			<id>DataGroup_1</id>
-			<layout>grid</layout>
 			<dataRef>
-				<id>text_0</id>
+				<id>number_0</id>
 				<logic>
-					<behavior>visible</behavior>
+					<behavior>editable</behavior>
 					<behavior>required</behavior>
 				</logic>
 				<layout>
-					<x>0</x>
-					<y>4</y>
+					<x>1</x>
+					<y>2</y>
 					<rows>1</rows>
-					<cols>4</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-		<dataGroup>
-			<id>DataGroup_2</id>
-			<dataRef>
-				<id>podujatie_owner_email</id>
-				<logic>
-					<behavior>visible</behavior>
-					<behavior>required</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>3</y>
-					<rows>1</rows>
-					<cols>4</cols>
+					<cols>1</cols>
 					<offset>0</offset>
 					<template>material</template>
 					<appearance>outline</appearance>
@@ -270,7 +188,7 @@
 					<x>0</x>
 					<y>0</y>
 					<rows>1</rows>
-					<cols>4</cols>
+					<cols>2</cols>
 					<offset>0</offset>
 					<template>material</template>
 					<appearance>outline</appearance>
@@ -283,10 +201,26 @@
 					<behavior>required</behavior>
 				</logic>
 				<layout>
-					<x>2</x>
+					<x>1</x>
 					<y>1</y>
 					<rows>1</rows>
-					<cols>2</cols>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>tim_hraci_min</id>
+				<logic>
+					<behavior>editable</behavior>
+					<behavior>required</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>2</y>
+					<rows>1</rows>
+					<cols>1</cols>
 					<offset>0</offset>
 					<template>material</template>
 					<appearance>outline</appearance>
@@ -300,9 +234,9 @@
 				</logic>
 				<layout>
 					<x>0</x>
-					<y>2</y>
+					<y>3</y>
 					<rows>1</rows>
-					<cols>4</cols>
+					<cols>2</cols>
 					<offset>0</offset>
 					<template>material</template>
 					<appearance>outline</appearance>
@@ -318,30 +252,13 @@
 					<x>0</x>
 					<y>1</y>
 					<rows>1</rows>
-					<cols>2</cols>
+					<cols>1</cols>
 					<offset>0</offset>
 					<template>material</template>
 					<appearance>outline</appearance>
 				</layout>
 			</dataRef>
 		</dataGroup>
-		<event type="assign">
-			<id>2_assign</id>
-			<actions phase="post">
-				<action>
-					email: f.podujatie_owner_email,
-					uid: f.podujatie_owner_id;
-
-					change email value {
-						loggedUser().email
-					}
-
-					change uid value {
-						loggedUser().id
-					}
-				</action>
-			</actions>
-		</event>
 	</transition>
 	<transition>
 		<id>3</id>
@@ -375,7 +292,6 @@
 			<offset>0</offset>
 		</layout>
 		<label>zrusenie podujatia \ owner</label>
-		<icon>clear</icon>
 	</transition>
 	<transition>
 		<id>6</id>
@@ -385,7 +301,6 @@
 			<offset>0</offset>
 		</layout>
 		<label>vykonanie podujatia \ owner</label>
-		<icon>alarm_on</icon>
 	</transition>
 	<transition>
 		<id>7</id>
@@ -395,7 +310,6 @@
 			<offset>0</offset>
 		</layout>
 		<label>vyhodnotenie podujatia \ owner</label>
-		<icon>assignment</icon>
 	</transition>
 	<transition>
 		<id>56</id>
@@ -405,88 +319,6 @@
 			<offset>0</offset>
 		</layout>
 		<label>info o podujati</label>
-		<icon>info</icon>
-		<dataGroup>
-			<id>DataGroup_2</id>
-			<dataRef>
-				<id>podujatie_owner_email</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>3</y>
-					<rows>1</rows>
-					<cols>4</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-		<dataGroup>
-			<id>DataGroup_0</id>
-			<dataRef>
-				<id>podujatie_datum</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>4</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>300</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-				<layout>
-					<x>2</x>
-					<y>1</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>podujatie_nazov</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>2</y>
-					<rows>1</rows>
-					<cols>4</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>400</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>1</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
 	</transition>
 	<transition>
 		<id>57</id>
@@ -508,7 +340,6 @@
 			<offset>0</offset>
 		</layout>
 		<label>zobraz vysledky</label>
-		<icon>zoom_in</icon>
 	</transition>
 	<transition>
 		<id>66</id>
@@ -518,69 +349,18 @@
 			<offset>0</offset>
 		</layout>
 		<label>odhlasenie</label>
-		<icon>remove_circle</icon>
-		<dataGroup>
-			<id>DataGroup_0</id>
-			<layout>grid</layout>
-			<dataRef>
-				<id>text_1</id>
-				<logic>
-					<behavior>visible</behavior>
-					<behavior>hidden</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>1</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>taskref_tim_podujatie_add</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>2</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>enumeration_0</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
 	</transition>
 	<transition>
 		<id>96</id>
-		<x>140</x>
-		<y>620</y>
+		<x>132</x>
+		<y>622</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
 		<label>Editovat podujatie</label>
-		<icon>create</icon>
 		<dataGroup>
 			<id>DataGroup_0</id>
+			<layout>grid</layout>
 			<dataRef>
 				<id>podujatie_datum</id>
 				<logic>
@@ -591,7 +371,39 @@
 					<x>0</x>
 					<y>0</y>
 					<rows>1</rows>
-					<cols>4</cols>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>number_0</id>
+				<logic>
+					<behavior>editable</behavior>
+					<behavior>required</behavior>
+				</logic>
+				<layout>
+					<x>1</x>
+					<y>2</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>tim_hraci_min</id>
+				<logic>
+					<behavior>editable</behavior>
+					<behavior>required</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>2</y>
+					<rows>1</rows>
+					<cols>1</cols>
 					<offset>0</offset>
 					<template>material</template>
 					<appearance>outline</appearance>
@@ -607,7 +419,7 @@
 					<x>0</x>
 					<y>1</y>
 					<rows>1</rows>
-					<cols>2</cols>
+					<cols>1</cols>
 					<offset>0</offset>
 					<template>material</template>
 					<appearance>outline</appearance>
@@ -620,10 +432,10 @@
 					<behavior>required</behavior>
 				</logic>
 				<layout>
-					<x>2</x>
+					<x>1</x>
 					<y>1</y>
 					<rows>1</rows>
-					<cols>2</cols>
+					<cols>1</cols>
 					<offset>0</offset>
 					<template>material</template>
 					<appearance>outline</appearance>
@@ -637,9 +449,9 @@
 				</logic>
 				<layout>
 					<x>0</x>
-					<y>2</y>
+					<y>3</y>
 					<rows>1</rows>
-					<cols>4</cols>
+					<cols>2</cols>
 					<offset>0</offset>
 					<template>material</template>
 					<appearance>outline</appearance>
@@ -814,6 +626,16 @@
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
+		<id>64</id>
+		<type>inhibitor</type>
+		<sourceId>61</sourceId>
+		<destinationId>1</destinationId>
+		<multiplicity>3</multiplicity>
+		<reference>300</reference>
+		<breakPoint><x>100</x><y>300</y></breakPoint>
+		<breakPoint><x>100</x><y>60</y></breakPoint>
+	</arc>
+	<arc>
 		<id>67</id>
 		<type>regular</type>
 		<sourceId>61</sourceId>
@@ -826,6 +648,14 @@
 		<sourceId>9</sourceId>
 		<destinationId>1</destinationId>
 		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>69</id>
+		<type>read</type>
+		<sourceId>61</sourceId>
+		<destinationId>4</destinationId>
+		<multiplicity>3</multiplicity>
+		<reference>300</reference>
 	</arc>
 	<arc>
 		<id>74</id>
@@ -847,6 +677,15 @@
 		<sourceId>73</sourceId>
 		<destinationId>1</destinationId>
 		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>81</id>
+		<type>read</type>
+		<sourceId>61</sourceId>
+		<destinationId>6</destinationId>
+		<multiplicity>2</multiplicity>
+		<reference>400</reference>
+		<breakPoint><x>260</x><y>540</y></breakPoint>
 	</arc>
 	<arc>
 		<id>82</id>
@@ -876,7 +715,6 @@
 		<sourceId>84</sourceId>
 		<destinationId>6</destinationId>
 		<multiplicity>1</multiplicity>
-		<breakPoint><x>540</x><y>620</y></breakPoint>
 	</arc>
 	<arc>
 		<id>87</id>
@@ -901,7 +739,7 @@
 		<sourceId>61</sourceId>
 		<destinationId>6</destinationId>
 		<multiplicity>1</multiplicity>
-		<breakPoint><x>460</x><y>420</y></breakPoint>
+		<breakPoint><x>260</x><y>580</y></breakPoint>
 	</arc>
 	<arc>
 		<id>91</id>
@@ -930,28 +768,5 @@
 		<sourceId>84</sourceId>
 		<destinationId>96</destinationId>
 		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>98</id>
-		<type>variable</type>
-		<sourceId>61</sourceId>
-		<destinationId>4</destinationId>
-		<multiplicity>300</multiplicity>
-	</arc>
-	<arc>
-		<id>99</id>
-		<type>variable</type>
-		<sourceId>4</sourceId>
-		<destinationId>61</destinationId>
-		<multiplicity>300</multiplicity>
-		<breakPoint><x>460</x><y>340</y></breakPoint>
-	</arc>
-	<arc>
-		<id>100</id>
-		<type>variable</type>
-		<sourceId>61</sourceId>
-		<destinationId>6</destinationId>
-		<multiplicity>400</multiplicity>
-		<breakPoint><x>260</x><y>540</y></breakPoint>
 	</arc>
 </document>
