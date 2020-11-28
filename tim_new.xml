@@ -30,7 +30,7 @@
 		<init>value</init>
 	</data>
 	<data type="text">
-		<id>text_1</id>
+		<id>nazov_timu</id>
 		<title>Nazov timu</title>
 		<init>value</init>
 	</data>
@@ -55,7 +55,7 @@
 			<id>DataGroup_0</id>
 			<layout>grid</layout>
 			<dataRef>
-				<id>text_1</id>
+				<id>nazov_timu</id>
 				<logic>
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
@@ -129,7 +129,7 @@
 			<id>DataGroup_0</id>
 			<layout>grid</layout>
 			<dataRef>
-				<id>text_1</id>
+				<id>nazov_timu</id>
 				<logic>
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
