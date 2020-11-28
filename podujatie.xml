@@ -133,13 +133,15 @@
 		<id>podujatie_owner_id</id>
 		<title>Owner ID</title>
 	</data>
-	<data type="enumeration">
-		<id>enumeration_0</id>
-		<title>Nazov timu</title>
-		<values>option1</values>
-		<values>option2</values>
-		<values>option3</values>
-		<init>option1</init>
+	<data type="enumeration_map">
+		<id>enu_map_timy</id>
+		<title>Prihlasene timy</title>
+		<options>
+			<option key="key1">value1</option>
+			<option key="key2">value2</option>
+			<option key="key3">value3</option>
+		</options>
+		<init>key1</init>
 	</data>
 	<data type="text">
 		<id>text_1</id>
@@ -164,7 +166,7 @@
 			<id>DataGroup_0</id>
 			<layout>grid</layout>
 			<dataRef>
-				<id>enumeration_0</id>
+				<id>enu_map_timy</id>
 				<logic>
 					<behavior>editable</behavior>
 				</logic>
@@ -209,6 +211,26 @@
 				</layout>
 			</dataRef>
 		</dataGroup>
+		<event type="assign">
+			<id>39_assign</id>
+			<actions phase="pre">
+				<action>
+					timy: f.enu_map_timy;
+					def map = [:]
+					def casesIds = []
+					def idecka = []
+					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
+					def cases = findCases ({ it.processIdentifier.eq("${groupId}_tim" as String) });
+					cases.each {
+						map[(it.stringId)] = (it.stringId)
+						casesIds.add(it.stringId)
+					}
+					change timy options {
+						return map;
+					}
+				</action>
+			</actions>
+		</event>
 	</transition>
 	<transition>
 		<id>2</id>
@@ -415,7 +437,7 @@
 				</layout>
 			</dataRef>
 			<dataRef>
-				<id>enumeration_0</id>
+				<id>enu_map_timy</id>
 				<logic>
 					<behavior>editable</behavior>
 				</logic>
@@ -623,7 +645,7 @@
 				</layout>
 			</dataRef>
 			<dataRef>
-				<id>enumeration_0</id>
+				<id>enu_map_timy</id>
 				<logic>
 					<behavior>editable</behavior>
 				</logic>
