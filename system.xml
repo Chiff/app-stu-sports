@@ -90,6 +90,17 @@
 						def vybrane_podujatie = podujatie_map.value
 
 						def taskInfo = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("56")) } )
+
+
+						if(podujatie_ref.value != null) {
+							if(podujatie_ref.value[0] != null) {
+									t = findTask({it._id.eq(podujatie_ref.value[1])})
+									cancelTask(t)
+							}
+								change podujatie_ref value {
+									return []
+								}
+						}
 						change podujatie_ref value {
 							return []
 						}
@@ -98,6 +109,7 @@
 							return podujatie_ref.value
 						}
 						def taskPrihlasit = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("1")) } )
+						assignTask(taskPrihlasit)
 						podujatie_ref.value.add(taskPrihlasit.stringId)
 							change podujatie_ref value {
 								return podujatie_ref.value
@@ -147,15 +159,23 @@
 			<actions phase="post">
 				<action>
 
-					zvolene_podujatie_ref: f.taskRef_zvolene_podujatie,
+					podujatie_ref: f.taskRef_zvolene_podujatie,
 					podujatia_map: f.enum_podujatia;
 
-					def map = [:]
-
-					change zvolene_podujatie_ref value {
+					if(podujatie_ref.value != null) {
+					if(podujatie_ref.value[0] != null) {
+					t = findTask({it._id.eq(podujatie_ref.value[1])})
+					cancelTask(t)
+					}
+					change podujatie_ref value {
+						return []
+					}
+					}
+					change podujatie_ref value {
 						return []
 					}
 
+					def map = [:]
 					change podujatia_map options {
 						return map
 					}
