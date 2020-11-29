@@ -246,7 +246,6 @@
 				<action>
 					timy_map: f.enu_map_timy;
 					def map = [:]
-					def casesIds = []
 					def tasks = []
 					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
 					def cases = findCases ({ it.processIdentifier.eq("${groupId}_tim" as String) });
@@ -254,12 +253,9 @@
 
 						def id = it.stringId
 						task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("16")) });
-						nazov_podujatia = getData(task).get('nazov_timu');
-						map[id] = nazov_podujatia.value
+						nazov_timu = getData(task).get('nazov_timu');
+						map[id] = nazov_timu.value
 
-					}
-					casesIds.each {
-						tasks
 					}
 					change timy_map options {
 						return map;
