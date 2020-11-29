@@ -132,7 +132,7 @@
 			<id>421_assign</id>
 			<actions phase="post">
 				<action>
-<!--					vyhladaju sa podujatia a tasky prihlasenie sa hodia do taskrefu-->
+
 					zvolene_podujatie_ref: f.taskRef_zvolene_podujatie,
 					podujatia_map: f.enum_podujatia;
 
@@ -189,7 +189,8 @@
 				<action>
 					zvolene_podujatie_ref: f.taskRef_zvolene_podujatie;
 
-					def prihlasenieTask = findTask(zvolene_podujatie_ref.value[0])
+					def prihlasenieTask = findTask(zvolene_podujatie_ref.value[1])
+
 					finishTask(prihlasenieTask)
 
 				</action>
@@ -235,6 +236,18 @@
 			<id>42_finish</id>
 			<actions phase="post">
 				<action>
+					podujatie_udaje_ref: f.taskRef_podujatie_vytvorenie;
+					def konstruktor = findTask(podujatie_udaje_ref.value[0])
+
+					finishTask(konstruktor)
+
+				</action>
+			</actions>
+		</event>
+		<event type="assign">
+			<id>42_assign</id>
+			<actions phase="pre">
+				<action>
 
 					vytvorenie_podujatia_ref: f.taskRef_podujatie_vytvorenie;
 
@@ -242,7 +255,7 @@
 					def podujatie = createCase("${groupId}_podujatie" as String, "Nové podujatie")
 					def konstruktor = assignTask("2", podujatie)
 					change vytvorenie_podujatia_ref value {
-					[konstruktor.stringId]
+					return [konstruktor.stringId]
 					}
 				</action>
 			</actions>
@@ -265,53 +278,6 @@
 			<offset>0</offset>
 		</layout>
 		<label>Spravovat podujatie / usr</label>
-	</transition>
-	<transition>
-		<id>57</id>
-		<x>380</x>
-		<y>1140</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Prihlasenie na podujatie</label>
-	</transition>
-	<transition>
-		<id>68</id>
-		<x>860</x>
-		<y>1140</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Vyplnit udaje / usr</label>
-		<assignPolicy>auto</assignPolicy>
-		<dataGroup>
-			<id>DataGroup_0</id>
-			<dataRef>
-				<id>taskRef_podujatie_vytvorenie</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-		<event type="finish">
-			<id>68_finish</id>
-			<actions phase="post">
-				<action>
-					podujatie_udaje_ref: f.taskRef_podujatie_vytvorenie;
-					def konstruktor = findTask(podujatie_udaje_ref.value[0])
-					finishTask(konstruktor)
-				</action>
-			</actions>
-		</event>
 	</transition>
 	<transition>
 		<id>77</id>
@@ -384,33 +350,6 @@
 			<offset>0</offset>
 		</layout>
 		<label>Zrusit ucet / sys</label>
-	</transition>
-	<transition>
-		<id>122</id>
-		<x>180</x>
-		<y>1140</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Prihlasenie timu</label>
-		<dataGroup>
-			<id>DataGroup_0</id>
-			<dataRef>
-				<id>enumeration_0</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
 	</transition>
 	<transition>
 		<id>130</id>
@@ -535,32 +474,8 @@
 		<static>false</static>
 	</place>
 	<place>
-		<id>58</id>
-		<x>300</x>
-		<y>1020</y>
-		<label></label>
-		<tokens>0</tokens>
-		<static>false</static>
-	</place>
-	<place>
-		<id>59</id>
-		<x>380</x>
-		<y>1260</y>
-		<label></label>
-		<tokens>0</tokens>
-		<static>false</static>
-	</place>
-	<place>
 		<id>64</id>
 		<x>620</x>
-		<y>1020</y>
-		<label></label>
-		<tokens>0</tokens>
-		<static>false</static>
-	</place>
-	<place>
-		<id>67</id>
-		<x>860</x>
 		<y>1020</y>
 		<label></label>
 		<tokens>0</tokens>
@@ -619,14 +534,6 @@
 		<x>460</x>
 		<y>2220</y>
 		<label>Ucet zruseny</label>
-		<tokens>0</tokens>
-		<static>false</static>
-	</place>
-	<place>
-		<id>126</id>
-		<x>180</x>
-		<y>1260</y>
-		<label></label>
 		<tokens>0</tokens>
 		<static>false</static>
 	</place>
@@ -698,45 +605,10 @@
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>60</id>
-		<type>regular</type>
-		<sourceId>39</sourceId>
-		<destinationId>58</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>61</id>
-		<type>regular</type>
-		<sourceId>58</sourceId>
-		<destinationId>57</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>62</id>
-		<type>regular</type>
-		<sourceId>57</sourceId>
-		<destinationId>59</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
 		<id>65</id>
 		<type>regular</type>
 		<sourceId>40</sourceId>
 		<destinationId>64</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>69</id>
-		<type>regular</type>
-		<sourceId>42</sourceId>
-		<destinationId>67</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>70</id>
-		<type>regular</type>
-		<sourceId>67</sourceId>
-		<destinationId>68</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
@@ -852,20 +724,6 @@
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>123</id>
-		<type>regular</type>
-		<sourceId>58</sourceId>
-		<destinationId>122</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>127</id>
-		<type>regular</type>
-		<sourceId>122</sourceId>
-		<destinationId>126</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
 		<id>131</id>
 		<type>regular</type>
 		<sourceId>37</sourceId>
@@ -919,7 +777,14 @@
 	<arc>
 		<id>145</id>
 		<type>regular</type>
-		<sourceId>68</sourceId>
+		<sourceId>42</sourceId>
+		<destinationId>37</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>147</id>
+		<type>regular</type>
+		<sourceId>39</sourceId>
 		<destinationId>37</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>

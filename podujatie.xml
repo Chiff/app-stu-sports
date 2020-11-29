@@ -174,43 +174,6 @@
 			<id>DataGroup_0</id>
 			<layout>grid</layout>
 			<dataRef>
-				<id>enu_map_timy</id>
-				<logic>
-					<behavior>editable</behavior>
-					<action trigger="set">
-						test: f.testovanie,
-						enumer: f.this;
-						change test value {
-							enumer.value
-						}
-					</action>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>text_1</id>
-				<logic>
-					<behavior>hidden</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>1</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
 				<id>taskref_tim_podujatie_add</id>
 				<logic>
 					<behavior>editable</behavior>
@@ -226,21 +189,6 @@
 				</layout>
 			</dataRef>
 			<dataRef>
-				<id>testovanie</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>3</y>
-					<rows>1</rows>
-					<cols>3</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
 				<id>dostupnost</id>
 				<logic>
 					<behavior>hidden</behavior>
@@ -250,6 +198,21 @@
 					<y>4</y>
 					<rows>1</rows>
 					<cols>3</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>enu_map_timy</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>2</cols>
 					<offset>0</offset>
 					<template>material</template>
 					<appearance>outline</appearance>
@@ -281,7 +244,7 @@
 		</event>
 		<event type="finish">
 			<id>39_finish</id>
-			<actions phase="pre">
+			<actions phase="post">
 				<action>
 					timy_ref: f.taskref_tim_podujatie_add,
 					enumer: f.enu_map_timy;
@@ -294,6 +257,7 @@
 						}
 					}
 					if(timy_ref.value.contains(novy_tim.stringId)) {
+						throw new IllegalArgumentException("Tento tim uz je na podujati prihlaseny");
 						cancelTask("1")
 					}
 					else {
@@ -466,8 +430,6 @@
 		</layout>
 		<label>podujatie dostupne \ system</label>
 		<icon>settings</icon>
-		<assignPolicy>auto</assignPolicy>
-		<finishPolicy>manual</finishPolicy>
 		<dataGroup>
 			<id>DataGroup_0</id>
 			<dataRef>
@@ -508,8 +470,6 @@
 		</layout>
 		<label>podujatie nedostupne \ system</label>
 		<icon>settings</icon>
-		<assignPolicy>auto</assignPolicy>
-		<finishPolicy>manual</finishPolicy>
 		<dataGroup>
 			<id>DataGroup_0</id>
 			<dataRef>
@@ -530,7 +490,7 @@
 		</dataGroup>
 		<event type="assign">
 			<id>4_finish</id>
-			<actions phase="post">
+			<actions phase="pre">
 				<action>
 					jeDostupne: f.dostupnost;
 
@@ -844,13 +804,14 @@
 
 						def id = it.stringId
 						task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("16")) });
-						nazov_podujatia = getData(task).get('nazov_timu');
+						nazov_timu = getData(task).get('nazov_timu');
+
 						if(timy_ref.value.contains(task.stringId)) {
-							map[id] = nazov_podujatia.value
+							map[id] = nazov_timu.value
 						}
 					}
 					change timy_map options {
-						return map;
+						return map
 					}
 				</action>
 			</actions>
