@@ -126,7 +126,7 @@
 
 					def map = [:]
 
-					def cases = findCases ({ it.processIdentifier.contains("podujatie") });
+					def cases = findCases ({ (it.processIdentifier.contains("podujatie")).and(it.dataSet.get("dostupnost").value.eq("true")) });
 					cases.each {
 
 						def id = it.stringId
@@ -146,7 +146,10 @@
 			<id>421_finish</id>
 			<actions phase="pre">
 				<action>
+					zvolene_podujatie_ref: f.taskRef_zvolene_podujatie;
 
+					def prihlasenieTask = findTask(zvolene_podujatie_ref.value[0])
+					finishTask(prihlasenieTask)
 
 				</action>
 			</actions>
