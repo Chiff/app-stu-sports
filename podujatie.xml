@@ -8,7 +8,7 @@
 	<!-- TRANSACTIONS -->
 	<!-- ROLES -->
 	<!-- DATA -->
-	<data type="boolean">
+	<data type="boolean" immediate="true">
 		<id>dostupnost</id>
 		<title>Dostupnost podujatia</title>
 		<init>true</init>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://modeler.netgrif.com/petriflow_schema.xsd">
 	<id>system</id>
-	<initials>NEW</initials>
+	<initials>SYSTEM</initials>
 	<title>system</title>
 	<defaultRole>true</defaultRole>
 	<transitionRole>false</transitionRole>
@@ -126,7 +126,7 @@
 
 					def map = [:]
 
-					def cases = findCases ({ (it.processIdentifier.contains("podujatie")).and(it.dataSet.get("dostupnost").value.eq("true")) });
+					def cases = findCases ({ it.processIdentifier.contains("podujatie") });
 					cases.each {
 
 						def id = it.stringId
@@ -137,6 +137,27 @@
 					}
 					change podujatia_map options {
 						return map;
+					}
+
+				</action>
+			</actions>
+		</event>
+		<event type="cancel">
+			<id>422_assign</id>
+			<actions phase="post">
+				<action>
+
+					zvolene_podujatie_ref: f.taskRef_zvolene_podujatie,
+					podujatia_map: f.enum_podujatia;
+
+					def map = [:]
+
+					change zvolene_podujatie_ref value {
+						return []
+					}
+
+					change podujatia_map options {
+						return map
 					}
 
 				</action>
