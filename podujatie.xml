@@ -8,6 +8,11 @@
 	<!-- TRANSACTIONS -->
 	<!-- ROLES -->
 	<!-- DATA -->
+	<data type="boolean">
+		<id>dostupnost</id>
+		<title>Dostupnost podujatia</title>
+		<init>true</init>
+	</data>
 	<data type="enumeration">
 		<id>podujatie_typ</id>
 		<title>Typ podujatia</title>
@@ -135,13 +140,7 @@
 	</data>
 	<data type="enumeration_map">
 		<id>enu_map_timy</id>
-		<title>Prihlasene timy</title>
-		<options>
-			<option key="key1">value1</option>
-			<option key="key2">value2</option>
-			<option key="key3">value3</option>
-		</options>
-		<init>key1</init>
+		<title>Vyber svoj tim</title>
 	</data>
 	<data type="text">
 		<id>text_1</id>
@@ -232,6 +231,21 @@
 				<layout>
 					<x>0</x>
 					<y>3</y>
+					<rows>1</rows>
+					<cols>3</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>dostupnost</id>
+				<logic>
+					<behavior>hidden</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>4</y>
 					<rows>1</rows>
 					<cols>3</cols>
 					<offset>0</offset>

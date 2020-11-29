@@ -83,6 +83,27 @@
 				<id>enum_podujatia</id>
 				<logic>
 					<behavior>editable</behavior>
+					<action trigger="set">
+						podujatie_ref: f.taskRef_zvolene_podujatie,
+						podujatie_map: f.enum_podujatia;
+
+						def vybrane_podujatie = podujatie_map.value
+
+						def taskInfo = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("56")) } )
+						change podujatie_ref value {
+							return []
+						}
+						podujatie_ref.value.add(taskInfo.stringId)
+						change podujatie_ref value {
+							return podujatie_ref.value
+						}
+						def taskPrihlasit = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("1")) } )
+						podujatie_ref.value.add(taskPrihlasit.stringId)
+							change podujatie_ref value {
+								return podujatie_ref.value
+							}
+
+					</action>
 				</logic>
 				<layout>
 					<x>1</x>
@@ -96,7 +117,7 @@
 			</dataRef>
 		</dataGroup>
 		<event type="assign">
-			<id>421_finish</id>
+			<id>421_assign</id>
 			<actions phase="post">
 				<action>
 <!--					vyhladaju sa podujatia a tasky prihlasenie sa hodia do taskrefu-->
@@ -109,32 +130,23 @@
 					cases.each {
 
 						def id = it.stringId
-						task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("16")) });
-						nazov_podujatia = getData(task).get('nazov_timu');
+						task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
+						nazov_podujatia = getData(task).get('podujatie_nazov');
 						map[id] = nazov_podujatia.value
 
 					}
 					change podujatia_map options {
-					return map;
+						return map;
 					}
 
-<!--					def cases = findCases ({ it.processIdentifier.contains("podujatie") });-->
-<!--					cases.each {-->
-<!--						caseIde = it.stringId-->
-<!--						task_prihlasenie = findTask( { it.caseId.eq(caseIde).and(it.transitionId.eq("1")) } );-->
-<!--						if(task_prihlasenie != null) {-->
-<!--							if(podujatia_ref.value == null) {-->
-<!--								change podujatia_ref value {-->
-<!--								return []-->
-<!--							}-->
-<!--							podujatia_ref.value.add(task_prihlasenie.stringId)-->
-<!--							}-->
-<!--							else {-->
-<!--							podujatia_ref.value.add(task_prihlasenie.stringId)-->
-<!--							}-->
-<!--						}-->
+				</action>
+			</actions>
+		</event>
+		<event type="finish">
+			<id>421_finish</id>
+			<actions phase="pre">
+				<action>
 
-<!--					}-->
 
 				</action>
 			</actions>
