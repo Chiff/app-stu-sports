@@ -253,7 +253,7 @@
 					cases.each {
 
 						def id = it.stringId
-						task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("6")) });
+						task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("16")) });
 						nazov_podujatia = getData(task).get('nazov_timu');
 						map[id] = nazov_podujatia.value
 
@@ -274,7 +274,6 @@
 					timy_ref: f.taskref_tim_podujatie_add,
 					enumer: f.enu_map_timy;
 
-					def prihlasene_timy = []
 					def chosen_team = enumer.value
 					def novy_tim = findTask( { it.caseId.eq(chosen_team).and(it.transitionId.eq("16")) } )
 					if(timy_ref.value == null) {
@@ -723,33 +722,47 @@
 			</dataRef>
 		</dataGroup>
 		<event type="assign">
-			<id>39_assign</id>
+			<id>339_assign</id>
 			<actions phase="pre">
 				<action>
+					timy_ref: f.taskref_tim_podujatie_add,
 					timy_map: f.enu_map_timy;
 					def map = [:]
-					def casesIds = []
-					def tasks = []
-
-
 
 					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
 					def cases = findCases ({ it.processIdentifier.eq("${groupId}_tim" as String) });
 					cases.each {
 
 						def id = it.stringId
-						def k = timy_map.values()
-<!--						task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("6")) });-->
-<!--						nazov_podujatia = getData(task).get('nazov_timu');-->
-<!--						map[id] = nazov_podujatia.value-->
-
-					}
-					casesIds.each {
-					tasks
+						task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("16")) });
+						nazov_podujatia = getData(task).get('nazov_timu');
+						if(timy_ref.value.contains(task.stringId)) {
+							map[id] = nazov_podujatia.value
+						}
 					}
 					change timy_map options {
 						return map;
 					}
+				</action>
+			</actions>
+		</event>
+		<event type="finish">
+			<id>339_finish</id>
+			<actions phase="pre">
+				<action>
+					timy_ref: f.taskref_tim_podujatie_add,
+					timy_map: f.enu_map_timy;
+
+					def chosen_team = timy_map.value
+
+					def task = findTask( { it.caseId.eq(chosen_team).and(it.transitionId.eq("16")) } )
+					if(timy_ref.value.contains(task.stringId)) {
+						timy_ref.value.remove(task.stringId)
+						change timy_ref value {
+							return timy_ref.value
+						}
+					}
+
 				</action>
 			</actions>
 		</event>
