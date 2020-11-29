@@ -205,6 +205,47 @@
 			</dataRef>
 		</dataGroup>
 	</transition>
+	<transition>
+		<id>16</id>
+		<x>460</x>
+		<y>500</y>
+		<dataGroup>
+			<id>DataGroup_0</id>
+			<layout>grid</layout>
+			<dataRef>
+				<id>nazov_timu</id>
+				<logic>
+					<behavior>visible</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>4</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>text_2</id>
+				<logic>
+					<behavior>visible</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>1</y>
+					<rows>1</rows>
+					<cols>4</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
+		<label>info o time</label>
+		<icon>info</icon>
+	</transition>
 	<!-- PLACES -->
 	<place>
 		<id>2</id>
@@ -246,20 +287,6 @@
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>10</id>
-		<type>regular</type>
-		<sourceId>3</sourceId>
-		<destinationId>5</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>11</id>
-		<type>regular</type>
-		<sourceId>5</sourceId>
-		<destinationId>3</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
 		<id>12</id>
 		<type>regular</type>
 		<sourceId>3</sourceId>
@@ -274,17 +301,24 @@
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>14</id>
-		<type>regular</type>
+		<id>17</id>
+		<type>read</type>
+		<sourceId>3</sourceId>
+		<destinationId>5</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>18</id>
+		<type>read</type>
 		<sourceId>3</sourceId>
 		<destinationId>6</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>15</id>
-		<type>regular</type>
-		<sourceId>6</sourceId>
-		<destinationId>3</destinationId>
+		<id>19</id>
+		<type>read</type>
+		<sourceId>3</sourceId>
+		<destinationId>16</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 </document>

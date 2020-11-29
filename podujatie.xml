@@ -151,6 +151,13 @@
 		<id>taskref_tim_podujatie_add</id>
 		<title>taskref_tim_podujatie_add</title>
 	</data>
+	<data type="text">
+		<id>testovanie</id>
+		<title>set label</title>
+		<placeholder>placeholder</placeholder>
+		<desc>description</desc>
+		<init>value</init>
+	</data>
 	<!-- I18NS -->
 	<!-- TRANSITIONS -->
 	<transition>
@@ -169,6 +176,13 @@
 				<id>enu_map_timy</id>
 				<logic>
 					<behavior>editable</behavior>
+					<action trigger="set">
+						test: f.testovanie,
+						enumer: f.this;
+						change test value {
+							enumer.value
+						}
+					</action>
 				</logic>
 				<layout>
 					<x>0</x>
@@ -210,6 +224,21 @@
 					<appearance>outline</appearance>
 				</layout>
 			</dataRef>
+			<dataRef>
+				<id>testovanie</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>3</y>
+					<rows>1</rows>
+					<cols>3</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
 		</dataGroup>
 		<event type="assign">
 			<id>39_assign</id>
@@ -234,6 +263,33 @@
 					}
 					change timy_map options {
 						return map;
+					}
+				</action>
+			</actions>
+		</event>
+		<event type="finish">
+			<id>39_finish</id>
+			<actions phase="pre">
+				<action>
+					timy_ref: f.taskref_tim_podujatie_add,
+					enumer: f.enu_map_timy;
+
+					def prihlasene_timy = []
+					def chosen_team = enumer.value
+					def novy_tim = findTask( { it.caseId.eq(chosen_team).and(it.transitionId.eq("16")) } )
+					if(timy_ref.value == null) {
+						change timy_ref value {
+							return []
+						}
+					}
+					if(timy_ref.value.contains(novy_tim.stringId)) {
+						cancelTask("1")
+					}
+					else {
+						timy_ref.value.add(novy_tim.stringId)
+						change timy_ref value {
+							return timy_ref.value
+						}
 					}
 				</action>
 			</actions>
@@ -293,7 +349,6 @@
 				<id>podujatie_datum</id>
 				<logic>
 					<behavior>editable</behavior>
-					<behavior>required</behavior>
 				</logic>
 				<layout>
 					<x>0</x>
@@ -325,7 +380,6 @@
 				<id>podujatie_nazov</id>
 				<logic>
 					<behavior>editable</behavior>
-					<behavior>required</behavior>
 				</logic>
 				<layout>
 					<x>0</x>
@@ -640,6 +694,7 @@
 				<id>taskref_tim_podujatie_add</id>
 				<logic>
 					<behavior>editable</behavior>
+					<behavior>hidden</behavior>
 				</logic>
 				<layout>
 					<x>0</x>
@@ -667,6 +722,37 @@
 				</layout>
 			</dataRef>
 		</dataGroup>
+		<event type="assign">
+			<id>39_assign</id>
+			<actions phase="pre">
+				<action>
+					timy_map: f.enu_map_timy;
+					def map = [:]
+					def casesIds = []
+					def tasks = []
+
+
+
+					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
+					def cases = findCases ({ it.processIdentifier.eq("${groupId}_tim" as String) });
+					cases.each {
+
+						def id = it.stringId
+						def k = timy_map.values()
+<!--						task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("6")) });-->
+<!--						nazov_podujatia = getData(task).get('nazov_timu');-->
+<!--						map[id] = nazov_podujatia.value-->
+
+					}
+					casesIds.each {
+					tasks
+					}
+					change timy_map options {
+						return map;
+					}
+				</action>
+			</actions>
+		</event>
 	</transition>
 	<transition>
 		<id>96</id>
