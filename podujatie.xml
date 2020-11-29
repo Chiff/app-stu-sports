@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://modeler.netgrif.com/petriflow_schema.xsd">
 	<id>podujatie</id>
-	<initials>NEW</initials>
+	<initials>PODUJATIE</initials>
 	<title>podujatie</title>
 	<defaultRole>true</defaultRole>
 	<transitionRole>false</transitionRole>
@@ -33,6 +33,7 @@
 		<placeholder>placeholder</placeholder>
 		<desc>description</desc>
 		<init>1</init>
+		<valid>positive</valid>
 	</data>
 	<data type="boolean">
 		<id>is_podujatie_sukromne</id>
@@ -128,6 +129,7 @@
 		<placeholder>placeholder</placeholder>
 		<desc>description</desc>
 		<init>1</init>
+		<valid>positive</valid>
 	</data>
 	<data type="text">
 		<id>podujatie_owner_email</id>
@@ -374,6 +376,16 @@
 				<logic>
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
+					<action trigger="set">
+						max: f.300,
+						min: f.400;
+
+						if (min.value > max.value) {
+							change max value {
+								return min.value
+							}
+						}
+					</action>
 				</logic>
 				<layout>
 					<x>2</x>
@@ -405,6 +417,16 @@
 				<logic>
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
+					<action trigger="set">
+						max: f.300,
+						min: f.400;
+
+						if (min.value > max.value) {
+							change min value {
+								return max.value;
+							}
+						}
+					</action>
 				</logic>
 				<layout>
 					<x>0</x>
@@ -445,7 +467,37 @@
 		<label>podujatie dostupne \ system</label>
 		<icon>settings</icon>
 		<assignPolicy>auto</assignPolicy>
-		<finishPolicy>auto_no_data</finishPolicy>
+		<finishPolicy>manual</finishPolicy>
+		<dataGroup>
+			<id>DataGroup_0</id>
+			<dataRef>
+				<id>dostupnost</id>
+				<logic>
+					<behavior>hidden</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance></appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
+		<event type="assign">
+			<id>3_finish</id>
+			<actions phase="post">
+				<action>
+					jeDostupne: f.dostupnost;
+
+					change jeDostupne value {
+						return true
+					}
+				</action>
+			</actions>
+		</event>
 	</transition>
 	<transition>
 		<id>4</id>
@@ -457,7 +509,37 @@
 		<label>podujatie nedostupne \ system</label>
 		<icon>settings</icon>
 		<assignPolicy>auto</assignPolicy>
-		<finishPolicy>auto_no_data</finishPolicy>
+		<finishPolicy>manual</finishPolicy>
+		<dataGroup>
+			<id>DataGroup_0</id>
+			<dataRef>
+				<id>dostupnost</id>
+				<logic>
+					<behavior>hidden</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance></appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
+		<event type="assign">
+			<id>4_finish</id>
+			<actions phase="post">
+				<action>
+					jeDostupne: f.dostupnost;
+
+					change jeDostupne value {
+						return false
+					}
+				</action>
+			</actions>
+		</event>
 	</transition>
 	<transition>
 		<id>5</id>
@@ -548,8 +630,25 @@
 		<label>info o podujati</label>
 		<icon>info</icon>
 		<dataGroup>
-			<id>DataGroup_1</id>
+			<id>DataGroup_3</id>
 			<layout>grid</layout>
+			<dataRef>
+				<id>dostupnost</id>
+				<logic>
+					<behavior>visible</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>4</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+				</layout>
+			</dataRef>
+		</dataGroup>
+		<dataGroup>
+			<id>DataGroup_1</id>
 			<dataRef>
 				<id>podujatie_owner_id</id>
 				<logic>
