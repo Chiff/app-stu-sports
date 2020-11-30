@@ -148,7 +148,6 @@
 
 							def caseid = it.stringId
 							def osoba_zobrazit_udaje_task = findTask( { it.caseId.eq(caseid).and(it.transitionId.eq("7")) });
-							assignTask(osoba_zobrazit_udaje_task)
 							def meno_osoby = getData(osoba_zobrazit_udaje_task).get('name').value;
 							def priezvisko_osoby = getData(osoba_zobrazit_udaje_task).get('surname').value;
 							def email_osoby = getData(osoba_zobrazit_udaje_task).get('mail').value;
@@ -170,26 +169,93 @@
 		<layout>
 			<offset>0</offset>
 		</layout>
-		<label>Prihlasit na podujatie</label>
+		<label>Pridat clenov</label>
 		<icon>event</icon>
-		<dataGroup>
-			<id>DataGroup_0</id>
-			<dataRef>
-				<id>taskRef_podujatie_prihlas</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>4</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
+		<dataRef>
+			<id>taskRef_clenovia</id>
+			<logic>
+				<behavior>editable</behavior>
+				<behavior>required</behavior>
+			</logic>
+			<layout>
+				<x>0</x>
+				<y>1</y>
+				<rows>2</rows>
+				<cols>4</cols>
+				<offset>0</offset>
+				<template>material</template>
+				<appearance>outline</appearance>
+			</layout>
+		</dataRef>
+		<dataRef>
+			<id>enum_osoby</id>
+			<logic>
+				<behavior>editable</behavior>
+				<action trigger="set">
+					<!-- task "info o osobe" sa prida do taskrefov-->
+					clenovia_ref: f.taskRef_clenovia,
+					clenovia_map: f.enum_osoby;
+
+					<!-- zober caseId zvolenej osoby z mapy-->
+					def vybrana_osoba = clenovia_map.value
+					<!-- najdi task "info o osobe" -->
+					def taskInfo = findTask( { it.caseId.eq(vybrana_osoba).and(it.transitionId.eq("7")) } )
+
+					<!-- ak je taskref prazny, inicializuj ho prazdnou hodnotou
+                          ak uz obsahuje dany task, nepridavaj ho -->
+					if(clenovia_ref.value != null) {
+					if( !(clenovia_ref.value.contains(taskInfo.stringId)) ) {
+					clenovia_ref.value.add(taskInfo.stringId)
+					change clenovia_ref value {
+					return clenovia_ref.value
+					}
+					}
+					}
+					else {
+					change clenovia_ref value {
+					return []
+					}
+					}
+				</action>
+			</logic>
+			<layout>
+				<x>0</x>
+				<y>2</y>
+				<rows>2</rows>
+				<cols>4</cols>
+				<offset>0</offset>
+				<template>material</template>
+				<appearance>outline</appearance>
+			</layout>
+		</dataRef>
+		<event type="assign">
+			<id>4211_assign</id>
+			<actions phase="post">
+				<action>
+
+					clenovia_ref: f.taskRef_clenovia,
+					clenovia_map: f.enum_osoby;
+
+					def map = [:]
+
+					def cases = findCases ({ it.processIdentifier.contains("clen_osoba") });
+					cases.each {
+
+					def caseid = it.stringId
+					def osoba_zobrazit_udaje_task = findTask( { it.caseId.eq(caseid).and(it.transitionId.eq("7")) });
+					def meno_osoby = getData(osoba_zobrazit_udaje_task).get('name').value;
+					def priezvisko_osoby = getData(osoba_zobrazit_udaje_task).get('surname').value;
+					def email_osoby = getData(osoba_zobrazit_udaje_task).get('mail').value;
+					map[caseid] = meno_osoby + " " + priezvisko_osoby + " --> " + email_osoby
+
+					}
+					change clenovia_map options {
+					return map
+					}
+
+				</action>
+			</actions>
+		</event>
 	</transition>
 	<transition>
 		<id>6</id>
@@ -305,12 +371,13 @@
 			<dataRef>
 				<id>taskRef_clenovia</id>
 				<logic>
-					<behavior>visible</behavior>
+					<behavior>editable</behavior>
+					<behavior>required</behavior>
 				</logic>
 				<layout>
 					<x>0</x>
 					<y>1</y>
-					<rows>1</rows>
+					<rows>2</rows>
 					<cols>4</cols>
 					<offset>0</offset>
 					<template>material</template>

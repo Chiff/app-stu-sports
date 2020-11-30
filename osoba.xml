@@ -77,6 +77,7 @@
 				<id>mail</id>
 				<logic>
 					<behavior>editable</behavior>
+					<behavior>required</behavior>
 				</logic>
 				<layout>
 					<x>2</x>
@@ -235,6 +236,12 @@
 				<logic>
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
+				</logic>
+			</dataRef>
+			<dataRef>
+				<id>mail</id>
+				<logic>
+					<behavior>visible</behavior>
 				</logic>
 			</dataRef>
 		</dataGroup>
