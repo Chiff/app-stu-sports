@@ -233,10 +233,13 @@
 					cases.each {
 
 						def id = it.stringId
-						task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
-						nazov_podujatia = getData(task).get('podujatie_nazov');
-						map[id] = nazov_podujatia.value
-
+						prihlasenie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("1")) });
+						<!-- ak je task prihlasenia nedostupny, tak ho nepridaj do zoznamu -->
+						if(prihlasenie != null) {
+							task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
+							nazov_podujatia = getData(task).get('podujatie_nazov');
+							map[id] = nazov_podujatia.value
+						}
 					}
 					change podujatia_map options {
 						return map
@@ -252,7 +255,7 @@
 
 					podujatie_ref: f.taskRef_zvolene_podujatie,
 					podujatia_map: f.enum_podujatia;
-
+					<!-- na cancel tasku kontrola, ci nahodou nie su assignute nejake tasky prihlasenia -->
 					if(podujatie_ref.value != null) {
 						if(podujatie_ref.value[1] != null) {
 							if(!podujatie_ref.value[1].isEmpty()) {
@@ -284,8 +287,8 @@
 
 					if(zvolene_podujatie_ref.value != null) {
 						if(zvolene_podujatie_ref.value[1] != null) {
-							if( (!zvolene_podujatie.value[1].isEmpty()) ) {
-								def prihlasenieTask = findTask(zvolene_podujatie_ref.value[1])
+							if( (!zvolene_podujatie_ref.value[1].isEmpty()) ) {
+								def prihlasenieTask = findTask({it._id.eq(zvolene_podujatie_ref.value[1])})
 								finishTask(prihlasenieTask)
 							}
 						}

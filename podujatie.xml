@@ -8,11 +8,6 @@
 	<!-- TRANSACTIONS -->
 	<!-- ROLES -->
 	<!-- DATA -->
-	<data type="boolean">
-		<id>dostupnost</id>
-		<title>Dostupnost podujatia</title>
-		<init>true</init>
-	</data>
 	<data type="enumeration">
 		<id>podujatie_typ</id>
 		<title>Typ podujatia</title>
@@ -189,21 +184,6 @@
 				</layout>
 			</dataRef>
 			<dataRef>
-				<id>dostupnost</id>
-				<logic>
-					<behavior>hidden</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>4</y>
-					<rows>1</rows>
-					<cols>3</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
 				<id>enu_map_timy</id>
 				<logic>
 					<behavior>editable</behavior>
@@ -227,7 +207,6 @@
 					timy_ref: f.taskref_tim_podujatie_add,
 					timy_map: f.enu_map_timy;
 					def map = [:]
-					def tasks = []
 
 					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
 					def cases = findCases ({ it.processIdentifier.eq("${groupId}_tim" as String) });
@@ -273,7 +252,7 @@
 					else {
 					timy_ref.value.add(novy_tim.stringId)
 					change timy_ref value {
-					return timy_ref.value
+						return timy_ref.value
 					}
 
 					}
@@ -444,37 +423,6 @@
 		<label>podujatie dostupne \ system</label>
 		<trigger type="auto"/>
 		<icon>settings</icon>
-		<dataGroup>
-			<id>DataGroup_0</id>
-			<dataRef>
-				<id>dostupnost</id>
-				<logic>
-					<behavior>hidden</behavior>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance></appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-<!--		<event type="assign">-->
-<!--			<id>3_finish</id>-->
-<!--			<actions phase="post">-->
-<!--				<action>-->
-<!--					jeDostupne: f.dostupnost;-->
-
-<!--					change jeDostupne value {-->
-<!--						return true-->
-<!--					}-->
-<!--				</action>-->
-<!--			</actions>-->
-<!--		</event>-->
 	</transition>
 	<transition>
 		<id>4</id>
@@ -486,37 +434,6 @@
 		<label>podujatie nedostupne \ system</label>
 		<trigger type="auto"/>
 		<icon>settings</icon>
-		<dataGroup>
-			<id>DataGroup_0</id>
-			<dataRef>
-				<id>dostupnost</id>
-				<logic>
-					<behavior>hidden</behavior>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance></appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-<!--		<event type="assign">-->
-<!--			<id>4_finish</id>-->
-<!--			<actions phase="post">-->
-<!--				<action>-->
-<!--					jeDostupne: f.dostupnost;-->
-
-<!--					change jeDostupne value {-->
-<!--						return false-->
-<!--					}-->
-<!--				</action>-->
-<!--			</actions>-->
-<!--		</event>-->
 	</transition>
 	<transition>
 		<id>5</id>
@@ -606,24 +523,6 @@
 		</layout>
 		<label>info o podujati</label>
 		<icon>info</icon>
-		<dataGroup>
-			<id>DataGroup_3</id>
-			<layout>grid</layout>
-			<dataRef>
-				<id>dostupnost</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>4</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-				</layout>
-			</dataRef>
-		</dataGroup>
 		<dataGroup>
 			<id>DataGroup_1</id>
 			<dataRef>
