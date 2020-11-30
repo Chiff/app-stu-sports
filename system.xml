@@ -23,6 +23,13 @@
 		<init>value</init>
 	</data>
 	<data type="taskRef">
+		<id>taskRef_osoba</id>
+		<title>taskref uzivatel</title>
+		<placeholder>Uzivatel</placeholder>
+		<desc>description</desc>
+		<init>value</init>
+	</data>
+	<data type="taskRef">
 		<id>taskRef_podujatie_vytvorenie</id>
 		<title>TakRef vytvorene podujatie</title>
 		<placeholder>placeholder</placeholder>
@@ -60,9 +67,9 @@
 		<icon>settings</icon>
 		<trigger type="auto"/>
 		<dataGroup>
-			<id>DataGroup_1</id>
+			<id>DataGroup_11</id>
 			<dataRef>
-				<id>taskRef_podujatie_vytvorenie</id>
+				<id>taskRef_osoba</id>
 				<logic>
 					<behavior>editable</behavior>
 				</logic>
@@ -81,7 +88,11 @@
 			<id>42_finish</id>
 			<actions phase="post">
 				<action>
-					vytvorenie_podujatia_ref: f.taskRef_podujatie_vytvorenie;
+					osoba_ref: f.taskRef_osoba;
+
+					change osoba_ref value {
+					return []
+					}
 
 					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
 
@@ -108,7 +119,18 @@
 					],
 					])
 					finishTask(osobne_udaje)
-
+					def osoba_udaje = assignTask("8", novaOsoba)
+					osoba_ref.value.add(osoba_udaje.stringId)
+					change osoba_ref value{
+					return osoba_ref.value
+					}
+					}
+					else {
+					def osoba_udaje = assignTask("8", mojaOsoba)
+					osoba_ref.value.add(osoba_udaje.stringId)
+					change osoba_ref value{
+					return osoba_ref.value
+					}
 					}
 				</action>
 			</actions>
@@ -265,6 +287,24 @@
 			<offset>0</offset>
 		</layout>
 		<label>Zobrazit profil</label>
+		<dataGroup>
+			<id>DataGroup_1</id>
+			<dataRef>
+				<id>taskRef_osoba</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
 	</transition>
 	<transition>
 		<id>42</id>
@@ -275,7 +315,7 @@
 		</layout>
 		<label>Vytvorit podujatie / usr</label>
 		<dataGroup>
-			<id>DataGroup_1</id>
+			<id>DataGroup_1111</id>
 			<dataRef>
 				<id>taskRef_podujatie_vytvorenie</id>
 				<logic>
@@ -358,24 +398,6 @@
 		<label>Editovat / usr</label>
 	</transition>
 	<transition>
-		<id>81</id>
-		<x>540</x>
-		<y>1140</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Editovat udaje / usr</label>
-	</transition>
-	<transition>
-		<id>82</id>
-		<x>700</x>
-		<y>1140</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Vymazat ucet / usr</label>
-	</transition>
-	<transition>
 		<id>130</id>
 		<x>1460</x>
 		<y>860</y>
@@ -384,7 +406,7 @@
 		</layout>
 		<label>Vytvorit tim</label>
 		<dataGroup>
-			<id>DataGroup_1</id>
+			<id>DataGroup_11111</id>
 			<dataRef>
 				<id>taskRef_tim</id>
 				<logic>
@@ -450,14 +472,6 @@
 	<place>
 		<id>50</id>
 		<x>1180</x>
-		<y>1020</y>
-		<label></label>
-		<tokens>0</tokens>
-		<static>false</static>
-	</place>
-	<place>
-		<id>64</id>
-		<x>620</x>
 		<y>1020</y>
 		<label></label>
 		<tokens>0</tokens>
@@ -539,13 +553,6 @@
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>65</id>
-		<type>regular</type>
-		<sourceId>40</sourceId>
-		<destinationId>64</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
 		<id>75</id>
 		<type>regular</type>
 		<sourceId>51</sourceId>
@@ -574,20 +581,6 @@
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>83</id>
-		<type>regular</type>
-		<sourceId>64</sourceId>
-		<destinationId>81</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>84</id>
-		<type>regular</type>
-		<sourceId>64</sourceId>
-		<destinationId>82</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
 		<id>131</id>
 		<type>regular</type>
 		<sourceId>37</sourceId>
@@ -613,6 +606,13 @@
 		<id>148</id>
 		<type>regular</type>
 		<sourceId>130</sourceId>
+		<destinationId>37</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>149</id>
+		<type>regular</type>
+		<sourceId>40</sourceId>
 		<destinationId>37</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
