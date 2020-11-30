@@ -95,7 +95,32 @@
 				<id>enum_osoby</id>
 				<logic>
 					<behavior>editable</behavior>
-					<behavior>required</behavior>
+					<action trigger="set">
+						<!-- task "info o osobe" sa prida do taskrefov-->
+						clenovia_ref: f.taskRef_clenovia,
+						clenovia_map: f.enum_osoby;
+
+						<!-- zober caseId zvolenej osoby z mapy-->
+						def vybrana_osoba = clenovia_map.value
+						<!-- najdi task "info o osobe" -->
+						def taskInfo = findTask( { it.caseId.eq(vybrana_osoba).and(it.transitionId.eq("7")) } )
+
+						<!-- ak je taskref prazny, inicializuj ho prazdnou hodnotou
+						 	 ak uz obsahuje dany task, nepridavaj ho -->
+						if(clenovia_ref.value != null) {
+							if( !(clenovia_ref.value.contains(taskInfo.stringId)) ) {
+								clenovia_ref.value.add(taskInfo.stringId)
+								change clenovia_ref value {
+									return clenovia_ref.value
+								}
+							}
+						}
+						else {
+							change clenovia_ref value {
+								return []
+							}
+						}
+					</action>
 				</logic>
 				<layout>
 					<x>0</x>
