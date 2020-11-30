@@ -442,8 +442,26 @@
 		<layout>
 			<offset>0</offset>
 		</layout>
-		<label>zrusenie podujatia \ owner</label>
+		<label>zrusenie podujatia</label>
 		<icon>clear</icon>
+		<dataGroup>
+			<id>DataGroup_511</id>
+			<dataRef>
+				<id>podujatie_nazov</id>
+				<logic>
+					<behavior>visible</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>4</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
 	</transition>
 	<transition>
 		<id>6</id>
@@ -1136,5 +1154,12 @@
 		<destinationId>6</destinationId>
 		<multiplicity>400</multiplicity>
 		<breakPoint><x>260</x><y>540</y></breakPoint>
+	</arc>
+	<arc>
+		<id>101</id>
+		<type>reset</type>
+		<sourceId>9</sourceId>
+		<destinationId>5</destinationId>
+		<multiplicity>1</multiplicity>
 	</arc>
 </document>

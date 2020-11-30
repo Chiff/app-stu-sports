@@ -17,8 +17,15 @@
 	</data>
 	<data type="taskRef">
 		<id>taskRef_zvolene_podujatie</id>
-		<title>Dostpne podujatia</title>
-		<placeholder>placeholder</placeholder>
+		<title>Zvolene podujatie</title>
+		<placeholder>Zvolene podujatie</placeholder>
+		<desc>description</desc>
+		<init>value</init>
+	</data>
+	<data type="taskRef">
+		<id>taskRef_spravovane_podujatie</id>
+		<title>Spravovane podujatie</title>
+		<placeholder>Spravovane podujatie</placeholder>
 		<desc>description</desc>
 		<init>value</init>
 	</data>
@@ -128,7 +135,7 @@
 					else {
 					def osoba_udaje = assignTask("8", mojaOsoba)
 					osoba_ref.value.add(osoba_udaje.stringId)
-					change osoba_ref value{
+					change osoba_ref value {
 					return osoba_ref.value
 					}
 					}
@@ -378,29 +385,22 @@
 					def podujatie = createCase("${groupId}_podujatie" as String, "Nové podujatie")
 					def konstruktor = assignTask("2", podujatie)
 					change vytvorenie_podujatia_ref value {
-					return [konstruktor.stringId]
+						return [konstruktor.stringId]
 					}
 				</action>
 			</actions>
 		</event>
 	</transition>
 	<transition>
-		<id>43</id>
-		<x>1180</x>
-		<y>900</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Vlastne podujatia / usr</label>
-	</transition>
-	<transition>
 		<id>51</id>
-		<x>1180</x>
-		<y>1140</y>
+		<x>1151</x>
+		<y>889</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
-		<label>Spravovat podujatie / usr</label>
+		<label>Moje podujatia</label>
+		<assignPolicy>auto</assignPolicy>
+		<finishPolicy>auto_no_data</finishPolicy>
 	</transition>
 	<transition>
 		<id>77</id>
@@ -409,7 +409,121 @@
 		<layout>
 			<offset>0</offset>
 		</layout>
-		<label>Zrusit / usr</label>
+		<label>Zrusit podujatie</label>
+		<dataGroup>
+			<id>DataGroup_771</id>
+			<dataRef>
+			<id>enum_podujatia</id>
+			<logic>
+				<behavior>editable</behavior>
+				<action trigger="set">
+					podujatia_map: f.enum_podujatia,
+					podujatie_ref: f.taskRef_spravovane_podujatie;
+
+					def vybrane_podujatie = podujatia_map.value
+
+					def taskInfo = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("56")) } )
+
+					<!-- vyprazdni taskref a pridaj tam  -->
+					change podujatie_ref value {
+						return []
+					}
+					podujatie_ref.value.add(taskInfo.stringId)
+
+				</action>
+			</logic>
+			<layout>
+				<x>1</x>
+				<y>0</y>
+				<rows>1</rows>
+				<cols>1</cols>
+				<offset>0</offset>
+				<template>material</template>
+				<appearance>outline</appearance>
+			</layout>
+			</dataRef>
+			<dataRef>
+				<id>taskRef_spravovane_podujatie</id>
+				<logic>
+					<behavior>visible</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
+		<event type="assign">
+			<id>77_assign</id>
+			<actions phase="pre">
+				<action>
+					podujatie_ref: f.taskRef_spravovane_podujatie,
+					podujatia_map: f.enum_podujatia;
+
+					def map = [:]
+
+					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
+					def podujatia = findCases{it.processIdentifier.eq("${groupId}_podujatie" as String).and(it.author.id.eq(loggedUser().id))}
+					podujatia.each {
+
+						def id = it.stringId
+						zrusenie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("5")) });
+						<!-- ak je task zrusenie je nedostupny, tak ho nepridaj do zoznamu -->
+						if(zrusenie != null) {
+							pofujatie_info = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
+							nazov_podujatia = getData(pofujatie_info).get('podujatie_nazov');
+							map[id] = nazov_podujatia.value
+						}
+					}
+					change podujatia_map options {
+						return map
+					}
+					<!-- vynuluj taskref -->
+					change podujatie_ref value {
+						return []
+					}
+
+				</action>
+			</actions>
+		</event>
+		<event type="cancel">
+			<id>77_cancel</id>
+			<actions phase="pre">
+				<action>
+					podujatie_ref: f.taskRef_spravovane_podujatie;
+
+					change podujatie_ref value {
+						return []
+					}
+
+				</action>
+			</actions>
+		</event>
+		<event type="finish">
+			<id>77_finish</id>
+			<actions phase="pre">
+				<action>
+					podujatia_map: f.enum_podujatia;
+
+					def vybrane_podujatie = podujatia_map.value
+
+					def zrusit_podujatie = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("5")) } )
+					if(zrusit_podujatie == null) {
+						throw new IllegalArgumentException("Vyber podujatie");
+					}
+					else {
+						assignTask(zrusit_podujatie)
+						finishTask(zrusit_podujatie)
+					}
+
+				</action>
+			</actions>
+		</event>
 	</transition>
 	<transition>
 		<id>78</id>
@@ -418,7 +532,7 @@
 		<layout>
 			<offset>0</offset>
 		</layout>
-		<label>Editovat / usr</label>
+		<label>Editovat</label>
 	</transition>
 	<transition>
 		<id>130</id>
@@ -493,24 +607,8 @@
 		<static>false</static>
 	</place>
 	<place>
-		<id>50</id>
-		<x>1180</x>
-		<y>1020</y>
-		<label></label>
-		<tokens>0</tokens>
-		<static>false</static>
-	</place>
-	<place>
 		<id>73</id>
 		<x>1060</x>
-		<y>1300</y>
-		<label></label>
-		<tokens>0</tokens>
-		<static>false</static>
-	</place>
-	<place>
-		<id>74</id>
-		<x>1300</x>
 		<y>1300</y>
 		<label></label>
 		<tokens>0</tokens>
@@ -554,28 +652,6 @@
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>48</id>
-		<type>regular</type>
-		<sourceId>37</sourceId>
-		<destinationId>43</destinationId>
-		<multiplicity>1</multiplicity>
-		<breakPoint><x>1180</x><y>820</y></breakPoint>
-	</arc>
-	<arc>
-		<id>52</id>
-		<type>regular</type>
-		<sourceId>43</sourceId>
-		<destinationId>50</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>53</id>
-		<type>regular</type>
-		<sourceId>50</sourceId>
-		<destinationId>51</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
 		<id>75</id>
 		<type>regular</type>
 		<sourceId>51</sourceId>
@@ -583,24 +659,10 @@
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>76</id>
-		<type>regular</type>
-		<sourceId>51</sourceId>
-		<destinationId>74</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
 		<id>79</id>
 		<type>regular</type>
 		<sourceId>73</sourceId>
 		<destinationId>77</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>80</id>
-		<type>regular</type>
-		<sourceId>74</sourceId>
-		<destinationId>78</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
@@ -637,6 +699,20 @@
 		<type>regular</type>
 		<sourceId>40</sourceId>
 		<destinationId>37</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>150</id>
+		<type>regular</type>
+		<sourceId>37</sourceId>
+		<destinationId>51</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>152</id>
+		<type>regular</type>
+		<sourceId>73</sourceId>
+		<destinationId>78</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 </document>
