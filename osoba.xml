@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://modeler.netgrif.com/petriflow_schema.xsd">
 	<id>osoba</id>
-	<initials>NEW</initials>
+	<initials>OSOBA</initials>
 	<title>osoba</title>
 	<defaultRole>true</defaultRole>
 	<transitionRole>false</transitionRole>
@@ -9,21 +9,17 @@
 	<!-- ROLES -->
 	<!-- DATA -->
 	<data type="text">
-		<id>text_0</id>
+		<id>name</id>
 		<title>Meno</title>
-		<placeholder>placeholder</placeholder>
-		<desc>description</desc>
 		<init>value</init>
 	</data>
 	<data type="text">
-		<id>text_1</id>
+		<id>surname</id>
 		<title>Priezvisko</title>
-		<placeholder>placeholder</placeholder>
-		<desc>description</desc>
 		<init>value</init>
 	</data>
 	<data type="date">
-		<id>date_0</id>
+		<id>birth</id>
 		<title>datum narodenia</title>
 		<placeholder>placeholder</placeholder>
 		<desc>description</desc>
@@ -47,6 +43,22 @@
 		<placeholder>placeholder</placeholder>
 		<desc>description</desc>
 	</data>
+	<data type="text" immediate="true">
+		<id>user_id</id>
+		<title>id uzivatela</title>
+		<placeholder>id uzivatela</placeholder>
+		<desc>description</desc>
+	</data>
+	<data type="text">
+		<id>mail</id>
+		<title>email</title>
+		<init>value</init>
+	</data>
+	<data type="text">
+		<id>text_5</id>
+		<title>heslo</title>
+		<init>value</init>
+	</data>
 	<!-- I18NS -->
 	<!-- TRANSITIONS -->
 	<transition>
@@ -57,27 +69,91 @@
 			<offset>0</offset>
 		</layout>
 		<label>osobne udaje</label>
+		<icon>person</icon>
+		<dataGroup>
+			<id>DataGroup_1</id>
+			<layout>grid</layout>
+			<dataRef>
+				<id>mail</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>2</x>
+					<y>1</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>user_id</id>
+				<logic>
+					<behavior>editable</behavior>
+					<behavior>required</behavior>
+					<behavior>immediate</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>2</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
 		<dataGroup>
 			<id>DataGroup_0</id>
 			<dataRef>
-				<id>text_0</id>
+				<id>name</id>
 				<logic>
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
 				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
 			</dataRef>
 			<dataRef>
-				<id>text_1</id>
+				<id>surname</id>
 				<logic>
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
 				</logic>
+				<layout>
+					<x>2</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
 			</dataRef>
 			<dataRef>
-				<id>date_0</id>
+				<id>birth</id>
 				<logic>
 					<behavior>editable</behavior>
 				</logic>
+				<layout>
+					<x>0</x>
+					<y>1</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
 			</dataRef>
 		</dataGroup>
 	</transition>
@@ -89,25 +165,43 @@
 			<offset>0</offset>
 		</layout>
 		<label>zobrazit udaje</label>
+		<icon>remove_red_eye</icon>
 		<dataGroup>
 			<id>DataGroup_0</id>
 			<dataRef>
-				<id>text_0</id>
+				<id>name</id>
 				<logic>
 					<behavior>visible</behavior>
 				</logic>
 			</dataRef>
 			<dataRef>
-				<id>text_1</id>
+				<id>surname</id>
 				<logic>
 					<behavior>visible</behavior>
 				</logic>
 			</dataRef>
 			<dataRef>
-				<id>date_0</id>
+				<id>birth</id>
 				<logic>
 					<behavior>visible</behavior>
 				</logic>
+			</dataRef>
+			<dataRef>
+				<id>user_id</id>
+				<logic>
+					<behavior>editable</behavior>
+					<behavior>required</behavior>
+					<behavior>immediate</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>2</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
 			</dataRef>
 		</dataGroup>
 	</transition>
@@ -119,24 +213,25 @@
 			<offset>0</offset>
 		</layout>
 		<label>editovat udaje</label>
+		<icon>edit</icon>
 		<dataGroup>
 			<id>DataGroup_0</id>
 			<dataRef>
-				<id>text_0</id>
+				<id>name</id>
 				<logic>
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
 				</logic>
 			</dataRef>
 			<dataRef>
-				<id>text_1</id>
+				<id>surname</id>
 				<logic>
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
 				</logic>
 			</dataRef>
 			<dataRef>
-				<id>date_0</id>
+				<id>birth</id>
 				<logic>
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
@@ -152,6 +247,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>zmazat</label>
+		<icon>cancel</icon>
 		<dataGroup>
 			<id>DataGroup_0</id>
 			<dataRef>
@@ -169,30 +265,6 @@
 		</dataGroup>
 	</transition>
 	<transition>
-		<id>17</id>
-		<x>980</x>
-		<y>300</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>zmazane</label>
-		<dataGroup>
-			<id>DataGroup_0</id>
-			<dataRef>
-				<id>date_1</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-			</dataRef>
-			<dataRef>
-				<id>text_2</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-			</dataRef>
-		</dataGroup>
-	</transition>
-	<transition>
 		<id>20</id>
 		<x>692</x>
 		<y>425</y>
@@ -200,6 +272,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>sportove podujatia</label>
+		<icon>event</icon>
 		<dataGroup>
 			<id>DataGroup_0</id>
 			<dataRef>
@@ -258,13 +331,6 @@
 		<type>regular</type>
 		<sourceId>9</sourceId>
 		<destinationId>15</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>18</id>
-		<type>read</type>
-		<sourceId>15</sourceId>
-		<destinationId>17</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
