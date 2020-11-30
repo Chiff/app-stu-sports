@@ -58,8 +58,61 @@
 		</layout>
 		<label>Domovska stranka / user</label>
 		<icon>settings</icon>
-		<assignPolicy>auto</assignPolicy>
-		<finishPolicy>auto_no_data</finishPolicy>
+		<trigger type="auto"/>
+		<dataGroup>
+			<id>DataGroup_1</id>
+			<dataRef>
+				<id>taskRef_podujatie_vytvorenie</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
+		<event type="finish">
+			<id>42_finish</id>
+			<actions phase="post">
+				<action>
+					vytvorenie_podujatia_ref: f.taskRef_podujatie_vytvorenie;
+
+					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
+
+					def mojaOsoba = findCase({it.processIdentifier.contains("osoba").and(it.author.id.eq(loggedUser().id))})
+					if(mojaOsoba == null) {
+					def novaOsoba = createCase("${groupId}_osoba" as String, loggedUser().name)
+					def osobne_udaje = assignTask("2", novaOsoba)
+					setData(osobne_udaje, [
+					"name": [
+					"value": loggedUser().name,
+					"type" : "text"
+					],
+					"surname": [
+					"value": loggedUser().surname,
+					"type" : "text"
+					],
+					"mail": [
+					"value": loggedUser().email,
+					"type" : "text"
+					],
+					"user_id": [
+					"value": loggedUser().id,
+					"type" : "text"
+					],
+					])
+					finishTask(osobne_udaje)
+
+					}
+				</action>
+			</actions>
+		</event>
 	</transition>
 	<transition>
 		<id>39</id>
