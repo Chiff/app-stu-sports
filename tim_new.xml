@@ -29,15 +29,16 @@
 		<desc>description</desc>
 		<init>value</init>
 	</data>
+	<data type="taskRef">
+		<id>taskRef_clenovia</id>
+		<title>clenovia timu</title>
+		<placeholder>clenovia timu</placeholder>
+		<desc>clenovia timu</desc>
+		<init>ziadny clen</init>
+	</data>
 	<data type="text">
 		<id>nazov_timu</id>
 		<title>Nazov timu</title>
-		<init>value</init>
-	</data>
-	<data type="text">
-		<id>text_2</id>
-		<title>Clenovia timu</title>
-		<values>area</values>
 		<init>value</init>
 	</data>
 	<!-- I18NS -->
@@ -49,7 +50,7 @@
 		<layout>
 			<offset>0</offset>
 		</layout>
-		<label>Vytvorit</label>
+		<label>Vytvorit tim</label>
 		<icon>control_point</icon>
 		<dataGroup>
 			<id>DataGroup_0</id>
@@ -71,7 +72,7 @@
 				</layout>
 			</dataRef>
 			<dataRef>
-				<id>text_2</id>
+				<id>taskRef_clenovia</id>
 				<logic>
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
@@ -145,7 +146,7 @@
 				</layout>
 			</dataRef>
 			<dataRef>
-				<id>text_2</id>
+				<id>taskRef_clenovia</id>
 				<logic>
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
@@ -228,7 +229,7 @@
 				</layout>
 			</dataRef>
 			<dataRef>
-				<id>text_2</id>
+				<id>taskRef_clenovia</id>
 				<logic>
 					<behavior>visible</behavior>
 				</logic>

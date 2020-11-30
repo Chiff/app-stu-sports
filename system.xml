@@ -175,16 +175,16 @@
 
 
 						if(podujatie_ref.value != null) {
-						if(podujatie_ref.value[0] != null) {
-						t = findTask({it._id.eq(podujatie_ref.value[1])})
-						cancelTask(t)
+							if(podujatie_ref.value[0] != null) {
+								t = findTask({it._id.eq(podujatie_ref.value[1])})
+								cancelTask(t)
+							}
+							change podujatie_ref value {
+								return []
+							}
 						}
 						change podujatie_ref value {
-						return []
-						}
-						}
-						change podujatie_ref value {
-						return []
+							return []
 						}
 						podujatie_ref.value.add(taskInfo.stringId)
 						change podujatie_ref value {
@@ -446,7 +446,7 @@
 					def tim = createCase("${groupId}_tim" as String, "Novy tim")
 					def vyplnenie_udajov = assignTask("1", tim)
 					change tim_ref value {
-					return [vyplnenie_udajov.stringId]
+						return [vyplnenie_udajov.stringId]
 					}
 				</action>
 			</actions>
