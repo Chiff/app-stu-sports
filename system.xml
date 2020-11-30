@@ -173,12 +173,15 @@
 
 						def taskInfo = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("56")) } )
 
-
+						<!-- Ak je dataref prazdny, len ho inicializuj []
+						 	 ak nie je prazdny, cancelni predchadzajuci task prihlasenia a pridaj tam novu hodnotu -->
 						if(podujatie_ref.value != null) {
-							if(podujatie_ref.value[0] != null) {
-								t = findTask({it._id.eq(podujatie_ref.value[1])})
-								cancelTask(t)
-							}
+
+								if( !(podujatie_ref.value.isEmpty()) ) {
+									t = findTask({it._id.eq(podujatie_ref.value[1])})
+									cancelTask(t)
+								}
+
 							change podujatie_ref value {
 								return []
 							}
@@ -186,15 +189,21 @@
 						change podujatie_ref value {
 							return []
 						}
-						podujatie_ref.value.add(taskInfo.stringId)
-						change podujatie_ref value {
-						return podujatie_ref.value
+						<!-- Pridaj taskref na info o podujati iba ak taky tak naslo -->
+						if(taskInfo != null) {
+							podujatie_ref.value.add(taskInfo.stringId)
+							change podujatie_ref value {
+								return podujatie_ref.value
+							}
 						}
+							<!-- Pridaj taskref na prihlasenie timu iba ak taky task naslo-->
 						def taskPrihlasit = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("1")) } )
-						assignTask(taskPrihlasit)
-						podujatie_ref.value.add(taskPrihlasit.stringId)
-						change podujatie_ref value {
-						return podujatie_ref.value
+						if(taskPrihlasit != null) {
+							assignTask(taskPrihlasit)
+							podujatie_ref.value.add(taskPrihlasit.stringId)
+							change podujatie_ref value {
+								return podujatie_ref.value
+							}
 						}
 
 					</action>
@@ -212,7 +221,7 @@
 		</dataGroup>
 		<event type="assign">
 			<id>421_assign</id>
-			<actions phase="post">
+			<actions phase="pre">
 				<action>
 
 					zvolene_podujatie_ref: f.taskRef_zvolene_podujatie,
@@ -223,21 +232,21 @@
 					def cases = findCases ({ it.processIdentifier.contains("podujatie") });
 					cases.each {
 
-					def id = it.stringId
-					task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
-					nazov_podujatia = getData(task).get('podujatie_nazov');
-					map[id] = nazov_podujatia.value
+						def id = it.stringId
+						task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
+						nazov_podujatia = getData(task).get('podujatie_nazov');
+						map[id] = nazov_podujatia.value
 
 					}
 					change podujatia_map options {
-					return map;
+						return map
 					}
 
 				</action>
 			</actions>
 		</event>
 		<event type="cancel">
-			<id>422_assign</id>
+			<id>422_cancel</id>
 			<actions phase="post">
 				<action>
 
@@ -245,21 +254,23 @@
 					podujatia_map: f.enum_podujatia;
 
 					if(podujatie_ref.value != null) {
-					if(podujatie_ref.value[0] != null) {
-					t = findTask({it._id.eq(podujatie_ref.value[1])})
-					cancelTask(t)
+						if(podujatie_ref.value[1] != null) {
+							if(!podujatie_ref.value[1].isEmpty()) {
+								t = findTask({it._id.eq(podujatie_ref.value[1])})
+								cancelTask(t)
+							}
+						}
+						change podujatie_ref value {
+						return []
+					}
 					}
 					change podujatie_ref value {
-					return []
-					}
-					}
-					change podujatie_ref value {
-					return []
+						return []
 					}
 
 					def map = [:]
 					change podujatia_map options {
-					return map
+						return map
 					}
 
 				</action>
@@ -271,9 +282,18 @@
 				<action>
 					zvolene_podujatie_ref: f.taskRef_zvolene_podujatie;
 
-					def prihlasenieTask = findTask(zvolene_podujatie_ref.value[1])
+					if(zvolene_podujatie_ref.value != null) {
+						if(zvolene_podujatie_ref.value[1] != null) {
+							if( (!zvolene_podujatie.value[1].isEmpty()) ) {
+								def prihlasenieTask = findTask(zvolene_podujatie_ref.value[1])
+								finishTask(prihlasenieTask)
+							}
+						}
+					}
 
-					finishTask(prihlasenieTask)
+					else {
+						throw new IllegalArgumentException("Nebolo zvolene ziadne podujatie");
+					}
 
 				</action>
 			</actions>
