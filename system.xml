@@ -59,7 +59,7 @@
 	</data>
 	<data type="enumeration_map">
 		<id>enum_podujatia</id>
-		<title>Dostupne podujatia</title>
+		<title>Vyber podujatie</title>
 	</data>
 	<!-- I18NS -->
 	<!-- TRANSITIONS -->
@@ -532,7 +532,121 @@
 		<layout>
 			<offset>0</offset>
 		</layout>
-		<label>Editovat</label>
+		<label>Editovat podujatie</label>
+		<dataGroup>
+			<id>DataGroup_781</id>
+			<dataRef>
+				<id>enum_podujatia</id>
+				<logic>
+					<behavior>editable</behavior>
+					<action trigger="set">
+						podujatia_map: f.enum_podujatia,
+						podujatie_ref: f.taskRef_spravovane_podujatie;
+
+						def vybrane_podujatie = podujatia_map.value
+
+						def taskInfo = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("96")) } )
+
+						<!-- vyprazdni taskref a pridaj tam  -->
+						change podujatie_ref value {
+						return []
+						}
+						podujatie_ref.value.add(taskInfo.stringId)
+
+					</action>
+				</logic>
+				<layout>
+					<x>1</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>taskRef_spravovane_podujatie</id>
+				<logic>
+					<behavior>visible</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
+		<event type="assign">
+			<id>78_assign</id>
+			<actions phase="pre">
+				<action>
+					podujatie_ref: f.taskRef_spravovane_podujatie,
+					podujatia_map: f.enum_podujatia;
+
+					def map = [:]
+
+					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
+					def podujatia = findCases{it.processIdentifier.eq("${groupId}_podujatie" as String).and(it.author.id.eq(loggedUser().id))}
+					podujatia.each {
+
+						def id = it.stringId
+						editovanie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("96")) });
+						<!-- ak je task zrusenie je nedostupny, tak ho nepridaj do zoznamu -->
+						if(editovanie != null) {
+							pofujatie_info = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
+							nazov_podujatia = getData(pofujatie_info).get('podujatie_nazov');
+							map[id] = nazov_podujatia.value
+						}
+					}
+					change podujatia_map options {
+						return map
+					}
+					<!-- vynuluj taskref -->
+					change podujatie_ref value {
+					return []
+					}
+
+				</action>
+			</actions>
+		</event>
+		<event type="cancel">
+			<id>78_cancel</id>
+			<actions phase="pre">
+				<action>
+					podujatie_ref: f.taskRef_spravovane_podujatie;
+
+					change podujatie_ref value {
+					return []
+					}
+
+				</action>
+			</actions>
+		</event>
+<!--		<event type="finish">-->
+<!--			<id>77_finish</id>-->
+<!--			<actions phase="pre">-->
+<!--				<action>-->
+<!--					podujatia_map: f.enum_podujatia;-->
+
+<!--					def vybrane_podujatie = podujatia_map.value-->
+
+<!--					def zrusit_podujatie = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("5")) } )-->
+<!--					if(zrusit_podujatie == null) {-->
+<!--					throw new IllegalArgumentException("Vyber podujatie");-->
+<!--					}-->
+<!--					else {-->
+<!--					assignTask(zrusit_podujatie)-->
+<!--					finishTask(zrusit_podujatie)-->
+<!--					}-->
+
+<!--				</action>-->
+<!--			</actions>-->
+<!--		</event>-->
 	</transition>
 	<transition>
 		<id>130</id>
