@@ -8,7 +8,7 @@
 	<!-- TRANSACTIONS -->
 	<!-- ROLES -->
 	<!-- DATA -->
-	<data type="boolean" immediate="true">
+	<data type="boolean">
 		<id>dostupnost</id>
 		<title>Dostupnost podujatia</title>
 		<init>true</init>
@@ -221,17 +221,28 @@
 		</dataGroup>
 		<event type="assign">
 			<id>39_assign</id>
-			<actions phase="pre">
+			<actions phase="post">
 				<action>
+
+					timy_ref: f.taskref_tim_podujatie_add,
 					timy_map: f.enu_map_timy;
 					def map = [:]
 					def tasks = []
+
 					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
 					def cases = findCases ({ it.processIdentifier.eq("${groupId}_tim" as String) });
 					cases.each {
 
 						def id = it.stringId
 						task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("16")) });
+						if(timy_ref.value != null) {
+							if(timy_ref.value[0] != null) {
+								if(timy_ref.value.contains(task.stringId)) {
+									return
+								}
+							}
+						}
+
 						nazov_timu = getData(task).get('nazov_timu');
 						map[id] = nazov_timu.value
 
@@ -257,14 +268,14 @@
 						}
 					}
 					if(timy_ref.value.contains(novy_tim.stringId)) {
-						throw new IllegalArgumentException("Tento tim uz je na podujati prihlaseny");
 						cancelTask("1")
 					}
 					else {
-						timy_ref.value.add(novy_tim.stringId)
-						change timy_ref value {
-							return timy_ref.value
-						}
+					timy_ref.value.add(novy_tim.stringId)
+					change timy_ref value {
+					return timy_ref.value
+					}
+
 					}
 				</action>
 			</actions>
@@ -429,6 +440,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>podujatie dostupne \ system</label>
+		<trigger type="auto"/>
 		<icon>settings</icon>
 		<dataGroup>
 			<id>DataGroup_0</id>
@@ -436,6 +448,7 @@
 				<id>dostupnost</id>
 				<logic>
 					<behavior>hidden</behavior>
+					<behavior>editable</behavior>
 				</logic>
 				<layout>
 					<x>0</x>
@@ -448,18 +461,18 @@
 				</layout>
 			</dataRef>
 		</dataGroup>
-		<event type="assign">
-			<id>3_finish</id>
-			<actions phase="post">
-				<action>
-					jeDostupne: f.dostupnost;
+<!--		<event type="assign">-->
+<!--			<id>3_finish</id>-->
+<!--			<actions phase="post">-->
+<!--				<action>-->
+<!--					jeDostupne: f.dostupnost;-->
 
-					change jeDostupne value {
-						return true
-					}
-				</action>
-			</actions>
-		</event>
+<!--					change jeDostupne value {-->
+<!--						return true-->
+<!--					}-->
+<!--				</action>-->
+<!--			</actions>-->
+<!--		</event>-->
 	</transition>
 	<transition>
 		<id>4</id>
@@ -469,6 +482,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>podujatie nedostupne \ system</label>
+		<trigger type="auto"/>
 		<icon>settings</icon>
 		<dataGroup>
 			<id>DataGroup_0</id>
@@ -476,6 +490,7 @@
 				<id>dostupnost</id>
 				<logic>
 					<behavior>hidden</behavior>
+					<behavior>editable</behavior>
 				</logic>
 				<layout>
 					<x>0</x>
@@ -488,18 +503,18 @@
 				</layout>
 			</dataRef>
 		</dataGroup>
-		<event type="assign">
-			<id>4_finish</id>
-			<actions phase="pre">
-				<action>
-					jeDostupne: f.dostupnost;
+<!--		<event type="assign">-->
+<!--			<id>4_finish</id>-->
+<!--			<actions phase="post">-->
+<!--				<action>-->
+<!--					jeDostupne: f.dostupnost;-->
 
-					change jeDostupne value {
-						return false
-					}
-				</action>
-			</actions>
-		</event>
+<!--					change jeDostupne value {-->
+<!--						return false-->
+<!--					}-->
+<!--				</action>-->
+<!--			</actions>-->
+<!--		</event>-->
 	</transition>
 	<transition>
 		<id>5</id>

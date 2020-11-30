@@ -30,6 +30,13 @@
 		<init>value</init>
 	</data>
 	<data type="taskRef">
+		<id>taskRef_tim</id>
+		<title>TakRef vytvorenie timu</title>
+		<placeholder>placeholder</placeholder>
+		<desc>description</desc>
+		<init>value</init>
+	</data>
+	<data type="taskRef">
 		<id>taskRef_osoba_udaje</id>
 		<title>taskRef osoba udaje</title>
 		<placeholder>placeholder</placeholder>
@@ -359,6 +366,52 @@
 			<offset>0</offset>
 		</layout>
 		<label>Vytvorit tim</label>
+		<dataGroup>
+			<id>DataGroup_1</id>
+			<dataRef>
+				<id>taskRef_tim</id>
+				<logic>
+					<behavior>editable</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>0</y>
+					<rows>1</rows>
+					<cols>1</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
+		<event type="finish">
+			<id>42_finish</id>
+			<actions phase="post">
+				<action>
+					tim_ref: f.taskRef_tim;
+					def vyplnenie_udajov = findTask(tim_ref.value[0])
+
+					finishTask(vyplnenie_udajov)
+
+				</action>
+			</actions>
+		</event>
+		<event type="assign">
+			<id>42_assign</id>
+			<actions phase="pre">
+				<action>
+
+					tim_ref: f.taskRef_tim;
+
+					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
+					def tim = createCase("${groupId}_tim" as String, "Novy tim")
+					def vyplnenie_udajov = assignTask("1", tim)
+					change tim_ref value {
+						return [vyplnenie_udajov.stringId]
+					}
+				</action>
+			</actions>
+		</event>
 	</transition>
 	<transition>
 		<id>132</id>
