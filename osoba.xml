@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://modeler.netgrif.com/petriflow_schema.xsd">
-	<id>osoba</id>
+	<id>clen_osoba</id>
 	<initials>OSOBA</initials>
 	<title>osoba</title>
 	<defaultRole>true</defaultRole>
@@ -181,7 +181,7 @@
 				</logic>
 			</dataRef>
 			<dataRef>
-				<id>birth</id>
+				<id>mail</id>
 				<logic>
 					<behavior>visible</behavior>
 				</logic>

@@ -98,7 +98,7 @@
 
 					def mojaOsoba = findCase({it.processIdentifier.contains("osoba").and(it.author.id.eq(loggedUser().id))})
 					if(mojaOsoba == null) {
-					def novaOsoba = createCase("${groupId}_osoba" as String, loggedUser().name)
+					def novaOsoba = createCase("${groupId}_clen_osoba" as String, loggedUser().name)
 					def osobne_udaje = assignTask("2", novaOsoba)
 					setData(osobne_udaje, [
 					"name": [
