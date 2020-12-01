@@ -116,7 +116,7 @@
 					osoba_ref: f.taskRef_osoba;
 
 					change osoba_ref value {
-					return []
+						return []
 					}
 
 					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
@@ -204,32 +204,32 @@
 						if(podujatie_ref.value != null) {
 
 						if( !(podujatie_ref.value.isEmpty()) ) {
-						t = findTask({it._id.eq(podujatie_ref.value[1])})
-						cancelTask(t)
+							t = findTask({it._id.eq(podujatie_ref.value[1])})
+							cancelTask(t)
 						}
 
 						change podujatie_ref value {
-						return []
+							return []
 						}
 						}
 						change podujatie_ref value {
-						return []
+							return []
 						}
 						<!-- Pridaj taskref na info o podujati iba ak taky tak naslo -->
 						if(taskInfo != null) {
-						podujatie_ref.value.add(taskInfo.stringId)
-						change podujatie_ref value {
-						return podujatie_ref.value
-						}
+							podujatie_ref.value.add(taskInfo.stringId)
+							change podujatie_ref value {
+								return podujatie_ref.value
+							}
 						}
 						<!-- Pridaj taskref na prihlasenie timu iba ak taky task naslo-->
 						def taskPrihlasit = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("1")) } )
 						if(taskPrihlasit != null) {
-						assignTask(taskPrihlasit)
-						podujatie_ref.value.add(taskPrihlasit.stringId)
-						change podujatie_ref value {
-						return podujatie_ref.value
-						}
+							assignTask(taskPrihlasit)
+							podujatie_ref.value.add(taskPrihlasit.stringId)
+							change podujatie_ref value {
+								return podujatie_ref.value
+							}
 						}
 
 					</action>
@@ -258,17 +258,17 @@
 					def cases = findCases ({ it.processIdentifier.contains("podujatie") });
 					cases.each {
 
-					def id = it.stringId
-					prihlasenie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("1")) });
-					<!-- ak je task prihlasenia nedostupny, tak ho nepridaj do zoznamu -->
-					if(prihlasenie != null) {
-					task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
-					nazov_podujatia = getData(task).get('podujatie_nazov');
-					map[id] = nazov_podujatia.value
-					}
+						def id = it.stringId
+						prihlasenie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("1")) });
+						<!-- ak je task prihlasenia nedostupny, tak ho nepridaj do zoznamu -->
+						if(prihlasenie != null) {
+							task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
+							nazov_podujatia = getData(task).get('podujatie_nazov');
+							map[id] = nazov_podujatia.value
+						}
 					}
 					change podujatia_map options {
-					return map
+						return map
 					}
 
 				</action>
@@ -283,21 +283,21 @@
 					podujatia_map: f.enum_podujatia;
 					<!-- na cancel tasku kontrola, ci nahodou nie su assignute nejake tasky prihlasenia -->
 					if(podujatie_ref.value != null) {
-					if(podujatie_ref.value[1] != null) {
-					if(!podujatie_ref.value[1].isEmpty()) {
-					t = findTask({it._id.eq(podujatie_ref.value[1])})
-					cancelTask(t)
+						if(podujatie_ref.value[1] != null) {
+							if(!podujatie_ref.value[1].isEmpty()) {
+								t = findTask({it._id.eq(podujatie_ref.value[1])})
+								cancelTask(t)
+							}
+					}
+					change podujatie_ref value {
+						return []
 					}
 					}
 					change podujatie_ref value {
-					return []
-					}
-					}
-					change podujatie_ref value {
-					return []
+						return []
 					}
 					change podujatia_map options {
-					return [:]
+						return [:]
 					}
 
 				</action>
@@ -310,16 +310,16 @@
 					zvolene_podujatie_ref: f.taskRef_zvolene_podujatie;
 
 					if(zvolene_podujatie_ref.value != null) {
-					if(zvolene_podujatie_ref.value[1] != null) {
-					if( (!zvolene_podujatie_ref.value[1].isEmpty()) ) {
-					def prihlasenieTask = findTask({it._id.eq(zvolene_podujatie_ref.value[1])})
-					finishTask(prihlasenieTask)
-					}
-					}
+						if(zvolene_podujatie_ref.value[1] != null) {
+							if( (!zvolene_podujatie_ref.value[1].isEmpty()) ) {
+								def prihlasenieTask = findTask({it._id.eq(zvolene_podujatie_ref.value[1])})
+								finishTask(prihlasenieTask)
+							}
+						}
 					}
 
 					else {
-					throw new IllegalArgumentException("Nebolo zvolene ziadne podujatie");
+						throw new IllegalArgumentException("Nebolo zvolene ziadne podujatie");
 					}
 
 				</action>
@@ -404,7 +404,7 @@
 					def podujatie = createCase("${groupId}_podujatie" as String, "Nové podujatie")
 					def konstruktor = assignTask("2", podujatie)
 					change vytvorenie_podujatia_ref value {
-					return [konstruktor.stringId]
+						return [konstruktor.stringId]
 					}
 				</action>
 			</actions>
@@ -447,7 +447,7 @@
 
 						<!-- vyprazdni taskref a pridaj tam  -->
 						change podujatie_ref value {
-						return []
+							return []
 						}
 						podujatie_ref.value.add(taskInfo.stringId)
 
@@ -492,21 +492,21 @@
 					def podujatia = findCases{it.processIdentifier.eq("${groupId}_podujatie" as String).and(it.author.id.eq(loggedUser().id))}
 					podujatia.each {
 
-					def id = it.stringId
-					zrusenie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("5")) });
-					<!-- ak je task zrusenie je nedostupny, tak ho nepridaj do zoznamu -->
-					if(zrusenie != null) {
-					pofujatie_info = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
-					nazov_podujatia = getData(pofujatie_info).get('podujatie_nazov');
-					map[id] = nazov_podujatia.value
-					}
+						def id = it.stringId
+						zrusenie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("5")) });
+						<!-- ak je task zrusenie je nedostupny, tak ho nepridaj do zoznamu -->
+						if(zrusenie != null) {
+							pofujatie_info = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
+							nazov_podujatia = getData(pofujatie_info).get('podujatie_nazov');
+							map[id] = nazov_podujatia.value
+						}
 					}
 					change podujatia_map options {
-					return map
+						return map
 					}
 					<!-- vynuluj taskref -->
 					change podujatie_ref value {
-					return []
+						return []
 					}
 
 				</action>
@@ -520,10 +520,10 @@
 					podujatie_ref: f.taskRef_spravovane_podujatie;
 
 					change podujatie_ref value {
-					return []
+						return []
 					}
 					change podujatia_map options {
-					return [:]
+						return [:]
 					}
 
 				</action>
@@ -539,15 +539,15 @@
 
 					def zrusit_podujatie = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("5")) } )
 					if(zrusit_podujatie == null) {
-					throw new IllegalArgumentException("Vyber podujatie");
+						throw new IllegalArgumentException("Vyber podujatie");
 					}
 					else {
-					assignTask(zrusit_podujatie)
-					finishTask(zrusit_podujatie)
+						assignTask(zrusit_podujatie)
+						finishTask(zrusit_podujatie)
 					}
 
 					change podujatia_map options {
-					return [:]
+						return [:]
 					}
 
 				</action>
@@ -579,7 +579,7 @@
 
 						<!-- vyprazdni taskref a pridaj tam  -->
 						change podujatie_ref value {
-						return []
+							return []
 						}
 						podujatie_ref.value.add(taskInfo.stringId)
 
@@ -624,21 +624,21 @@
 					def podujatia = findCases{it.processIdentifier.eq("${groupId}_podujatie" as String).and(it.author.id.eq(loggedUser().id))}
 					podujatia.each {
 
-					def id = it.stringId
-					editovanie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("96")) });
-					<!-- ak je task zrusenie je nedostupny, tak ho nepridaj do zoznamu -->
-					if(editovanie != null) {
-					pofujatie_info = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
-					nazov_podujatia = getData(pofujatie_info).get('podujatie_nazov');
-					map[id] = nazov_podujatia.value
-					}
+						def id = it.stringId
+						editovanie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("96")) });
+						<!-- ak je task zrusenie je nedostupny, tak ho nepridaj do zoznamu -->
+						if(editovanie != null) {
+							pofujatie_info = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
+							nazov_podujatia = getData(pofujatie_info).get('podujatie_nazov');
+							map[id] = nazov_podujatia.value
+						}
 					}
 					change podujatia_map options {
-					return map
+						return map
 					}
 					<!-- vynuluj taskref -->
 					change podujatie_ref value {
-					return []
+						return []
 					}
 
 				</action>
@@ -651,7 +651,7 @@
 					podujatie_ref: f.taskRef_spravovane_podujatie;
 
 					change podujatie_ref value {
-					return []
+						return []
 					}
 
 				</action>
@@ -708,7 +708,7 @@
 					def tim = createCase("${groupId}_tim" as String, "Novy tim")
 					def vyplnenie_udajov = assignTask("1", tim)
 					change tim_ref value {
-					return [vyplnenie_udajov.stringId]
+						return [vyplnenie_udajov.stringId]
 					}
 				</action>
 			</actions>
@@ -739,7 +739,7 @@
 
 						<!-- vyprazdni taskref a pridaj tam  -->
 						change podujatie_ref value {
-						return []
+							return []
 						}
 						podujatie_ref.value.add(taskInfo.stringId)
 
@@ -784,21 +784,21 @@
 					def podujatia = findCases{it.processIdentifier.eq("${groupId}_podujatie" as String).and(it.author.id.eq(loggedUser().id))}
 					podujatia.each {
 
-					def id = it.stringId
-					vykonanie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("6")) });
-					<!-- ak je task zrusenie je nedostupny, tak ho nepridaj do zoznamu -->
-					if(editovanie != null) {
-					pofujatie_info = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
-					nazov_podujatia = getData(pofujatie_info).get('podujatie_nazov');
-					map[id] = nazov_podujatia.value
-					}
+						def id = it.stringId
+						vykonanie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("6")) });
+						<!-- ak je task zrusenie je nedostupny, tak ho nepridaj do zoznamu -->
+						if(editovanie != null) {
+							pofujatie_info = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
+							nazov_podujatia = getData(pofujatie_info).get('podujatie_nazov');
+							map[id] = nazov_podujatia.value
+						}
 					}
 					change podujatia_map options {
-					return map
+						return map
 					}
 					<!-- vynuluj taskref -->
 					change podujatie_ref value {
-					return []
+						return []
 					}
 
 				</action>
@@ -811,7 +811,7 @@
 					podujatie_ref: f.taskRef_spravovane_podujatie;
 
 					change podujatie_ref value {
-					return []
+						return []
 					}
 
 				</action>
@@ -824,7 +824,7 @@
 					podujatie_ref: f.taskRef_spravovane_podujatie;
 
 					change podujatie_ref value {
-					return []
+						return []
 					}
 
 				</action>
@@ -868,11 +868,11 @@
 
 						<!-- vyprazdni taskref a pridaj tam  -->
 						change pridat_clena_ref value {
-						return []
+							return []
 						}
 						pridat_clena_ref.value.add(pridat_clena.stringId)
 						change pridat_clena_ref value {
-						return pridat_clena_ref.value
+							return pridat_clena_ref.value
 						}
 
 					</action>
@@ -916,21 +916,21 @@
 					def timy = findCases{it.processIdentifier.eq("${groupId}_tim" as String).and(it.author.id.eq(loggedUser().id))}
 					timy.each {
 
-					def id = it.stringId
-					rozpustit_tim = findTask( { it.caseId.eq(id).and(it.transitionId.eq("7")) });
-					<!-- ak je task zrusenie je nedostupny, tak ho nepridaj do zoznamu -->
-					if(rozpustit_tim != null) {
-					info_o_time = findTask( { it.caseId.eq(id).and(it.transitionId.eq("5")) });
-					nazov_timu = getData(info_o_time).get('nazov_timu');
-					map[id] = nazov_timu.value
-					}
+						def id = it.stringId
+						rozpustit_tim = findTask( { it.caseId.eq(id).and(it.transitionId.eq("7")) });
+						<!-- ak je task zrusenie je nedostupny, tak ho nepridaj do zoznamu -->
+						if(rozpustit_tim != null) {
+							info_o_time = findTask( { it.caseId.eq(id).and(it.transitionId.eq("5")) });
+							nazov_timu = getData(info_o_time).get('nazov_timu');
+							map[id] = nazov_timu.value
+						}
 					}
 					change tim_map options {
-					return map
+						return map
 					}
 					<!-- vynuluj taskref -->
 					change pridat_clena_ref value {
-					return []
+						return []
 					}
 
 				</action>
@@ -964,19 +964,19 @@
 
 					def rozpustit_tim = findTask( { it.caseId.eq(vybrany_tim).and(it.transitionId.eq("7")) } )
 					if(rozpustit_tim == null) {
-					throw new IllegalArgumentException("Vyber podujatie");
+						throw new IllegalArgumentException("Vyber podujatie");
 					}
 					else {
-					assignTask(rozpustit_tim)
-					finishTask(rozpustit_tim)
+						assignTask(rozpustit_tim)
+						finishTask(rozpustit_tim)
 					}
 
 					change tim_map options {
-					return [:]
+						return [:]
 					}
 
 					change podujatie_ref value {
-					return []
+						return []
 					}
 
 				</action>
@@ -1008,11 +1008,11 @@
 
 						<!-- vyprazdni taskref a pridaj tam  -->
 						change pridat_clena_ref value {
-						return []
+							return []
 						}
 						pridat_clena_ref.value.add(pridat_clena.stringId)
 						change pridat_clena_ref value {
-						return pridat_clena_ref.value
+							return pridat_clena_ref.value
 						}
 
 					</action>
@@ -1056,20 +1056,20 @@
 					def timy = findCases{it.processIdentifier.eq("${groupId}_tim" as String).and(it.author.id.eq(loggedUser().id))}
 					timy.each {
 
-					def id = it.stringId
-					pridanie_clena = findTask( { it.caseId.eq(id).and(it.transitionId.eq("16")) });
-					<!-- ak je task zrusenie je nedostupny, tak ho nepridaj do zoznamu -->
-					if(pridanie_clena != null) {
-					nazov_timu = getData(pridanie_clena).get('nazov_timu');
-					map[id] = nazov_timu.value
-					}
-					}
+						def id = it.stringId
+						pridanie_clena = findTask( { it.caseId.eq(id).and(it.transitionId.eq("16")) });
+						<!-- ak je task zrusenie je nedostupny, tak ho nepridaj do zoznamu -->
+						if(pridanie_clena != null) {
+							nazov_timu = getData(pridanie_clena).get('nazov_timu');
+							map[id] = nazov_timu.value
+							}
+						}
 					change tim_map options {
-					return map
+						return map
 					}
 					<!-- vynuluj taskref -->
 					change pridat_clena_ref value {
-					return []
+						return []
 					}
 
 				</action>
@@ -1083,11 +1083,11 @@
 					pridat_clena_ref: f.taskRef_pridat_clena;
 
 					change tim_map options {
-					return [:]
+						return [:]
 					}
 
 					change podujatie_ref value {
-					return []
+						return []
 					}
 
 				</action>
@@ -1502,6 +1502,20 @@
 		<type>regular</type>
 		<sourceId>165</sourceId>
 		<destinationId>25</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>179</id>
+		<type>regular</type>
+		<sourceId>37</sourceId>
+		<destinationId>178</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>180</id>
+		<type>regular</type>
+		<sourceId>178</sourceId>
+		<destinationId>166</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 </document>
