@@ -251,7 +251,7 @@
 			<actions phase="pre">
 				<action>
 
-					zvolene_podujatie_ref: f.taskRef_zvolene_podujatie,
+					podujatie_ref: f.taskRef_zvolene_podujatie,
 					podujatia_map: f.enum_podujatia;
 
 					def map = [:]
@@ -273,13 +273,15 @@
 						if(prihlasenie != null) {
 							task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
 							nazov_podujatia = getData(task).get('podujatie_nazov');
-							map[id] = nazov_podujatia.value
+							if(nazov_podujatia?.value) {
+								map[id] = nazov_podujatia.value
+							}
 						}
 					}
 					change podujatia_map options {
 						return map
 					}
-					change zvolene_podujatie_ref value {
+					change podujatie_ref value {
 						return []
 					}
 
@@ -889,20 +891,20 @@
 				<logic>
 					<behavior>editable</behavior>
 					<action trigger="set">
-						pridat_clena_ref: f.taskRef_pridat_clena,
+						spravovany_tim_ref: f.taskRef_spravovany_tim,
 						tim_map: f.enum_tim;
 
 						def vybrany_tim = tim_map.value
 
-						def pridat_clena = findTask( { it.caseId.eq(vybrany_tim).and(it.transitionId.eq("16")) } )
+						def pridat_tim = findTask( { it.caseId.eq(vybrany_tim).and(it.transitionId.eq("16")) } )
 
 						<!-- vyprazdni taskref a pridaj tam  -->
-						change pridat_clena_ref value {
+						change spravovany_tim_ref value {
 							return []
 						}
-						pridat_clena_ref.value.add(pridat_clena.stringId)
-						change pridat_clena_ref value {
-							return pridat_clena_ref.value
+						spravovany_tim_ref.value.add(pridat_tim.stringId)
+						change spravovany_tim_ref value {
+							return spravovany_tim_ref.value
 						}
 
 					</action>
@@ -937,7 +939,7 @@
 			<id>78_assign</id>
 			<actions phase="pre">
 				<action>
-					pridat_clena_ref: f.taskRef_pridat_clena,
+					spravovany_tim_ref: f.taskRef_spravovany_tim,
 					tim_map: f.enum_tim;
 
 					def map = [:]
@@ -950,7 +952,7 @@
 						rozpustit_tim = findTask( { it.caseId.eq(id).and(it.transitionId.eq("7")) });
 						<!-- ak je task zrusenie je nedostupny, tak ho nepridaj do zoznamu -->
 						if(rozpustit_tim != null) {
-							info_o_time = findTask( { it.caseId.eq(id).and(it.transitionId.eq("5")) });
+							info_o_time = findTask( { it.caseId.eq(id).and(it.transitionId.eq("16")) });
 							nazov_timu = getData(info_o_time).get('nazov_timu');
 							map[id] = nazov_timu.value
 						}
@@ -959,7 +961,7 @@
 						return map
 					}
 					<!-- vynuluj taskref -->
-					change pridat_clena_ref value {
+					change spravovany_tim_ref value {
 						return []
 					}
 
@@ -971,13 +973,13 @@
 			<actions phase="pre">
 				<action>
 					tim_map: f.enum_tim,
-					pridat_clena_ref: f.taskRef_pridat_clena;
+					spravovany_tim_ref: f.taskRef_spravovany_tim;
 
 					change tim_map options {
 						return [:]
 					}
 
-					change pridat_clena_ref value {
+					change spravovany_tim_ref value {
 						return []
 					}
 
@@ -988,13 +990,19 @@
 			<id>78_cancel</id>
 			<actions phase="pre">
 				<action>
+					spravovany_tim_ref: f.taskRef_spravovany_tim,
 					tim_map: f.enum_tim;
 
 					def vybrany_tim = tim_map.value
 
+					if(vybrany_tim == null) {
+						throw new IllegalArgumentException("Nebol vybrany ziaden tim");
+					}
+
 					def rozpustit_tim = findTask( { it.caseId.eq(vybrany_tim).and(it.transitionId.eq("7")) } )
+
 					if(rozpustit_tim == null) {
-						throw new IllegalArgumentException("Vyber podujatie");
+						throw new IllegalArgumentException("Nenasiel sa tim");
 					}
 					else {
 						assignTask(rozpustit_tim)
@@ -1005,7 +1013,7 @@
 						return [:]
 					}
 
-					change podujatie_ref value {
+					change spravovany_tim_ref value {
 						return []
 					}
 
@@ -1034,6 +1042,7 @@
 						tim_map: f.enum_tim;
 
 						def vybrany_tim = tim_map.value
+
 						if(pridat_clena_ref.value != null) {
 
 							if( !(pridat_clena_ref.value.isEmpty()) ) {
@@ -1123,7 +1132,9 @@
 
 						if( !(pridat_clena_ref.value.isEmpty()) ) {
 							t = findTask({it._id.eq(pridat_clena_ref.value[0])})
-							cancelTask(t)
+							if(t) {
+								cancelTask(t)
+							}
 						}
 					}
 
@@ -1144,6 +1155,12 @@
 				<action>
 					tim_map: f.enum_tim,
 					pridat_clena_ref: f.taskRef_pridat_clena;
+
+					def vybrany_tim = tim_map.value
+
+					if(vybrany_tim == null) {
+						throw new IllegalArgumentException("Nebol vybrany ziaden tim");
+					}
 
 					if(pridat_clena_ref.value != null) {
 
