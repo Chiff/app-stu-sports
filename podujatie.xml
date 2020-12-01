@@ -238,21 +238,22 @@
 		</event>
 		<event type="finish">
 			<id>39_finish</id>
-			<actions phase="post">
+			<actions phase="pre">
 				<action>
 					timy_ref: f.taskref_tim_podujatie_add,
 					enumer: f.enu_map_timy;
 
 					def chosen_team = enumer.value
 
-					if(chosen_team == null) {
-						throw new IllegalArgumentException("Nebolo zvoleny ziadny tim");
+
+					if(chosen_team == null || chosen_team?.isEmpty()) {
+						throw new IllegalArgumentException("Nebol zvoleny ziadny tim");
 					}
 
 					def novy_tim = findTask( { it.caseId.eq(chosen_team).and(it.transitionId.eq("16")) } )
 
 					if(novy_tim == null) {
-						throw new IllegalArgumentException("Nebolo zvoleny ziadny tim");
+						throw new IllegalArgumentException("Nebol zvoleny ziadny tim");
 					}
 
 					if(timy_ref.value == null) {
@@ -843,7 +844,7 @@
 						task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("16")) });
 						nazov_timu = getData(task).get('nazov_timu');
 
-						if(timy_ref.value.contains(task.stringId)) {
+						if(timy_ref.value?.contains(task.stringId)) {
 							map[id] = nazov_timu.value
 						}
 					}
@@ -862,8 +863,12 @@
 
 					def chosen_team = timy_map.value
 
+					if(chosen_team == null) {
+						throw new IllegalArgumentException("Nebol zvoleny ziadny tim");
+					}
+
 					def task = findTask( { it.caseId.eq(chosen_team).and(it.transitionId.eq("16")) } )
-					if(timy_ref.value.contains(task.stringId)) {
+					if(timy_ref.value?.contains(task.stringId)) {
 						timy_ref.value.remove(task.stringId)
 						change timy_ref value {
 							return timy_ref.value
