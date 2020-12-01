@@ -351,7 +351,7 @@
 						max: f.300,
 						min: f.400;
 
-						if (min.value ;tg& max.value) {
+						if (min.value > max.value) {
 							change max value {
 								return min.value
 							}
