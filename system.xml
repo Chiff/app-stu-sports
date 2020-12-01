@@ -376,7 +376,6 @@
 		</layout>
 		<label>Vytvorit podujatie</label>
 		<icon>event</icon>
-		<assignPolicy>auto</assignPolicy>
 		<dataGroup>
 			<id>DataGroup_1111</id>
 			<dataRef>
