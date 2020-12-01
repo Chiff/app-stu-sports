@@ -787,7 +787,7 @@
 						def id = it.stringId
 						vykonanie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("6")) });
 						<!-- ak je task zrusenie je nedostupny, tak ho nepridaj do zoznamu -->
-						if(editovanie != null) {
+						if(vykonanie != null) {
 							pofujatie_info = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
 							nazov_podujatia = getData(pofujatie_info).get('podujatie_nazov');
 							map[id] = nazov_podujatia.value
