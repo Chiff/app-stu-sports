@@ -170,6 +170,7 @@
 		</layout>
 		<label>Vyhladat podujatie</label>
 		<icon>search</icon>
+		<assignPolicy>auto</assignPolicy>
 		<dataGroup>
 			<id>DataGroup_111</id>
 			<dataRef>
@@ -346,6 +347,7 @@
 		</layout>
 		<label>Zobrazit profil</label>
 		<icon>face</icon>
+		<assignPolicy>auto</assignPolicy>
 		<dataGroup>
 			<id>DataGroup_1</id>
 			<dataRef>
@@ -374,6 +376,7 @@
 		</layout>
 		<label>Vytvorit podujatie</label>
 		<icon>event</icon>
+		<assignPolicy>auto</assignPolicy>
 		<dataGroup>
 			<id>DataGroup_1111</id>
 			<dataRef>
@@ -442,6 +445,7 @@
 		</layout>
 		<label>Zrusit podujatie</label>
 		<icon>event_busy</icon>
+		<assignPolicy>auto</assignPolicy>
 		<dataGroup>
 			<id>DataGroup_771</id>
 			<dataRef>
@@ -574,6 +578,7 @@
 		</layout>
 		<label>Editovat podujatie</label>
 		<icon>edit</icon>
+		<assignPolicy>auto</assignPolicy>
 		<dataGroup>
 			<id>DataGroup_781</id>
 			<dataRef>
@@ -678,6 +683,7 @@
 		</layout>
 		<label>Vytvorit tim</label>
 		<icon>group_add</icon>
+		<assignPolicy>auto</assignPolicy>
 		<dataGroup>
 			<id>DataGroup_11111</id>
 			<dataRef>
@@ -734,6 +740,7 @@
 		</layout>
 		<label>vyhodnotenie podujatia</label>
 		<icon>event_note</icon>
+		<assignPolicy>auto</assignPolicy>
 		<dataGroup>
 			<id>DataGroup_1531</id>
 			<dataRef>
@@ -865,6 +872,7 @@
 		</layout>
 		<label>Rozpustit tim</label>
 		<icon>delete_forever</icon>
+		<assignPolicy>auto</assignPolicy>
 		<dataGroup>
 			<id>DataGroup_781</id>
 			<dataRef>
@@ -1005,6 +1013,7 @@
 		</layout>
 		<label>Pridat clena</label>
 		<icon>person_add</icon>
+		<assignPolicy>auto</assignPolicy>
 		<dataGroup>
 			<id>DataGroup_781</id>
 			<dataRef>
@@ -1156,6 +1165,7 @@
 		</layout>
 		<label>Odhlasit z podujatia</label>
 		<icon>login</icon>
+		<assignPolicy>auto</assignPolicy>
 		<dataGroup>
 			<id>DataGroup_111</id>
 			<dataRef>
