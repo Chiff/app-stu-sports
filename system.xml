@@ -169,6 +169,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>Vyhladat podujatie</label>
+		<icon>search</icon>
 		<dataGroup>
 			<id>DataGroup_111</id>
 			<dataRef>
@@ -333,6 +334,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>Zobrazit profil</label>
+		<icon>face</icon>
 		<dataGroup>
 			<id>DataGroup_1</id>
 			<dataRef>
@@ -360,6 +362,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>Vytvorit podujatie</label>
+		<icon>event</icon>
 		<dataGroup>
 			<id>DataGroup_1111</id>
 			<dataRef>
@@ -415,6 +418,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>Moje podujatia</label>
+		<icon>book_online</icon>
 		<assignPolicy>auto</assignPolicy>
 		<finishPolicy>auto_no_data</finishPolicy>
 	</transition>
@@ -426,6 +430,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>Zrusit podujatie</label>
+		<icon>event_busy</icon>
 		<dataGroup>
 			<id>DataGroup_771</id>
 			<dataRef>
@@ -557,6 +562,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>Editovat podujatie</label>
+		<icon>edit</icon>
 		<dataGroup>
 			<id>DataGroup_781</id>
 			<dataRef>
@@ -660,6 +666,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>Vytvorit tim</label>
+		<icon>group_add</icon>
 		<dataGroup>
 			<id>DataGroup_11111</id>
 			<dataRef>
@@ -715,6 +722,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>vyhodnotenie podujatia</label>
+		<icon>event_note</icon>
 		<dataGroup>
 			<id>DataGroup_1531</id>
 			<dataRef>
@@ -831,6 +839,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>Moje timy</label>
+		<icon>group</icon>
 		<assignPolicy>auto</assignPolicy>
 		<finishPolicy>auto_no_data</finishPolicy>
 	</transition>
@@ -842,6 +851,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>Rozpustit tim</label>
+		<icon>delete_forever</icon>
 		<dataGroup>
 			<id>DataGroup_781</id>
 			<dataRef>
@@ -981,6 +991,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>Pridat clena</label>
+		<icon>person_add</icon>
 		<dataGroup>
 			<id>DataGroup_781</id>
 			<dataRef>
@@ -1091,6 +1102,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>Spat na domovsku stranku</label>
+		<icon>home</icon>
 		<trigger type="auto"/>
 	</transition>
 	<!-- PLACES -->
@@ -1309,8 +1321,8 @@
 		<sourceId>166</sourceId>
 		<destinationId>165</destinationId>
 		<multiplicity>1</multiplicity>
-		<breakPoint><x>1900</x><y>1740</y></breakPoint>
-		<breakPoint><x>1900</x><y>500</y></breakPoint>
+		<breakPoint><x>1780</x><y>1300</y></breakPoint>
+		<breakPoint><x>1780</x><y>860</y></breakPoint>
 	</arc>
 	<arc>
 		<id>177</id>
