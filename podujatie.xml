@@ -27,8 +27,8 @@
 		<title>Maximalny pocet timov</title>
 		<placeholder>placeholder</placeholder>
 		<desc>description</desc>
-		<init>1</init>
 		<valid>positive</valid>
+		<init>1</init>
 	</data>
 	<data type="boolean">
 		<id>is_podujatie_sukromne</id>
@@ -123,8 +123,8 @@
 		<title>Minimalny pocet timov</title>
 		<placeholder>placeholder</placeholder>
 		<desc>description</desc>
-		<init>1</init>
 		<valid>positive</valid>
+		<init>1</init>
 	</data>
 	<data type="text">
 		<id>podujatie_owner_email</id>
@@ -427,8 +427,8 @@
 			<offset>0</offset>
 		</layout>
 		<label>podujatie dostupne \ system</label>
-		<trigger type="auto"/>
 		<icon>settings</icon>
+		<trigger type="auto"/>
 	</transition>
 	<transition>
 		<id>4</id>
@@ -438,8 +438,8 @@
 			<offset>0</offset>
 		</layout>
 		<label>podujatie nedostupne \ system</label>
-		<trigger type="auto"/>
 		<icon>settings</icon>
+		<trigger type="auto"/>
 	</transition>
 	<transition>
 		<id>5</id>
@@ -720,10 +720,10 @@
 			<offset>0</offset>
 		</layout>
 		<label>Zaslat notifikaciu</label>
-		<trigger type="auto"/>
 		<icon>settings</icon>
 		<assignPolicy>auto</assignPolicy>
 		<finishPolicy>auto_no_data</finishPolicy>
+		<trigger type="auto"/>
 	</transition>
 	<transition>
 		<id>59</id>
@@ -894,6 +894,16 @@
 				<logic>
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
+					<action trigger="set">
+						max: f.300,
+						min: f.400;
+
+						if (min.value > max.value) {
+							change min value {
+								return max.value;
+							}
+						}
+                    </action>
 				</logic>
 				<layout>
 					<x>0</x>
@@ -910,6 +920,16 @@
 				<logic>
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
+					<action trigger="set">
+						max: f.300,
+						min: f.400;
+
+						if (min.value > max.value) {
+							change max value {
+								return min.value
+							}
+						}
+					</action>
 				</logic>
 				<layout>
 					<x>2</x>
