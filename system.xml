@@ -1248,9 +1248,9 @@
 
 						def id = it.stringId
 						<!-- Vyhladaj task odhlasenia -->
-						prihlasenie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("66")) });
+						odhlasenie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("66")) });
 						<!-- ak je task odhlasenie nedostupny, tak ho nepridaj do zoznamu -->
-						if(prihlasenie != null) {
+						if(odhlasenie != null) {
 							task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
 							nazov_podujatia = getData(task).get('podujatie_nazov');
 							map[id] = nazov_podujatia.value
@@ -1272,9 +1272,9 @@
 					podujatia_map: f.enum_podujatia;
 					<!-- na cancel tasku kontrola, ci nahodou nie su assignute nejake tasky odlhasenia -->
 					if(podujatie_ref.value != null) {
-						if(podujatie_ref.value[1] != null) {
-							if(!podujatie_ref.value[1].isEmpty()) {
-								t = findTask({it._id.eq(podujatie_ref.value[1])})
+						if(podujatie_ref.value[0] != null) {
+							if(!podujatie_ref.value[0].isEmpty()) {
+								t = findTask({it._id.eq(podujatie_ref.value[0])})
 								cancelTask(t)
 							}
 						}
