@@ -92,9 +92,8 @@
 			<dataRef>
 				<id>user_id</id>
 				<logic>
-					<behavior>editable</behavior>
+					<behavior>visible</behavior>
 					<behavior>required</behavior>
-					<behavior>immediate</behavior>
 				</logic>
 				<layout>
 					<x>0</x>
