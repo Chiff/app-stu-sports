@@ -39,6 +39,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>Vytvorit</label>
+		<icon>group_add</icon>
 	</transition>
 	<transition>
 		<id>5</id>
@@ -48,6 +49,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>Prihlasit na podujatie</label>
+		<icon>book_online</icon>
 		<dataGroup>
 			<id>DataGroup_0</id>
 			<layout>grid</layout>
@@ -76,6 +78,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>Editovat</label>
+		<icon>edit</icon>
 	</transition>
 	<transition>
 		<id>7</id>
@@ -85,6 +88,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>Rozpustit</label>
+		<icon>delete_forever</icon>
 		<dataGroup>
 			<id>DataGroup_0</id>
 			<layout>grid</layout>
