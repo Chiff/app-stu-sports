@@ -139,13 +139,17 @@
 		<id>enu_map_timy</id>
 		<title>Vyber svoj tim</title>
 	</data>
-	<data type="text">
-		<id>text_1</id>
-		<title>ID timu</title>
+	<data type="number">
+		<id>pocet_bodov</id>
+		<title>pocet_bodov</title>
 	</data>
 	<data type="taskRef">
 		<id>taskref_tim_podujatie_add</id>
 		<title>taskref_tim_podujatie_add</title>
+	</data>
+	<data type="taskRef">
+		<id>taskref_vitaz</id>
+		<title>vitazny tim</title>
 	</data>
 	<data type="text">
 		<id>testovanie</id>
@@ -250,11 +254,13 @@
 						cancelTask("1")
 					}
 					else {
-					timy_ref.value.add(novy_tim.stringId)
-					change timy_ref value {
-						return timy_ref.value
+						timy_ref.value.add(novy_tim.stringId)
+						change timy_ref value {
+							return timy_ref.value
+						}
 					}
-
+					change enu_map_timy options {
+						return [:]
 					}
 				</action>
 			</actions>
@@ -470,7 +476,7 @@
 		<layout>
 			<offset>0</offset>
 		</layout>
-		<label>vykonanie podujatia \ owner</label>
+		<label>vykonanie podujatia</label>
 		<icon>alarm_on</icon>
 	</transition>
 	<transition>
@@ -480,13 +486,28 @@
 		<layout>
 			<offset>0</offset>
 		</layout>
-		<label>vyhodnotenie podujatia \ owner</label>
+		<label>vyhodnotenie podujatia</label>
 		<icon>assignment</icon>
 		<dataGroup>
 			<id>DataGroup_0</id>
 			<layout>grid</layout>
 			<dataRef>
 				<id>taskref_tim_podujatie_add</id>
+				<logic>
+					<behavior>hidden</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>3</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>taskref_vitaz</id>
 				<logic>
 					<behavior>editable</behavior>
 				</logic>
@@ -504,6 +525,19 @@
 				<id>enu_map_timy</id>
 				<logic>
 					<behavior>editable</behavior>
+					<behavior>required</behavior>
+					<action trigger="set">
+						vitaz_ref: f.taskref_vitaz,
+						timy_map: f.enu_map_timy;
+
+						def vybrany_tim = timy_map.value
+						<!-- inicializuj taskref a pridaj tam vitaza -->
+						change vitaz_ref value {
+							return []
+						}
+						vitaz_ref.value.add(vybrany_tim)
+
+					</action>
 				</logic>
 				<layout>
 					<x>0</x>
@@ -516,7 +550,7 @@
 				</layout>
 			</dataRef>
 			<dataRef>
-				<id>text_1</id>
+				<id>pocet_bodov</id>
 				<logic>
 					<behavior>editable</behavior>
 				</logic>
@@ -531,6 +565,42 @@
 				</layout>
 			</dataRef>
 		</dataGroup>
+		<event type="assign">
+			<id>78_assign</id>
+			<actions phase="pre">
+				<action>
+					prihlasene_timy: f.taskref_tim_podujatie_add,
+					timy_map: f.enu_map_timy;
+
+					def map = [:]
+					prihlasene_timy.value.each {
+						id = it
+						def tim_info_task = findTask({it._id.eq(id)})
+						nazov_timu = getData(tim_info_task).get('nazov_timu');
+						map[id] = nazov_timu.value
+					}
+					change timy_map options {
+						return map
+					}
+				</action>
+			</actions>
+		</event>
+		<event type="cancel">
+			<id>78_assign</id>
+			<actions phase="pre">
+				<action>
+					vitaz: f.taskref_vitaz,
+					timy_map: f.enu_map_timy;
+
+					change vitaz value {
+						return []
+					}
+					change timy_map options {
+						return [:]
+					}
+				</action>
+			</actions>
+		</event>
 	</transition>
 	<transition>
 		<id>56</id>
@@ -650,6 +720,7 @@
 			<offset>0</offset>
 		</layout>
 		<label>Zaslat notifikaciu</label>
+		<trigger type="auto"/>
 		<icon>settings</icon>
 		<assignPolicy>auto</assignPolicy>
 		<finishPolicy>auto_no_data</finishPolicy>
@@ -663,6 +734,40 @@
 		</layout>
 		<label>zobraz vysledky</label>
 		<icon>zoom_in</icon>
+		<dataGroup>
+			<id>DataGroup_0</id>
+			<layout>grid</layout>
+			<dataRef>
+				<id>taskref_vitaz</id>
+				<logic>
+					<behavior>visible</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>2</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+			<dataRef>
+				<id>pocet_bodov</id>
+				<logic>
+					<behavior>visible</behavior>
+				</logic>
+				<layout>
+					<x>0</x>
+					<y>1</y>
+					<rows>1</rows>
+					<cols>2</cols>
+					<offset>0</offset>
+					<template>material</template>
+					<appearance>outline</appearance>
+				</layout>
+			</dataRef>
+		</dataGroup>
 	</transition>
 	<transition>
 		<id>66</id>
@@ -676,22 +781,6 @@
 		<dataGroup>
 			<id>DataGroup_0</id>
 			<layout>grid</layout>
-			<dataRef>
-				<id>text_1</id>
-				<logic>
-					<behavior>visible</behavior>
-					<behavior>hidden</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>1</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
 			<dataRef>
 				<id>taskref_tim_podujatie_add</id>
 				<logic>
@@ -766,7 +855,9 @@
 							return timy_ref.value
 						}
 					}
-
+					change enu_map_timy options {
+						return [:]
+					}
 				</action>
 			</actions>
 		</event>
