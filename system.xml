@@ -1096,12 +1096,13 @@
 	</transition>
 	<transition>
 		<id>178</id>
-		<x>344</x>
-		<y>911</y>
+		<x>340</x>
+		<y>900</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
 		<label>Odhlasit z podujatia</label>
+		<icon>login</icon>
 		<dataGroup>
 			<id>DataGroup_111</id>
 			<dataRef>
@@ -1277,6 +1278,30 @@
 		<label>Spat na domovsku stranku</label>
 		<icon>home</icon>
 		<trigger type="auto"/>
+	</transition>
+	<transition>
+		<id>181</id>
+		<x>1152</x>
+		<y>687</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>Spat na domovsku stranku</label>
+		<icon>home</icon>
+		<assignPolicy>auto</assignPolicy>
+		<finishPolicy>auto_no_data</finishPolicy>
+	</transition>
+	<transition>
+		<id>182</id>
+		<x>1168</x>
+		<y>591</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>Spat na domovsku stranku</label>
+		<icon>home</icon>
+		<assignPolicy>auto</assignPolicy>
+		<finishPolicy>auto_no_data</finishPolicy>
 	</transition>
 	<!-- PLACES -->
 	<place>
@@ -1516,6 +1541,34 @@
 		<type>regular</type>
 		<sourceId>178</sourceId>
 		<destinationId>166</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>183</id>
+		<type>regular</type>
+		<sourceId>73</sourceId>
+		<destinationId>181</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>184</id>
+		<type>regular</type>
+		<sourceId>156</sourceId>
+		<destinationId>182</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>185</id>
+		<type>regular</type>
+		<sourceId>181</sourceId>
+		<destinationId>25</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>186</id>
+		<type>regular</type>
+		<sourceId>182</sourceId>
+		<destinationId>25</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 </document>
