@@ -244,7 +244,17 @@
 					enumer: f.enu_map_timy;
 
 					def chosen_team = enumer.value
+
+					if(chosen_team == null) {
+						throw new IllegalArgumentException("Nebolo zvoleny ziadny tim");
+					}
+
 					def novy_tim = findTask( { it.caseId.eq(chosen_team).and(it.transitionId.eq("16")) } )
+
+					if(novy_tim == null) {
+						throw new IllegalArgumentException("Nebolo zvoleny ziadny tim");
+					}
+
 					if(timy_ref.value == null) {
 						change timy_ref value {
 							return []
