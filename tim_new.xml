@@ -109,6 +109,9 @@
 						 	 ak uz obsahuje dany task, nepridavaj ho -->
 						if(clenovia_ref.value != null) {
 							if( !(clenovia_ref.value.contains(taskInfo.stringId)) ) {
+								change clenovia_ref value {
+									return []
+								}
 								clenovia_ref.value.add(taskInfo.stringId)
 								change clenovia_ref value {
 									return clenovia_ref.value
@@ -158,6 +161,23 @@
 						return map
 					}
 
+				</action>
+			</actions>
+		</event>
+		<event type="finish">
+			<id>4211_finish</id>
+			<actions phase="post">
+				<action>
+					clenovia_ref: f.taskRef_clenovia,
+					clenovia_map: f.enum_osoby;
+
+					change clenovia_map options {
+						return [:]
+					}
+
+					change clenovia_ref value {
+						return []
+					}
 				</action>
 			</actions>
 		</event>
