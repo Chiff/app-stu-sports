@@ -225,10 +225,13 @@
                           ak uz obsahuje dany task, nepridavaj ho -->
 					if(clenovia_ref.value != null) {
 					if( !(clenovia_ref.value.contains(taskInfo.stringId)) ) {
-					clenovia_ref.value.add(taskInfo.stringId)
-					change clenovia_ref value {
-					return clenovia_ref.value
-					}
+						change clenovia_ref value {
+							return []
+						}
+						clenovia_ref.value.add(taskInfo.stringId)
+						change clenovia_ref value {
+							return clenovia_ref.value
+						}
 					}
 					}
 					else {

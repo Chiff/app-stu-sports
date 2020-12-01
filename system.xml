@@ -203,14 +203,14 @@
 						 	 ak nie je prazdny, cancelni predchadzajuci task prihlasenia a pridaj tam novu hodnotu -->
 						if(podujatie_ref.value != null) {
 
-						if( !(podujatie_ref.value.isEmpty()) ) {
-							t = findTask({it._id.eq(podujatie_ref.value[1])})
-							cancelTask(t)
-						}
+							if( !(podujatie_ref.value.isEmpty()) ) {
+								t = findTask({it._id.eq(podujatie_ref.value[1])})
+								cancelTask(t)
+							}
 
-						change podujatie_ref value {
-							return []
-						}
+							change podujatie_ref value {
+								return []
+							}
 						}
 						change podujatie_ref value {
 							return []
@@ -255,7 +255,7 @@
 
 					def map = [:]
 
-					def cases = findCases ({ it.processIdentifier.contains("podujatie") });
+					def cases = findCases ({ it.processIdentifier.contains("podujatie_p") });
 					cases.each {
 
 						def id = it.stringId
@@ -269,6 +269,9 @@
 					}
 					change podujatia_map options {
 						return map
+					}
+					change zvolene_podujatie_ref value {
+						return []
 					}
 
 				</action>
@@ -307,7 +310,8 @@
 			<id>421_finish</id>
 			<actions phase="pre">
 				<action>
-					zvolene_podujatie_ref: f.taskRef_zvolene_podujatie;
+					zvolene_podujatie_ref: f.taskRef_zvolene_podujatie,
+					podujatia_map: f.enum_podujatia;
 
 					if(zvolene_podujatie_ref.value != null) {
 						if(zvolene_podujatie_ref.value[1] != null) {
@@ -320,6 +324,13 @@
 
 					else {
 						throw new IllegalArgumentException("Nebolo zvolene ziadne podujatie");
+					}
+
+					change podujatia_map options {
+						return map
+					}
+					change zvolene_podujatie_ref value {
+						return []
 					}
 
 				</action>
@@ -735,7 +746,7 @@
 
 						def vybrane_podujatie = podujatia_map.value
 
-						def taskInfo = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("96")) } )
+						def taskInfo = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("7")) } )
 
 						<!-- vyprazdni taskref a pridaj tam  -->
 						change podujatie_ref value {
@@ -759,6 +770,7 @@
 				<id>taskRef_spravovane_podujatie</id>
 				<logic>
 					<behavior>visible</behavior>
+					<behavior>editable</behavior>
 				</logic>
 				<layout>
 					<x>0</x>
@@ -785,9 +797,9 @@
 					podujatia.each {
 
 						def id = it.stringId
-						vykonanie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("6")) });
-						<!-- ak je task zrusenie je nedostupny, tak ho nepridaj do zoznamu -->
-						if(vykonanie != null) {
+						vyhodnotenie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("7")) });
+						<!-- ak je task vykonaie nedostupny, tak ho nepridaj do zoznamu -->
+						if(vyhodnotenie != null) {
 							pofujatie_info = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
 							nazov_podujatia = getData(pofujatie_info).get('podujatie_nazov');
 							map[id] = nazov_podujatia.value
@@ -808,20 +820,21 @@
 			<id>78_cancel</id>
 			<actions phase="pre">
 				<action>
-					podujatie_ref: f.taskRef_spravovane_podujatie;
+					podujatie_ref: f.taskRef_spravovane_podujatie,
+					podujatia_map: f.enum_podujatia;
 
 					change podujatie_ref value {
 						return []
 					}
-
 				</action>
 			</actions>
 		</event>
 		<event type="finish">
-			<id>78_cancel</id>
+			<id>78_finishl</id>
 			<actions phase="pre">
 				<action>
 					podujatie_ref: f.taskRef_spravovane_podujatie;
+
 
 					change podujatie_ref value {
 						return []
@@ -1003,9 +1016,15 @@
 						tim_map: f.enum_tim;
 
 						def vybrany_tim = tim_map.value
+						if(pridat_clena_ref.value != null) {
 
+							if( !(pridat_clena_ref.value.isEmpty()) ) {
+								t = findTask({it._id.eq(pridat_clena_ref.value)})
+								cancelTask(t)
+							}
+						}
 						def pridat_clena = findTask( { it.caseId.eq(vybrany_tim).and(it.transitionId.eq("5")) } )
-
+						assignTask(pridat_clena)
 						<!-- vyprazdni taskref a pridaj tam  -->
 						change pridat_clena_ref value {
 							return []
@@ -1044,7 +1063,7 @@
 			</dataRef>
 		</dataGroup>
 		<event type="assign">
-			<id>78_assign</id>
+			<id>7888_assign</id>
 			<actions phase="pre">
 				<action>
 					pridat_clena_ref: f.taskRef_pridat_clena,
@@ -1076,17 +1095,51 @@
 			</actions>
 		</event>
 		<event type="cancel">
-			<id>78_cancel</id>
+			<id>7888_cancel</id>
 			<actions phase="pre">
 				<action>
 					tim_map: f.enum_tim,
 					pridat_clena_ref: f.taskRef_pridat_clena;
 
+					if(pridat_clena_ref.value != null) {
+
+						if( !(pridat_clena_ref.value.isEmpty()) ) {
+							t = findTask({it._id.eq(pridat_clena_ref.value[0])})
+							cancelTask(t)
+						}
+					}
+
 					change tim_map options {
 						return [:]
 					}
 
-					change podujatie_ref value {
+					change pridat_clena_ref value {
+						return []
+					}
+
+				</action>
+			</actions>
+		</event>
+		<event type="finish">
+			<id>7888_finish</id>
+			<actions phase="pre">
+				<action>
+					tim_map: f.enum_tim,
+					pridat_clena_ref: f.taskRef_pridat_clena;
+
+					if(pridat_clena_ref.value != null) {
+
+					if( !(pridat_clena_ref.value.isEmpty()) ) {
+						t = findTask({it._id.eq(pridat_clena_ref.value[0])})
+						finishTask(t)
+					}
+					}
+
+					change tim_map options {
+						return [:]
+					}
+
+					change pridat_clena_ref value {
 						return []
 					}
 

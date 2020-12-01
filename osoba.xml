@@ -189,8 +189,7 @@
 			<dataRef>
 				<id>user_id</id>
 				<logic>
-					<behavior>editable</behavior>
-					<behavior>required</behavior>
+					<behavior>visible</behavior>
 					<behavior>immediate</behavior>
 				</logic>
 				<layout>
