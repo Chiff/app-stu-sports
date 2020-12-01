@@ -143,7 +143,7 @@
 			<dataRef>
 				<id>birth</id>
 				<logic>
-					<behavior>editable</behavior>
+					<behavior>visible</behavior>
 				</logic>
 				<layout>
 					<x>0</x>
@@ -233,13 +233,13 @@
 				<id>birth</id>
 				<logic>
 					<behavior>editable</behavior>
-					<behavior>required</behavior>
 				</logic>
 			</dataRef>
 			<dataRef>
 				<id>mail</id>
 				<logic>
 					<behavior>visible</behavior>
+					<behavior>editable</behavior>
 				</logic>
 			</dataRef>
 		</dataGroup>

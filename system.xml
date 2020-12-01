@@ -256,6 +256,14 @@
 
 					def map = [:]
 
+					if(podujatie_ref.value != null) {
+
+						if( !(podujatie_ref.value.isEmpty()) ) {
+							t = findTask({it._id.eq(podujatie_ref.value[1])})
+							cancelTask(t)
+						}
+					}
+
 					def cases = findCases ({ it.processIdentifier.contains("podujatie") });
 					cases.each {
 
@@ -314,9 +322,11 @@
 					zvolene_podujatie_ref: f.taskRef_zvolene_podujatie,
 					podujatia_map: f.enum_podujatia;
 
+
+
 					if(zvolene_podujatie_ref.value != null) {
 						if(zvolene_podujatie_ref.value[1] != null) {
-							if( (!zvolene_podujatie_ref.value[1].isEmpty()) ) {
+							if( (!(zvolene_podujatie_ref.value[1].isEmpty())) ) {
 								def prihlasenieTask = findTask({it._id.eq(zvolene_podujatie_ref.value[1])})
 								finishTask(prihlasenieTask)
 							}
@@ -1281,9 +1291,9 @@
 					podujatia_map: f.enum_podujatia;
 					<!-- na cancel tasku kontrola, ci nahodou nie su assignute nejake tasky odlhasenia -->
 					if(podujatie_ref.value != null) {
-						if(podujatie_ref.value[0] != null) {
-							if(!podujatie_ref.value[0].isEmpty()) {
-								t = findTask({it._id.eq(podujatie_ref.value[0])})
+						if(podujatie_ref.value[1] != null) {
+							if(!podujatie_ref.value[1].isEmpty()) {
+								t = findTask({it._id.eq(podujatie_ref.value[1])})
 								cancelTask(t)
 							}
 						}
@@ -1310,7 +1320,7 @@
 
 					if(zvolene_podujatie_ref.value != null) {
 						if(zvolene_podujatie_ref.value[1] != null) {
-							if( (!zvolene_podujatie_ref.value[1].isEmpty()) ) {
+							if( (!(zvolene_podujatie_ref.value[1].isEmpty()) ) ) {
 								def odhlasenieTask = findTask({it._id.eq(zvolene_podujatie_ref.value[1])})
 								finishTask(odhlasenieTask)
 							}
