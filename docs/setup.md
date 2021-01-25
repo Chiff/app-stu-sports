@@ -11,8 +11,8 @@ google + yarn + angular
 
 ## run be
 ```
-cd app/sp-web
-php -S localhost:8000 -t public
+cd app/sp-api
+php -S localhost:8080 -t public
 ```
 
 ## run fe
