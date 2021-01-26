@@ -33,3 +33,10 @@ yarn start
 cd app/sp-api
 php artisan make:migration [nazov migracie]
 ``` 
+
+## linky
+https://auth0.com/blog/developing-restful-apis-with-lumen/
+https://laravel.com/docs/8.x/migrations#column-modifiers
+
+https://github.com/voltagead/lumen-angular-demo/blob/master/app/Http/routes.php
+https://github.com/voltagead/lumen-angular-demo/tree/master/resources/views
