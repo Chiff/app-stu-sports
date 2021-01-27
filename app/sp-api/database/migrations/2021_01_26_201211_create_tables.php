@@ -16,8 +16,13 @@ class CreateTables extends Migration
         Schema::create('user', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('name', 256);
+
+            $table->string('firstname', 256);
+            $table->string('surname', 256);
+            $table->string('nickname', 256)
             $table->string('email', 256);
+            $table->date('birthday');
+
         });
 
 
@@ -25,7 +30,6 @@ class CreateTables extends Migration
             $table->id();
             $table->timestamps();
 
-            $table->foreign('owner_id')->references('id')->on('user');
             $table->foreign('owner_id')->references('id')->on('user');
 
             $table->dateTime('registration_start');
@@ -37,6 +41,7 @@ class CreateTables extends Migration
             $table->integer('max_participants');
 
         });
+
     }
 
     /**
@@ -47,5 +52,6 @@ class CreateTables extends Migration
     public function down()
     {
         Schema::dropIfExists('user');
+        Schema::dropIfExists('event');
     }
 }
