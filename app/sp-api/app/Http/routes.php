@@ -18,3 +18,15 @@ use Laravel\Lumen\Routing\Router;
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->group(['prefix' => 'api'], function () use ($router) {
+    $router->get('events',  ['uses' => 'EventsController@showUserEvents']);
+
+    $router->get('events/{id}', ['uses' => 'EventsController@showOneEvent']);
+
+    $router->post('events', ['uses' => 'EventsController@create']);
+
+    $router->delete('events/{id}', ['uses' => 'EventsController@delete']);
+
+    $router->put('events/{id}', ['uses' => 'EventsController@update']);
+});
