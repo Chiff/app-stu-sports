@@ -1,0 +1,45 @@
+// https://yoksel.github.io/url-encoder/
+// https://boxy-svg.com/app
+
+input[ngDate=short] {
+  padding-right: calc(1.5em + 0.75rem);
+
+  /* @license https://fontawesome.com/license */
+  //background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2aWV3Qm94PSIwIDAgNTAwIDUwMCIgd2lkdGg9IjUwMCIgaGVpZ2h0PSI1MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGc+CiAgICA8cGF0aCBkPSJNIDQwNC4xODkgNzYuMDUgTCAzNjIuMTM3IDc2LjA1IEwgMzYyLjEzNyAzMC4zOTggQyAzNjIuMTM3IDI0LjYwMyAzNTcuNDA3IDE5Ljg2MiAzNTEuNjI1IDE5Ljg2MiBMIDMxNi41ODEgMTkuODYyIEMgMzEwLjc5OSAxOS44NjIgMzA2LjA2OSAyNC42MDMgMzA2LjA2OSAzMC4zOTggTCAzMDYuMDY5IDc2LjA1IEwgMTkzLjkzMSA3Ni4wNSBMIDE5My45MzEgMzAuMzk4IEMgMTkzLjkzMSAyNC42MDMgMTg5LjIwMSAxOS44NjIgMTgzLjQxOSAxOS44NjIgTCAxNDguMzc2IDE5Ljg2MiBDIDE0Mi41OTMgMTkuODYyIDEzNy44NjMgMjQuNjAzIDEzNy44NjMgMzAuMzk4IEwgMTM3Ljg2MyA3Ni4wNSBMIDk1LjgxMSA3Ni4wNSBDIDcyLjU5NSA3Ni4wNSA1My43NiA5NC45MjUgNTMuNzYgMTE4LjE5IEwgNTMuNzYgNDI3LjIyMSBDIDUzLjc2IDQ1MC40ODcgNzIuNTk1IDQ2OS4zNjIgOTUuODExIDQ2OS4zNjIgTCA0MDQuMTg5IDQ2OS4zNjIgQyA0MjcuNDA1IDQ2OS4zNjIgNDQ2LjI0IDQ1MC40ODcgNDQ2LjI0IDQyNy4yMjEgTCA0NDYuMjQgMTE4LjE5IEMgNDQ2LjI0IDk0LjkyNSA0MjcuNDA1IDc2LjA1IDQwNC4xODkgNzYuMDUgWiBNIDM5OC45MzIgNDI3LjIyMSBMIDEwMS4wNjggNDI3LjIyMSBDIDk4LjE3NiA0MjcuMjIxIDk1LjgxMSA0MjQuODUxIDk1LjgxMSA0MjEuOTU0IEwgOTUuODExIDE2MC4zMyBMIDQwNC4xODkgMTYwLjMzIEwgNDA0LjE4OSA0MjEuOTU0IEMgNDA0LjE4OSA0MjQuODUxIDQwMS44MjQgNDI3LjIyMSAzOTguOTMyIDQyNy4yMjEgWiIgc3R5bGU9IiIvPgogICAgPGc+CiAgICAgIDxjaXJjbGUgc3R5bGU9ImZpbGw6IHJnYigyNTUsIDI1NSwgMjU1KTsiIGN4PSIzNzUuNTM5IiBjeT0iMzczLjM4MyIgcj0iOTcuMTciLz4KICAgICAgPHBhdGggZD0iTSAzNzQgMjUwLjUzOSBDIDMwNS41IDI1MC41MzkgMjUwIDMwNi4wMzkgMjUwIDM3NC41MzkgQyAyNTAgNDQzLjAzOSAzMDUuNSA0OTguNTM4IDM3NCA0OTguNTM4IEMgNDQyLjUgNDk4LjUzOCA0OTggNDQzLjAzOSA0OTggMzc0LjUzOSBDIDQ5OCAzMDYuMDM5IDQ0Mi41IDI1MC41MzkgMzc0IDI1MC41MzkgWiBNIDQyMC4yNDUgNDA3LjAzOSBMIDQyMC4yNDUgNDA3LjAzOSBMIDQxMC4yNDQgNDE5LjUzOSBDIDQwNy40ODUgNDIyLjk4OSA0MDIuNDUgNDIzLjU0OSAzOTkgNDIwLjc4OSBMIDM5OSA0MjAuNzg5IEwgMzY1LjUgMzk1LjkyOCBDIDM2MC43NTggMzkyLjEzMyAzNTcuOTk5IDM4Ni4zODcgMzU4IDM4MC4zMTQgTCAzNTggMzAyLjUzOSBDIDM1OCAyOTguMTIxIDM2MS41ODEgMjk0LjUzOSAzNjUuOTk5IDI5NC41MzkgTCAzODIgMjk0LjUzOSBDIDM4Ni40MTggMjk0LjUzOSAzOTAgMjk4LjEyMSAzOTAgMzAyLjUzOSBMIDM5MCAzNzQuNTM5IEwgNDE5IDM5NS43ODkgQyA0MjIuNDUyIDM5OC41NSA0MjMuMDA5IDQwMy41ODkgNDIwLjI0NSA0MDcuMDM5IFoiIHN0eWxlPSIiLz4KICAgIDwvZz4KICA8L2c+Cjwvc3ZnPg==");
+  background-image: url("data:image/svg+xml,%3Csvg aria-hidden='true' focusable='false' data-prefix='far' data-icon='calendar-alt' class='svg-inline--fa fa-calendar-alt fa-w-14' role='img' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%23495057' d='M148 288h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h48c26.5 0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3 0 6-2.7 6-6z'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+
+  &.is-invalid {
+
+  }
+}
+
+input[ngDate=shortTime] {
+  padding-right: calc(1.5em + 0.75rem);
+
+  /* @license https://fontawesome.com/license */
+  background-image: url("data:image/svg+xml,%3Csvg aria-hidden='true' focusable='false' data-prefix='far' data-icon='clock' class='svg-inline--fa fa-clock fa-w-16' role='img' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23495057' d='M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm61.8-104.4l-84.9-61.7c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h32c6.6 0 12 5.4 12 12v141.7l66.8 48.6c5.4 3.9 6.5 11.4 2.6 16.8L334.6 349c-3.9 5.3-11.4 6.5-16.8 2.6z'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+
+  &.is-invalid {
+
+  }
+}
+
+input[ngDate=shortDate] {
+  padding-right: calc(1.5em + 0.75rem);
+
+  /* @license https://fontawesome.com/license */
+  background-image: url("data:image/svg+xml,%3Csvg aria-hidden='true' focusable='false' data-prefix='fas' data-icon='calendar-day' class='svg-inline--fa fa-calendar-day fa-w-14' role='img' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%23495057' d='M0 464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V192H0v272zm64-192c0-8.8 7.2-16 16-16h96c8.8 0 16 7.2 16 16v96c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16v-96zM400 64h-48V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H160V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H48C21.5 64 0 85.5 0 112v48h448v-48c0-26.5-21.5-48-48-48z'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+
+  &.is-invalid {
+
+  }
+}
