@@ -4,11 +4,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class EventsController extends Controller
 {
-    public function showUserEvents(): \Illuminate\Http\JsonResponse
+    public function showUserEvents(): JsonResponse
     {
         return response()->json(Event::all());
     }

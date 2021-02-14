@@ -16,7 +16,7 @@ google + yarn + angular
 ```
 cd app/sp-api
 composer install # toto je na doinstalovanie chybajucich kniznic 
-php -S localhost:8080 -t public
+php -S 127.0.0.1:8080 -t public
 
 php artisan migrate # toto je na spustenie migracie
 ```
