@@ -2,18 +2,36 @@
 
 namespace App\Models;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Lumen\Auth\Authorizable;
 
 class Event extends Model
 {
+    // ani jedno riesenie vsak nie je ok, lebo toto budeme vzdy musiet definovat, taktiez pokial bude mat Model DATE aj DATETIME aj TIME tak musime pouzit cast
+    // TODO - 15/02/2021 - mozno toto https://carbon.nesbot.com/docs/
+
+    // alternativa
+    // https://laravel.com/docs/8.x/eloquent-mutators#attribute-casting
+    // protected $casts = [
+    //     'created_at' => 'datetime:Y-m-d\TH:i:s',
+    // ];
+
+    // https://laravel.com/docs/8.x/eloquent-serialization#date-serialization
+    protected $dates = ['created_at', 'updated_at', 'registration_start', 'registration_end', 'event_start', 'event_end'];
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format("Y-m-d\TH:i:s");
+    }
 
     protected $fillable = [
-        'name', 'email', 'github', 'twitter', 'location', 'latest_article_published'
+        'created_at',
+        'updated_at',
+        'name',
+        'registration_start',
+        'registration_end',
+        'event_start',
+        'event_end',
+        'max_participants',
     ];
 
     /**
