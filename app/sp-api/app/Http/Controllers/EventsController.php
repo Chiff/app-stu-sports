@@ -17,11 +17,13 @@ class EventsController extends Controller
             'update',
             'delete'
         ]]);
+
+        $this->middleware('auth', ['except' => ['showUserEvents']]);
     }
 
-    public function showUserEvents(): JsonResponse
+    public function showUserEvents()
     {
-        return response()->json(Event::all());
+        return Event::showEvents();
     }
 
     public function showOneEvent($id)

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Lumen\Auth\Authorizable;
 
 class Event extends Model
 {
@@ -40,4 +41,32 @@ class Event extends Model
      * @var array
      */
     protected $hidden = [];
+
+    protected static function showEvents() {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://engine.interes.group//api/task",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 0,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_POSTFIELDS =>"",
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json;charset=UTF-8",
+                "Authorization: Basic eHJ5YmFybUBzdHViYS5zazo4MDA4Nw==",
+                "Content-Type: application/json"
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        if (curl_errno($curl)) {
+            echo 'Error:' . curl_error($curl);
+        }
+        curl_close($curl);
+        return $response;
+    }
 }

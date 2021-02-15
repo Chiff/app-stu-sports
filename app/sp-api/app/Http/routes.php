@@ -19,14 +19,14 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($router) {
-    $router->get('events',  ['uses' => 'EventsController@showUserEvents']);
+$router->group(['prefix' => 'events', 'middleware' => 'auth'], function () use ($router) {
+    $router->get('',  ['uses' => 'EventsController@showUserEvents']);
 
-    $router->get('events/{id}', ['uses' => 'EventsController@showOneEvent']);
+    $router->get('/{id}', ['uses' => 'EventsController@showOneEvent']);
 
-    $router->post('events', ['uses' => 'EventsController@create']);
+    $router->post('', ['uses' => 'EventsController@create']);
 
-    $router->delete('events/{id}', ['uses' => 'EventsController@delete']);
+    $router->delete('/{id}', ['uses' => 'EventsController@delete']);
 
-    $router->put('events/{id}', ['uses' => 'EventsController@update']);
+    $router->put('/{id}', ['uses' => 'EventsController@update']);
 });
