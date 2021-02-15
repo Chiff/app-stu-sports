@@ -19,7 +19,7 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->group(['prefix' => 'api'], function () use ($router) {
+$router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($router) {
     $router->get('events',  ['uses' => 'EventsController@showUserEvents']);
 
     $router->get('events/{id}', ['uses' => 'EventsController@showOneEvent']);

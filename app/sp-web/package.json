@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json --hmr",
+    "start-no-login": "ng serve --proxy-config proxy-no-user.conf.json --hmr",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

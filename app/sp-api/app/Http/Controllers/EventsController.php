@@ -9,6 +9,16 @@ use Illuminate\Http\Request;
 
 class EventsController extends Controller
 {
+    // tento kod zaruci ze auth middleware nebude obmedzovat showUserEvents + showOneEvent avsak musis byt prihlaseny na C,U,D
+    public function __construct(array $attributes = [])
+    {
+        $this->middleware('auth', ['only' => [
+            'create',
+            'update',
+            'delete'
+        ]]);
+    }
+
     public function showUserEvents(): JsonResponse
     {
         return response()->json(Event::all());

@@ -26,6 +26,7 @@ php artisan migrate # toto je na spustenie migracie
 cd app/sp-web
 yarn install 
 yarn start  
+yarn start-no-login # nastartuje apku bez MOCK usera  
 ```
 
 ## vytvorenie migracie
