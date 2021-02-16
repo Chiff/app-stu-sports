@@ -4,8 +4,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Http\ApplicationService\EventAS;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Laravel\Lumen\Routing\Controller;
 
 class EventsController extends Controller
 {
@@ -17,13 +19,11 @@ class EventsController extends Controller
             'update',
             'delete'
         ]]);
-
-        $this->middleware('auth', ['except' => ['showUserEvents']]);
     }
 
-    public function showUserEvents()
+    public function showUserEvents():JsonResponse
     {
-        return Event::showEvents();
+        return EventAS::showEvents();
     }
 
     public function showOneEvent($id)

@@ -16,17 +16,19 @@
 use Laravel\Lumen\Routing\Router;
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    return "hello stranger";
 });
 
-$router->group(['prefix' => 'events', 'middleware' => 'auth'], function () use ($router) {
-    $router->get('',  ['uses' => 'EventsController@showUserEvents']);
+$router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($router) {
+    $router->group(['prefix' => 'event', 'middleware' => 'auth'], function () use ($router) {
+        $router->get('', ['uses' => 'EventsController@showUserEvents']);
 
-    $router->get('/{id}', ['uses' => 'EventsController@showOneEvent']);
+        $router->get('/{id}', ['uses' => 'EventsController@showOneEvent']);
 
-    $router->post('', ['uses' => 'EventsController@create']);
+        $router->post('', ['uses' => 'EventsController@create']);
 
-    $router->delete('/{id}', ['uses' => 'EventsController@delete']);
+        $router->delete('/{id}', ['uses' => 'EventsController@delete']);
 
-    $router->put('/{id}', ['uses' => 'EventsController@update']);
+        $router->put('/{id}', ['uses' => 'EventsController@update']);
+    });
 });

@@ -9,7 +9,7 @@ export class AppComponent {
   data: any;
 
   constructor(private http: HttpClient) {
-    this.http.get('/api/events').subscribe((data) => {
+    this.http.get('/api/event').subscribe((data) => {
       this.data = data;
     });
   }
