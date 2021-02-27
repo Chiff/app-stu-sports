@@ -7,6 +7,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "guzzlehttp/guzzle": "^7.2",
+        "json-mapper/laravel-package": "^2.1",
         "laravel/lumen-framework": "^8.0"
     },
     "require-dev": {

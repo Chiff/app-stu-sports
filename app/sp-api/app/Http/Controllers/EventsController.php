@@ -3,17 +3,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\EventService;
 use App\Models\Event;
-use App\Http\ApplicationService\EventAS;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller;
 
 class EventsController extends Controller
 {
+    private EventService $event;
+
     // tento kod zaruci ze auth middleware nebude obmedzovat showUserEvents + showOneEvent avsak musis byt prihlaseny na C,U,D
-    public function __construct(array $attributes = [])
+    public function __construct(EventService $event, array $attributes = [])
     {
+        $this->event = $event;
+
         $this->middleware('auth', ['only' => [
             'create',
             'update',
@@ -21,9 +25,10 @@ class EventsController extends Controller
         ]]);
     }
 
-    public function showUserEvents():JsonResponse
+    public function showUserEvents(): JsonResponse
     {
-        return EventAS::showEvents();
+        $res = $this->event->showEvents();
+        return response()->json($res);
     }
 
     public function showOneEvent($id)

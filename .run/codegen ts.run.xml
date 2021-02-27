@@ -1,0 +1,18 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="codegen ts" type="SwaggerCodegen">
+    <option name="activeConfigurationType" value="CLI_PARAMETERS" />
+    <option name="configurationPath" value="" />
+    <option name="customJreEnabled" value="false" />
+    <option name="customTemplatesPath" value="" />
+    <option name="enableDebugLogging" value="false" />
+    <option name="generateToPath" value="C:\Users\master\Desktop\msus\app\sp-swagger" />
+    <option name="generationParameters">
+      <list />
+    </option>
+    <option name="generatorPath" value="https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar" />
+    <option name="jdkPath" value="Default" />
+    <option name="language" value="php-laravel" />
+    <option name="specificationPath" value="C:\Users\master\Desktop\msus\docs\swagger_netgrif.yaml" />
+    <method v="2" />
+  </configuration>
+</component>

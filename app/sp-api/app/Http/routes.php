@@ -19,8 +19,9 @@ $router->get('/', function () use ($router) {
     return "hello stranger";
 });
 
-$router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($router) {
-    $router->group(['prefix' => 'event', 'middleware' => 'auth'], function () use ($router) {
+$router->group(['prefix' => 'api', 'middleware' => ['auth']], function () use ($router) {
+
+    $router->group(['prefix' => 'event'], function () use ($router) {
         $router->get('', ['uses' => 'EventsController@showUserEvents']);
 
         $router->get('/{id}', ['uses' => 'EventsController@showOneEvent']);
@@ -31,4 +32,5 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
         $router->put('/{id}', ['uses' => 'EventsController@update']);
     });
+
 });
