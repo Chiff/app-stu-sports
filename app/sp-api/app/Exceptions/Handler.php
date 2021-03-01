@@ -53,9 +53,12 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        // return parent::render($request, $exception);
-        $rendered = parent::render($request, $exception);
+        // na localhoste si vies pozriet stacktrace tak ze si pridas header debug=true
+        if (app()->environment('local') && $request->header('debug') == true) {
+            return parent::render($request, $exception);
+        }
 
+        $rendered = parent::render($request, $exception);
         return response()->json([
             'error' => [
                 'code' => $rendered->getStatusCode(),
