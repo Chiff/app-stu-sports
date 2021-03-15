@@ -2,12 +2,16 @@
 /**
  * TaskReference
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * TaskReference
  */
-class TaskReference {
+class TaskReference extends AppSerializable
+{
 
     /** @var string $stringId */
     public $stringId;

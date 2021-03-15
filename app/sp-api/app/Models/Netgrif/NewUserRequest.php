@@ -2,12 +2,16 @@
 /**
  * NewUserRequest
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * NewUserRequest
  */
-class NewUserRequest {
+class NewUserRequest extends AppSerializable
+{
 
     /** @var string $email */
     public $email;

@@ -2,14 +2,17 @@
 /**
  * LocalisedEventOutcomeResource
  */
+
 namespace App\Models\Netgrif;
 
+use App\Models\AppSerializable;
 use DateTime;
 
 /**
  * LocalisedEventOutcomeResource
  */
-class LocalisedEventOutcomeResource {
+class LocalisedEventOutcomeResource extends AppSerializable
+{
 
     /** @var User $assignee */
     public $assignee;

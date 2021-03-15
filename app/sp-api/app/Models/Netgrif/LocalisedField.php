@@ -2,12 +2,16 @@
 /**
  * LocalisedField
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * LocalisedField
  */
-class LocalisedField {
+class LocalisedField extends AppSerializable
+{
 
     /** @var Component $component */
     public $component;

@@ -10,11 +10,19 @@ use App\Http\Services\Netgrif\FilterService;
 use App\Http\Services\Netgrif\GroupService;
 use App\Http\Services\Netgrif\PetriNetService;
 use App\Http\Services\Netgrif\TaskService;
-use App\Http\Services\Netgrif\UserService;
+use App\Http\Services\Netgrif\UserService as NetgrifUserService;
 use App\Http\Services\Netgrif\WorkflowService;
+use App\Http\Services\UserService;
+use App\Http\Utils\DateUtil;
+use DateTime;
 use Illuminate\Support\ServiceProvider;
+use JsonMapper\Cache\ArrayCache;
+use JsonMapper\Handler\ClassFactoryRegistry;
+use JsonMapper\Handler\PropertyMapper;
 use JsonMapper\JsonMapper;
-use JsonMapper\JsonMapperFactory;
+use JsonMapper\Middleware\DocBlockAnnotations;
+use JsonMapper\Middleware\NamespaceResolver;
+use JsonMapper\Middleware\TypedProperties;
 use Laravel\Lumen\Application;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,7 +31,25 @@ class AppServiceProvider extends ServiceProvider
     {
         // vendor services
         $this->app->singleton(JsonMapper::class, function (Application $app) {
-            return (new JsonMapperFactory())->bestFit();
+            $classFactoryRegistry = new ClassFactoryRegistry();
+
+            // ked budes chciet customove parsovanie tak si pridaj novu factory
+            $classFactoryRegistry->addFactory(DateTime::class, static function ($value) {
+                return DateUtil::customDateMapper($value);
+            });
+
+            $properyMapper = new PropertyMapper($classFactoryRegistry);
+
+            $mapper = new JsonMapper($properyMapper);
+            $mapper->push(new DocBlockAnnotations(new ArrayCache()));
+
+            if (PHP_VERSION_ID >= 70400) {
+                $mapper->push(new TypedProperties(new ArrayCache()));
+            }
+
+            $mapper->push(new NamespaceResolver());
+
+            return $mapper;
         });
 
         // netgrif services

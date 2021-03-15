@@ -2,12 +2,16 @@
 /**
  * Resource
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * Resource
  */
-class Resource {
+class Resource extends AppSerializable
+{
 
     /** @var string $description */
     public $description;

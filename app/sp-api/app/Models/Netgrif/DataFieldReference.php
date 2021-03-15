@@ -2,12 +2,16 @@
 /**
  * DataFieldReference
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * DataFieldReference
  */
-class DataFieldReference {
+class DataFieldReference extends AppSerializable
+{
 
     /** @var string $petriNetId */
     public $petriNetId;

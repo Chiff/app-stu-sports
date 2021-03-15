@@ -2,12 +2,16 @@
 /**
  * TransitionReference
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * TransitionReference
  */
-class TransitionReference {
+class TransitionReference extends AppSerializable
+{
 
     /** @var DataFieldReference $immediateData */
     public $immediateData;

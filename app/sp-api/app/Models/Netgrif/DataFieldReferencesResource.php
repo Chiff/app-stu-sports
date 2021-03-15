@@ -2,12 +2,16 @@
 /**
  * DataFieldReferencesResource
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * DataFieldReferencesResource
  */
-class DataFieldReferencesResource {
+class DataFieldReferencesResource extends AppSerializable
+{
 
     /** @var DataFieldReference[] $content */
     public $content;

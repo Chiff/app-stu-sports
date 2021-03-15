@@ -2,12 +2,16 @@
 /**
  * User
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * User
  */
-class User {
+class User extends AppSerializable
+{
 
     /** @var Authority[] $authorities */
     public $authorities;

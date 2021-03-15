@@ -2,12 +2,16 @@
 /**
  * UpdateUserRequest
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * UpdateUserRequest
  */
-class UpdateUserRequest {
+class UpdateUserRequest extends AppSerializable
+{
 
     /** @var string $avatar */
     public $avatar;

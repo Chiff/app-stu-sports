@@ -2,12 +2,16 @@
 /**
  * CreateCaseBody
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * CreateCaseBody
  */
-class CreateCaseBody {
+class CreateCaseBody extends AppSerializable
+{
 
     /** @var string $color */
     public $color;

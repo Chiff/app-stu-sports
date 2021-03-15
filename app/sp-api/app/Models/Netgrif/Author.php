@@ -2,12 +2,16 @@
 /**
  * Author
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * Author
  */
-class Author {
+class Author extends AppSerializable
+{
 
     /** @var string $email */
     public $email;

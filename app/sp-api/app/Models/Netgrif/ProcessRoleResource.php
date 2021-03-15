@@ -2,12 +2,16 @@
 /**
  * ProcessRoleResource
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * ProcessRoleResource
  */
-class ProcessRoleResource {
+class ProcessRoleResource extends AppSerializable
+{
 
     /** @var string $description */
     public $description;

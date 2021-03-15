@@ -2,12 +2,16 @@
 /**
  * Group
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * Group
  */
-class Group {
+class Group extends AppSerializable
+{
 
     /** @var Group[] $childGroups */
     public $childGroups;

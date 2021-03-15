@@ -2,14 +2,17 @@
 /**
  * LocalisedTaskResource
  */
+
 namespace App\Models\Netgrif;
 
+use App\Models\AppSerializable;
 use DateTime;
 
 /**
  * LocalisedTaskResource
  */
-class LocalisedTaskResource {
+class LocalisedTaskResource extends AppSerializable
+{
 
     /** @var string $assignPolicy */
     public $assignPolicy;

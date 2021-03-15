@@ -2,12 +2,16 @@
 /**
  * ChangePasswordRequest
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * ChangePasswordRequest
  */
-class ChangePasswordRequest {
+class ChangePasswordRequest extends AppSerializable
+{
 
     /** @var string $login */
     public $login;

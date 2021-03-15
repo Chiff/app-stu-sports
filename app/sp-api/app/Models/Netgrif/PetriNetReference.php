@@ -2,14 +2,17 @@
 /**
  * PetriNetReference
  */
+
 namespace App\Models\Netgrif;
 
+use App\Models\AppSerializable;
 use DateTime;
 
 /**
  * PetriNetReference
  */
-class PetriNetReference {
+class PetriNetReference extends AppSerializable
+{
 
     /** @var Author $author */
     public $author;

@@ -2,12 +2,16 @@
 /**
  * DataGroupLayout
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * DataGroupLayout
  */
-class DataGroupLayout {
+class DataGroupLayout extends AppSerializable
+{
 
     /** @var int $cols */
     public $cols;

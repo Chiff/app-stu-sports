@@ -2,12 +2,16 @@
 /**
  * TaskSearchRequest
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * TaskSearchRequest
  */
-class TaskSearchRequest {
+class TaskSearchRequest extends AppSerializable
+{
 
     /** @var TaskSearchCaseRequest $case */
     public $case;

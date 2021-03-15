@@ -2,12 +2,16 @@
 /**
  * GroupsResource
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * GroupsResource
  */
-class GroupsResource {
+class GroupsResource extends AppSerializable
+{
 
     /** @var Group[] $content */
     public $content;

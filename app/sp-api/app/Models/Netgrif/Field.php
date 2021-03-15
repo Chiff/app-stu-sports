@@ -2,12 +2,16 @@
 /**
  * Field
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * Field
  */
-class Field {
+class Field extends AppSerializable
+{
 
     /** @var ObjectId $id */
     public $id;

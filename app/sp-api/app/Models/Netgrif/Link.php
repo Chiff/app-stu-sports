@@ -2,12 +2,16 @@
 /**
  * Link
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * Link
  */
-class Link {
+class Link extends AppSerializable
+{
 
     /** @var string $deprecation */
     public $deprecation;

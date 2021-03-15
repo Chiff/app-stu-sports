@@ -2,12 +2,16 @@
 /**
  * FieldLayout
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * FieldLayout
  */
-class FieldLayout {
+class FieldLayout extends AppSerializable
+{
 
     /** @var string $alignment */
     public $alignment;

@@ -2,12 +2,16 @@
 /**
  * TransactionResource
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * TransactionResource
  */
-class TransactionResource {
+class TransactionResource extends AppSerializable
+{
 
     /** @var Link $links */
     public $links;

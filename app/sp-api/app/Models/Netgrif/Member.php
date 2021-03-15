@@ -2,12 +2,16 @@
 /**
  * Member
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * Member
  */
-class Member {
+class Member extends AppSerializable
+{
 
     /** @var string $email */
     public $email;

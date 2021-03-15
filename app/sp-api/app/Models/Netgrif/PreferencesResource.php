@@ -2,12 +2,16 @@
 /**
  * PreferencesResource
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * PreferencesResource
  */
-class PreferencesResource {
+class PreferencesResource extends AppSerializable
+{
 
     /** @var Link $links */
     public $links;

@@ -2,12 +2,16 @@
 /**
  * MessageResource
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * MessageResource
  */
-class MessageResource {
+class MessageResource extends AppSerializable
+{
 
     /** @var string $data */
     public $data;

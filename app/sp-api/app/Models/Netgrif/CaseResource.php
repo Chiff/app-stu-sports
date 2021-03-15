@@ -2,14 +2,17 @@
 /**
  * CaseResource
  */
+
 namespace App\Models\Netgrif;
 
+use App\Models\AppSerializable;
 use DateTime;
 
 /**
  * CaseResource
  */
-class CaseResource {
+class CaseResource extends AppSerializable
+{
 
     /** @var ObjectId $id */
     public $id;
@@ -26,7 +29,7 @@ class CaseResource {
     /** @var string $icon */
     public $icon;
 
-    /** @var Field $immediateData */
+    /** @var Field[] $immediateData */
     public $immediateData;
 
     /** @var DateTime $lastModified */

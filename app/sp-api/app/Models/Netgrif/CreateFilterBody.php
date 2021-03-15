@@ -2,12 +2,16 @@
 /**
  * CreateFilterBody
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * CreateFilterBody
  */
-class CreateFilterBody {
+class CreateFilterBody extends AppSerializable
+{
 
     /** @var string $description */
     public $description;

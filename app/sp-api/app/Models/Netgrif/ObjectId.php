@@ -2,14 +2,17 @@
 /**
  * ObjectId
  */
+
 namespace App\Models\Netgrif;
 
+use App\Models\AppSerializable;
 use DateTime;
 
 /**
  * ObjectId
  */
-class ObjectId {
+class ObjectId extends AppSerializable
+{
 
     /** @var int $counter */
     public $counter;

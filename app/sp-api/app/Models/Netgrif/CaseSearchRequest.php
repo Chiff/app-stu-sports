@@ -2,12 +2,16 @@
 /**
  * CaseSearchRequest
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * CaseSearchRequest
  */
-class CaseSearchRequest {
+class CaseSearchRequest extends AppSerializable
+{
 
     /** @var Author $author */
     public $author;

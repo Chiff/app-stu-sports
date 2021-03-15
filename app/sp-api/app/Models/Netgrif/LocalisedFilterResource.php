@@ -2,14 +2,17 @@
 /**
  * LocalisedFilterResource
  */
+
 namespace App\Models\Netgrif;
 
+use App\Models\AppSerializable;
 use DateTime;
 
 /**
  * LocalisedFilterResource
  */
-class LocalisedFilterResource {
+class LocalisedFilterResource extends AppSerializable
+{
 
     /** @var Author $author */
     public $author;

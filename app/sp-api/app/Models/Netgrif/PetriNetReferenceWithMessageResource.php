@@ -2,12 +2,16 @@
 /**
  * PetriNetReferenceWithMessageResource
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * PetriNetReferenceWithMessageResource
  */
-class PetriNetReferenceWithMessageResource {
+class PetriNetReferenceWithMessageResource extends AppSerializable
+{
 
     /** @var string $data */
     public $data;

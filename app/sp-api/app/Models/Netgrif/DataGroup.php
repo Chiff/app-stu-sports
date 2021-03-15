@@ -2,12 +2,16 @@
 /**
  * DataGroup
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * DataGroup
  */
-class DataGroup {
+class DataGroup extends AppSerializable
+{
 
     /** @var string $alignment */
     public $alignment;

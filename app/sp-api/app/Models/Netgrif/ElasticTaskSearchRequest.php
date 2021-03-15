@@ -2,12 +2,16 @@
 /**
  * ElasticTaskSearchRequest
  */
+
 namespace App\Models\Netgrif;
+
+use App\Models\AppSerializable;
 
 /**
  * ElasticTaskSearchRequest
  */
-class ElasticTaskSearchRequest {
+class ElasticTaskSearchRequest extends AppSerializable
+{
 
     /** @var TaskSearchCaseRequest $case */
     public $case;
