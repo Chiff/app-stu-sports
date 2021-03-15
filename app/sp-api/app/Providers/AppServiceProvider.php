@@ -10,9 +10,8 @@ use App\Http\Services\Netgrif\FilterService;
 use App\Http\Services\Netgrif\GroupService;
 use App\Http\Services\Netgrif\PetriNetService;
 use App\Http\Services\Netgrif\TaskService;
-use App\Http\Services\Netgrif\UserService as NetgrifUserService;
+use App\Http\Services\Netgrif\UserService;
 use App\Http\Services\Netgrif\WorkflowService;
-use App\Http\Services\UserService;
 use App\Http\Utils\DateUtil;
 use DateTime;
 use Illuminate\Support\ServiceProvider;
@@ -37,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
             $classFactoryRegistry->addFactory(DateTime::class, static function ($value) {
                 return DateUtil::customDateMapper($value);
             });
+
 
             $properyMapper = new PropertyMapper($classFactoryRegistry);
 

@@ -26,7 +26,7 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth']], function () use ($
 
         $router->get('/{id}', ['uses' => 'EventsController@showOneEvent']);
 
-        $router->post('', ['uses' => 'EventsController@create']);
+        $router->post('', ['uses' => 'EventsController@createOneEvent']);
 
         $router->delete('/{id}', ['uses' => 'EventsController@delete']);
 

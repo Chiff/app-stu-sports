@@ -5,6 +5,8 @@ namespace App\Models;
 
 // custom serializer na urcite datove typy - zatial iba datetime
 use App\Http\Utils\DateUtil;
+use App\Models\Netgrif\CaseResource;
+use App\Models\Netgrif\EmbededCases;
 use DateTime;
 use JsonSerializable;
 

@@ -27,13 +27,20 @@ class EventsController extends Controller
 
     public function showUserEvents(): JsonResponse
     {
-        $res = $this->event->showEvents();
+        $res = $this->event->showAllEvents();
         return response()->json($res);
     }
 
-    public function showOneEvent($id)
+    public function showOneEvent($id): JsonResponse
     {
-        return response()->json(Event::find($id));
+        $res = $this->event->showOneEvent($id);
+        return response()->json($res);
+    }
+
+    public function createOneEvent(): JsonResponse
+    {
+        $res = $this->event->createOneEvent();
+        return response()->json($res);
     }
 
     public function create(Request $request)
