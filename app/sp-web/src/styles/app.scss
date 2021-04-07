@@ -48,3 +48,17 @@ html, body {
 .h-cursor-pointer {
   cursor: pointer;
 }
+
+label {
+  font-weight: bold;
+}
+
+.form-control-required::after {
+    content: '*';
+    color: $danger;
+    font-size: 80%;
+}
+
+.form-group-spaced + .form-group-spaced {
+  margin-top: 0.5em;
+}

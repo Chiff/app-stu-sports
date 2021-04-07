@@ -42,7 +42,8 @@ module.exports = {
         'no-continue': 'off',
         '@angular-eslint/no-input-rename': 'warn',
         '@angular-eslint/no-output-on-prefix': 'off',
-        '@typescript-eslint/no-use-before-define': 'warn'
+        '@typescript-eslint/no-use-before-define': 'warn',
+        '@typescript-eslint/no-floating-promises': 'warn',
       }
     },
 
