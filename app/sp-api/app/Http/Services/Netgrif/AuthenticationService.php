@@ -5,6 +5,8 @@ namespace App\Http\Services\Netgrif;
 
 
 use App\Models\Netgrif\UserResource;
+use App\Models\User\LoginCredentials;
+use Illuminate\Support\Facades\Http;
 use JsonMapper\JsonMapper;
 
 
@@ -29,10 +31,14 @@ class AuthenticationService extends AbstractNetgrifService
     }
 
 
-    public function login(): UserResource
+    public function login(LoginCredentials $loginCredentials): UserResource
     {
         $url = self::getFullRequestUrl($this->apiPaths['loginUsingGET']);
-        $response = self::beginRequest()->get($url);
+
+        $response = Http::withBasicAuth(
+            $loginCredentials->email,
+            $loginCredentials->password
+        )->get($url);
 
         if ($response->failed()) {
             $response->throw();

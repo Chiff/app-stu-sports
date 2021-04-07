@@ -2,42 +2,44 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Token;
 
 class Authenticate
 {
-    /**
-     * The authentication guard factory instance.
-     *
-     * @var Auth
-     */
-    protected $auth;
+    protected Auth $auth;
 
-    /**
-     * Create a new middleware instance.
-     *
-     * @param  Auth $auth
-     * @return void
-     */
     public function __construct(Auth $auth)
     {
         $this->auth = $auth;
     }
 
-    /**
-     * Handle an incoming request.
-     *
-     * @param  Request  $request
-     * @param  Closure $next
-     * @param  string|null  $guard
-     * @return mixed
-     */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle(Request $request, Closure $next, string|null $guard = null): mixed
     {
+
+        $rawToken = $request->cookie('token');
+        if ($rawToken) {
+            $token = new Token($rawToken);
+            $payload = JWTAuth::decode($token);
+
+            $userId = $payload['sub'];
+            $u = User::find($userId);
+            auth()->login($u);
+        }
+
+
         if ($this->auth->guard($guard)->guest()) {
-            return response('Unauthorized.', 401);
+            $r = array(
+                'error' => array(
+                    'code' => 401,
+                    'message' => 'Unauthorized',
+                ));
+
+            return response()->json($r, 401);
         }
 
         return $next($request);

@@ -10,8 +10,9 @@ use App\Http\Services\Netgrif\FilterService;
 use App\Http\Services\Netgrif\GroupService;
 use App\Http\Services\Netgrif\PetriNetService;
 use App\Http\Services\Netgrif\TaskService;
-use App\Http\Services\Netgrif\UserService;
+use App\Http\Services\Netgrif\UserService as NetgrifUserService;
 use App\Http\Services\Netgrif\WorkflowService;
+use App\Http\Services\UserService;
 use App\Http\Utils\DateUtil;
 use DateTime;
 use Illuminate\Support\ServiceProvider;
@@ -37,7 +38,6 @@ class AppServiceProvider extends ServiceProvider
                 return DateUtil::customDateMapper($value);
             });
 
-
             $properyMapper = new PropertyMapper($classFactoryRegistry);
 
             $mapper = new JsonMapper($properyMapper);
@@ -60,10 +60,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(GroupService::class);
         $this->app->singleton(PetriNetService::class);
         $this->app->singleton(TaskService::class);
-        $this->app->singleton(UserService::class);
+        $this->app->singleton(NetgrifUserService::class);
         $this->app->singleton(WorkflowService::class);
 
         // sp services
         $this->app->singleton(EventService::class);
+        $this->app->singleton(UserService::class);
     }
 }

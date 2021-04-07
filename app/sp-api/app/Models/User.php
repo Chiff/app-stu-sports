@@ -2,32 +2,50 @@
 
 namespace App\Models;
 
+use DateTimeInterface;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract
+// TODO - 05/04/2021 - use NOTIFIABLE - https://laravel.com/api/5.5/Illuminate/Notifications/Notifiable.html
+class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
 {
     use Authenticatable, Authorizable, HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
+    protected string $table = 'user';
+
+    protected $dates = ['created_at', 'updated_at'];
+
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format("Y-m-d\TH:i:s");
+    }
+
+
+    // The attributes that are mass assignable.
+    protected array $fillable = [
         'name', 'email',
     ];
 
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
+    // The attributes excluded from the model's JSON form.
+    protected array $hidden = [
+        'ext_id',
     ];
+
+    //Get the identifier that will be stored in the subject claim of the JWT.
+    public function getJWTIdentifier(): mixed
+    {
+        // pokial zmenim identifikator z "id" -> https://github.com/tymondesigns/jwt-auth/issues/1103#issuecomment-475161433
+        return $this->id;
+    }
+
+    // Return a key value array, containing any custom claims to be added to the JWT.
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 }

@@ -12,14 +12,19 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
-
 use Laravel\Lumen\Routing\Router;
 
-$router->get('/', function () use ($router) {
-    return "hello stranger";
-});
+//$router->get('/', function () use ($router) {
+//    return "hello stranger";
+//});
 
-$router->group(['prefix' => 'api', 'middleware' => ['auth']], function () use ($router) {
+$router->group(['prefix' => 'api'], function () use ($router) {
+
+    $router->group(['prefix' => 'user'], function () use ($router) {
+        $router->post('login', ['uses' => 'UserController@login']);
+        $router->get('logout', ['uses' => 'UserController@logout']);
+        $router->get('detail', ['uses' => 'UserController@detail']);
+    });
 
     $router->group(['prefix' => 'event'], function () use ($router) {
         $router->get('', ['uses' => 'EventsController@showUserEvents']);
