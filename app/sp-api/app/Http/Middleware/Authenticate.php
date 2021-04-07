@@ -13,6 +13,12 @@ class Authenticate
 {
     protected Auth $auth;
 
+    /**
+     * Create a new middleware instance.
+     *
+     * @param  Auth $auth
+     * @return void
+     */
     public function __construct(Auth $auth)
     {
         $this->auth = $auth;

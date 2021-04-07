@@ -27,7 +27,7 @@ class EventsController extends Controller
 
     public function showUserEvents(): JsonResponse
     {
-        $res = $this->event->showAllEvents();
+        $res = $this->event->showUserEvents();
         return response()->json($res);
     }
 
@@ -38,6 +38,12 @@ class EventsController extends Controller
     }
 
     public function createOneEvent(): JsonResponse
+    {
+        $res = $this->event->createOneEvent();
+        return response()->json($res);
+    }
+
+    public function deleteOneEvent(): JsonResponse
     {
         $res = $this->event->createOneEvent();
         return response()->json($res);

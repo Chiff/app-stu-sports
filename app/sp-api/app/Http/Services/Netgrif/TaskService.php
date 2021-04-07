@@ -4,10 +4,19 @@
 namespace App\Http\Services\Netgrif;
 
 
+use App\Models\Netgrif\LocalisedTaskResource;
+use App\Models\Netgrif\MessageResource;
+use App\Models\Netgrif\TaskReference;
+use JsonMapper\JsonMapper;
+
 class TaskService extends AbstractNetgrifService
 {
-    public function __construct()
+
+    private JsonMapper $mapper;
+
+    public function __construct(JsonMapper $mapper)
     {
+        $this->mapper = $mapper;
         $this->apiPaths = [
             'getAllUsingGET' => 'api/task',
             'assignUsingGET' => 'api/task/assign/{id}',
@@ -34,10 +43,71 @@ class TaskService extends AbstractNetgrifService
         ];
     }
 
-    public function test()
+    public function assignUsingGET($task_id): MessageResource
     {
-        $url = self::getFullRequestUrl($this->apiPaths['saveFilesUsingPOST'], 1, 1);
-        var_dump($url);
+        $url = self::getFullRequestUrl($this->apiPaths['assignUsingGET'], $task_id);
+        $response = self::beginRequest()->get($url);
+
+        if ($response->failed()) {
+            $response->throw();
+        }
+        $message = new MessageResource();
+        $this->mapper->mapObject($response->object(), $message);
+        return $message;
     }
+
+    public function cancelUsingGET($task_id): MessageResource
+    {
+        $url = self::getFullRequestUrl($this->apiPaths['cancelUsingGET'], $task_id);
+        $response = self::beginRequest()->get($url);
+
+        if ($response->failed()) {
+            $response->throw();
+        }
+        $message = new MessageResource();
+        $this->mapper->mapObject($response->object(), $message);
+        return $message;
+    }
+
+    public function finishUsingGET($task_id): MessageResource
+    {
+        $url = self::getFullRequestUrl($this->apiPaths['finishUsingGET'], $task_id);
+        $response = self::beginRequest()->get($url);
+
+        if ($response->failed()) {
+            $response->throw();
+        }
+        $message = new MessageResource();
+        $this->mapper->mapObject($response->object(), $message);
+        return $message;
+    }
+
+    public function getOneUsingGET($task_id): LocalisedTaskResource
+    {
+        $url = self::getFullRequestUrl($this->apiPaths['getOneUsingGET'], $task_id);
+        $response = self::beginRequest()->get($url);
+
+        if ($response->failed()) {
+            $response->throw();
+        }
+        $task = new LocalisedTaskResource();
+        $this->mapper->mapObject($response->object(), $task);
+        return $task;
+    }
+
+    public function getTasksOfCaseUsingGET($case_id): TaskReference
+    {
+        $url = self::getFullRequestUrl($this->apiPaths['getTasksOfCaseUsingGET'], $case_id);
+        $response = self::beginRequest()->get($url);
+
+        if ($response->failed()) {
+            $response->throw();
+        }
+        $task = new TaskReference();
+        $this->mapper->mapObject($response->object(), $task);
+        return $task;
+    }
+
+
 }
 

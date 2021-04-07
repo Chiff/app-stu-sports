@@ -4,6 +4,8 @@
 namespace App\Http\Services;
 
 use App\Http\Services\Netgrif\AuthenticationService;
+use App\Models\Netgrif\EmbeddedUsers;
+use App\Models\Netgrif\UserResource;
 use App\Models\User;
 use App\Models\User\LoginCredentials;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -11,10 +13,12 @@ use Illuminate\Contracts\Auth\Authenticatable;
 class UserService
 {
     private AuthenticationService $netgrigfAuth;
+    private \App\Http\Services\Netgrif\UserService $netgrifUser;
 
-    public function __construct(AuthenticationService $authService)
+    public function __construct(AuthenticationService $authService, \App\Http\Services\Netgrif\UserService $netgrifUserService)
     {
         $this->netgrigfAuth = $authService;
+        $this->netgrifUser = $netgrifUserService;
     }
 
     public function login(LoginCredentials $credentials): User|null
@@ -45,5 +49,10 @@ class UserService
     public function detail(): Authenticatable|null // User|null
     {
         return auth()->user();
+    }
+
+    public function getAllUsers(): EmbeddedUsers
+    {
+        return $this->netgrifUser->getAllUsingGET();
     }
 }
