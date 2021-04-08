@@ -29,8 +29,8 @@ class CaseResource extends AppSerializable
     /** @var string $icon */
     public $icon;
 
-//    /** @var Field[] $immediateData */
-//    public $immediateData;
+    /** @var Field[] $immediateData */
+    public $immediateData;
 
     /** @var DateTime $lastModified */
     public $lastModified;

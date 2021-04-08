@@ -5,18 +5,22 @@ namespace App\Http\Controllers;
 
 use App\Http\Services\EventService;
 use App\Models\Event;
+use App\Models\Netgrif\CaseResource;
+use DateTime;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller;
 
 class EventsController extends Controller
 {
-    private EventService $event;
+    //TODO pridat do autora id eventov, ktore vytvoril a na ktore je prihlaseny
+    //TODO pridat do eventov id autorov a userov, ktori su prihlaseni na podujatie
+    private EventService $eventService;
 
     // tento kod zaruci ze auth middleware nebude obmedzovat showUserEvents + showOneEvent avsak musis byt prihlaseny na C,U,D
     public function __construct(EventService $event, array $attributes = [])
     {
-        $this->event = $event;
+        $this->eventService = $event;
 
         $this->middleware('auth', ['only' => [
             'create',
@@ -27,33 +31,36 @@ class EventsController extends Controller
 
     public function showUserEvents(): JsonResponse
     {
-        $res = $this->event->showUserEvents();
+        $res = $this->eventService->showUserEvents();
         return response()->json($res);
     }
 
     public function showOneEvent($id): JsonResponse
     {
-        $res = $this->event->showOneEvent($id);
+        $res = $this->eventService->showOneEvent($id);
         return response()->json($res);
     }
 
-    public function createOneEvent(): JsonResponse
+    public function createOneEvent(): CaseResource
     {
-        $res = $this->event->createOneEvent();
-        return response()->json($res);
+        $res = $this->eventService->createOneEvent();
+        return $res;
     }
 
     public function deleteOneEvent(): JsonResponse
     {
-        $res = $this->event->createOneEvent();
+        $res = $this->eventService->createOneEvent();
         return response()->json($res);
     }
 
     public function create(Request $request)
     {
-        $event = Event::create($request->all());
 
-        return response()->json($event, 201);
+        $netgrifEvent = $this->createOneEvent();
+
+        $id = $netgrifEvent->stringId;
+        $event = Event::create(array('id' => $id, 'name' => $request->get('name'), 'registration_start' => $request->get('registration_start'), 'registration_end' => $request->get('registration_end'), 'event_start' => $request->get('event_start'), 'max_participants' => $request->get('max_participants')));
+        return response()->json($event, 200);
     }
 
     public function update($id, Request $request)
@@ -66,6 +73,7 @@ class EventsController extends Controller
 
     public function delete($id)
     {
+        //TODO spytat sa martina, preco nie je delete metoda povolena
         Event::findOrFail($id)->delete();
         return response('Deleted Successfully', 200);
     }

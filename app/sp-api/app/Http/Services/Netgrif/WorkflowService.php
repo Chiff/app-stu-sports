@@ -81,7 +81,6 @@ class WorkflowService extends AbstractNetgrifService
     {
         $url = self::getFullRequestUrl($this->apiPaths['createCaseUsingPOST']);
         $response = self::beginRequest()->post($url, array('color' => 'black', 'netId' => env('API_INTERES_EVENT_NET_ID'), 'title' => 'event'));
-
         if ($response->failed()) {
             $response->throw();
         }

@@ -25,6 +25,8 @@ class UserController extends Controller
         ]]);
     }
 
+
+
     public function showAllUsers(): JsonResponse
     {
         $res = $this->user_service->getAllUsers();

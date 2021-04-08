@@ -8,6 +8,7 @@ use Illuminate\Http\Client\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Http;
 
+
 class Event extends Model
 {
     // ani jedno riesenie vsak nie je ok, lebo toto budeme vzdy musiet definovat, taktiez pokial bude mat Model DATE aj DATETIME aj TIME tak musime pouzit cast
@@ -20,6 +21,7 @@ class Event extends Model
     // ];
 
     // https://laravel.com/docs/8.x/eloquent-serialization#date-serialization
+
     protected $dates = ['created_at', 'updated_at', 'registration_start', 'registration_end', 'event_start', 'event_end'];
 
     protected function serializeDate(DateTimeInterface $date)
@@ -27,7 +29,20 @@ class Event extends Model
         return $date->format("Y-m-d\TH:i:s");
     }
 
+    /**
+     * @param string[] $fillable
+     */
+    public function setFillable(array $fillable): void
+    {
+        $this->fillable = $fillable;
+    }
+
+
+
+    protected $table = 'events';
+
     protected $fillable = [
+        'id',
         'created_at',
         'updated_at',
         'name',
@@ -43,6 +58,11 @@ class Event extends Model
      *
      * @var array
      */
-    protected $hidden = [];
+    protected $hidden = [
+        'id'
+    ];
+
+
+
 
 }

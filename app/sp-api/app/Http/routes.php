@@ -35,6 +35,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->post('', ['uses' => 'EventsController@createOneEvent']);
         $router->delete('/{id}', ['uses' => 'EventsController@delete']);
         $router->put('/{id}', ['uses' => 'EventsController@update']);
+        $router->post('/create', ['uses' => 'EventsController@create']);
 
     });
 
