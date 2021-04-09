@@ -5,6 +5,7 @@ export interface AccountModel {
   surname: string;
   created_at: string; // yyyy-MM-ddTHH:mm:ss
   updated_at: string; // yyyy-MM-ddTHH:mm:ss
+  permissions: AccountPermissionEnum[];
 }
 
 // TODO - 08/03/2021 - zatial nemame
