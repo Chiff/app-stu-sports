@@ -22,11 +22,7 @@ class EventsController extends Controller
     {
         $this->eventService = $event;
 
-        $this->middleware('auth', ['only' => [
-            'create',
-            'update',
-            'delete'
-        ]]);
+        $this->middleware('auth', ['except' => ['showUserEvents', 'showOneEvent']]);
     }
 
     public function showUserEvents(): JsonResponse

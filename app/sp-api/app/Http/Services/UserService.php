@@ -5,7 +5,6 @@ namespace App\Http\Services;
 
 use App\Http\Services\Netgrif\AuthenticationService;
 use App\Models\Netgrif\EmbeddedUsers;
-use App\Models\Netgrif\UserResource;
 use App\Models\User;
 use App\Models\User\LoginCredentials;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -13,9 +12,9 @@ use Illuminate\Contracts\Auth\Authenticatable;
 class UserService
 {
     private AuthenticationService $netgrigfAuth;
-    private \App\Http\Services\Netgrif\UserService $netgrifUser;
+    private Netgrif\UserService $netgrifUser;
 
-    public function __construct(AuthenticationService $authService, \App\Http\Services\Netgrif\UserService $netgrifUserService)
+    public function __construct(AuthenticationService $authService, Netgrif\UserService $netgrifUserService)
     {
         $this->netgrigfAuth = $authService;
         $this->netgrifUser = $netgrifUserService;
@@ -32,7 +31,7 @@ class UserService
 
         $user = User::where('ext_id', $userResource->id)->first();
 
-        // prve prihlasenie
+        // prve prihlasenie ("registracia")
         if (!$user) {
             $user = new User;
             $user->email = $userResource->email;
