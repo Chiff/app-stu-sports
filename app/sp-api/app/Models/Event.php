@@ -22,6 +22,8 @@ class Event extends Model
 
     // https://laravel.com/docs/8.x/eloquent-serialization#date-serialization
 
+    protected string $table = 'events';
+
     protected $dates = ['created_at', 'updated_at', 'registration_start', 'registration_end', 'event_start', 'event_end'];
 
     protected function serializeDate(DateTimeInterface $date)
@@ -30,19 +32,24 @@ class Event extends Model
     }
 
     /**
-     * @param string[] $fillable
+     * Get ovner of the event
      */
-    public function setFillable(array $fillable): void
+    public function owner()
     {
-        $this->fillable = $fillable;
+        return $this->belongsTo(User::class);
     }
 
+    /**
+     * Get users signed on the event
+     */
+    public function participants()
+    {
+        return $this->belongsToMany(User::class, 'user_event');
+    }
 
-
-    protected $table = 'events';
-
-    protected $fillable = [
-        'id',
+    protected array $fillable = [
+        'ext_id',
+        'owner_id',
         'created_at',
         'updated_at',
         'name',
@@ -58,8 +65,8 @@ class Event extends Model
      *
      * @var array
      */
-    protected $hidden = [
-        'id'
+    protected array $hidden = [
+        'ext_id'
     ];
 
 

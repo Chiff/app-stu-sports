@@ -48,4 +48,21 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return [];
     }
+
+    /**
+     * Get events, which created user
+     */
+    public function ownEvents()
+    {
+        return $this->hasMany(Event::class);
+    }
+
+    /**
+     * Get events on which user is registered.
+     */
+    public function getSignedEvents()
+    {
+        return $this->belongsToMany(Event::class, 'user_event');
+    }
+
 }

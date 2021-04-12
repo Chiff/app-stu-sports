@@ -31,12 +31,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'event'], function () use ($router) {
 
         $router->get('', ['uses' => 'EventsController@showUserEvents']);
-        $router->get('/{id}', ['uses' => 'EventsController@showOneEvent']);
+        $router->get('/{id}', ['uses' => 'EventsController@showOneEventById']);
+        $router->get('/{eventName}', ['uses' => 'EventsController@showOneEventByEventName']);
         $router->post('', ['uses' => 'EventsController@createOneEvent']);
-        $router->delete('/{id}', ['uses' => 'EventsController@delete']);
+        $router->delete('/{id}', ['uses' => 'EventsController@deleteOneEvent']);
         $router->put('/{id}', ['uses' => 'EventsController@update']);
-        $router->post('/create', ['uses' => 'EventsController@create']);
-
+        $router->post('/create', ['uses' => 'EventsController@createOneEvent']);
+        $router->post('/createOne', ['uses' => 'EventsController@addOneParticipantToEventById']);
+        $router->post('/createOne', ['uses' => 'EventsController@addOneParticipantToEventByEmail']);
     });
 
 });
