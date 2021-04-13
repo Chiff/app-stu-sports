@@ -50,7 +50,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * Get events, which created user
+     * Get events, which user owns
      */
     public function ownEvents()
     {
@@ -58,7 +58,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * Get events on which user is registered.
+     * Get events on which user is signed
      */
     public function getSignedEvents()
     {

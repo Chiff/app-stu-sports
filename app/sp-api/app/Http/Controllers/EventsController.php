@@ -19,14 +19,28 @@ class EventsController extends Controller
 {
     private EventService $eventService;
 
-    // tento kod zaruci ze auth middleware nebude obmedzovat showUserEvents + showOneEvent avsak musis byt prihlaseny na C,U,D
+    // tento kod zaruci ze auth middleware nebude obmedzovat showAllEvents
     public function __construct(EventService $event, array $attributes = [])
     {
         $this->eventService = $event;
 
-        $this->middleware('auth', ['except' => ['createOneEvent', 'showOneEvent', 'create']]);
+        $this->middleware('auth', ['except' => ['showAllEvents']]);
     }
 
+    /**
+     * Returns all events in the system, where registration is still possible
+     */
+    public function showAllEvents(): JsonResponse
+    {
+        $todayDate = date('Y/m/d H:m:i');
+        $events = Event::where('registration_start', '>=', $todayDate)->get();
+
+        return response()->json($events);
+    }
+
+    /**
+     * Get all events of logged user
+     */
     public function showUserEvents(): JsonResponse
     {
         $owner_id = auth()->id();
@@ -35,26 +49,38 @@ class EventsController extends Controller
         return response()->json($events);
     }
 
+    /**
+     * Find event by event id
+     */
     public function showOneEventById($id): JsonResponse
     {
-        $res = $this->eventService->showOneEvent($id);
-        return response()->json($res);
+        $event = Event::findOrFail($id)->get();
+        return response()->json($event);
     }
 
+    /**
+     * Find event by event name
+     */
     public function showOneEventsByEventName($event_name): JsonResponse
     {
-        $events = Event::where('owner_id', $event_name)->get();
+        $events = Event::where('name', $event_name)->get();
         return response()->json($events);
     }
 
-    public function deleteOneEvent($id)
+    /**
+     * Delete one event, by event id
+     */
+    public function deleteOneEvent($id): JsonResponse
     {
         //TODO kontrolovat, ci je aj vlastnikom eventu?
         Event::findOrFail($id)->delete();
-        return response('Deleted Successfully', 200);
+        return response()->json(200);
     }
 
-    public function createOneEvent(Request $request)
+    /**
+     * Create one event
+     */
+    public function createOneEvent(Request $request): JsonResponse
     {
 
         $netgrifEvent = $this->eventService->createOneEvent();
@@ -74,8 +100,12 @@ class EventsController extends Controller
         return response()->json($event, 200);
     }
 
+    /**
+     * Add one participant to event, by participants id
+     */
     public function addOneParticipantToEventById(Request $request)
     {
+        //TODO spytat sa Mata, ci staci vraciat nejake string hlasky o uspesnosti alebo robit nejake custom json response
         $this->validate($request, [
             'event_id' => 'required',
             'user_id' => 'required'
@@ -92,11 +122,15 @@ class EventsController extends Controller
             $event->participants()->attach($user_id);
             $event->save();
         }
+
     }
 
+    /**
+     * Add one participant to event, by participants email
+     */
     public function addOneParticipantToEventByEmail(Request $request)
     {
-        //TODO skontrolovat
+        //TODO spytat sa Mata, ci staci vraciat nejake string hlasky o uspesnosti alebo robit nejake custom json response
         $this->validate($request, [
             'event_id' => 'required',
             'user_mail' => 'required|email'
@@ -115,10 +149,13 @@ class EventsController extends Controller
             $event->participants()->attach($user_id);
             $event->save();
         }
+
     }
 
-
-    public function update($id, Request $request)
+    /**
+     * Update event info
+     */
+    public function update($id, Request $request): JsonResponse
     {
         $event = Event::findOrFail($id);
         $event->update($request->all());

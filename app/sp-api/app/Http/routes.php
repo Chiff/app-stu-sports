@@ -30,7 +30,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->group(['prefix' => 'event'], function () use ($router) {
 
-        $router->get('', ['uses' => 'EventsController@showUserEvents']);
+        $router->get('', ['uses' => 'EventsController@showAllEvents']);
+        $router->get('/my', ['uses' => 'EventsController@showUserEvents']);
         $router->get('/{id}', ['uses' => 'EventsController@showOneEventById']);
         $router->get('/{eventName}', ['uses' => 'EventsController@showOneEventByEventName']);
         $router->post('', ['uses' => 'EventsController@createOneEvent']);
