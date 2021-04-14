@@ -5,15 +5,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Services\EventService;
 use App\Models\Event;
-use App\Models\Netgrif\CaseResource;
 use App\Models\User;
-use Brick\Math\BigInteger;
-use DateTime;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Routing\Controller;
-use function PHPUnit\Framework\isEmpty;
-use function Sodium\add;
+
 
 class EventsController extends Controller
 {
@@ -79,6 +76,9 @@ class EventsController extends Controller
 
     /**
      * Create one event
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
      */
     public function createOneEvent(Request $request): JsonResponse
     {
@@ -92,10 +92,26 @@ class EventsController extends Controller
             'registration_start' => 'required|date|date_format:Y-m-d',
             'registration_end' => 'required|date|date_format:Y-m-d|',
             'event_start' => 'required|date|date_format:Y-m-d|',
-            'max_participants' => 'required'
+            'min_teams' => 'required',
+            'max_teams' => 'required',
+            'min_team_members' => 'required',
+            'max_team_members' => 'required'
         ]);
 
-        $event = new Event(array('owner_id' => $ownerId, 'ext_id' => $ext_id, 'name' => $request->get('eventName'), 'registration_start' => $request->get('registration_start'), 'registration_end' => $request->get('registration_end'), 'event_start' => $request->get('event_start'), 'max_participants' => $request->get('max_participants')));
+        $eventName = $request->get('eventName');
+        $registration_start = $request->get('registration_start');
+        $registration_end = $request->get('registration_end');
+        $event_start = $request->get('event_start');
+        $min_teams = $request->get('min_teams');
+        $max_teams = $request->get('max_teams');
+        $min_team_members = $request->get('min_team_members');
+        $max_team_members = $request->get('max_team_members');
+
+        $event = new Event(array('owner_id' => $ownerId, 'ext_id' => $ext_id, 'name' => $eventName,
+            'registration_start' => $registration_start, 'registration_end' => $registration_end,
+            'event_start' => $event_start, 'min_teams' => $min_teams, 'max_teams' => $max_teams,
+            'min_team_members' => $min_team_members, 'max_team_members' => $max_team_members));
+
         $event->save();
         return response()->json($event, 200);
     }

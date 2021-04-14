@@ -52,17 +52,33 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * Get events, which user owns
      */
-    public function ownEvents()
+    public function ownEvents(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Event::class);
     }
 
     /**
+     * Get teams, which user owns
+     */
+    public function ownTeams(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Team::class);
+    }
+
+    /**
      * Get events on which user is signed
      */
-    public function getSignedEvents()
+    public function getSignedEvents(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Event::class, 'user_event');
+    }
+
+    /**
+     * Get all teams of which is user member
+     */
+    public function teams(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Team::class, 'user_team');
     }
 
 }

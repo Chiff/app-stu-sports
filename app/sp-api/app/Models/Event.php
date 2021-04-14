@@ -4,9 +4,6 @@ namespace App\Models;
 
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Client\Response;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Http;
 
 
 class Event extends Model
@@ -47,6 +44,14 @@ class Event extends Model
         return $this->belongsToMany(User::class, 'user_event');
     }
 
+    /**
+     * Get teams signed to event
+     */
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'event_team');
+    }
+
     protected array $fillable = [
         'ext_id',
         'owner_id',
@@ -57,7 +62,10 @@ class Event extends Model
         'registration_end',
         'event_start',
         'event_end',
-        'max_participants',
+        'min_teams',
+        'max_teams',
+        'min_team_members',
+        'max_team_members'
     ];
 
     /**
