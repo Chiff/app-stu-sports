@@ -26,6 +26,14 @@ class Team extends Model
         return $this->belongsToMany(Event::class, 'event_team');
     }
 
+    /**
+     * Get the owner of the team
+     */
+    public function owner(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
 
     protected array $fillable = [
         'team_name'

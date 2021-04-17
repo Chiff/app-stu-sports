@@ -17,6 +17,10 @@ class TeamController extends Controller
         $this->middleware('auth');
     }
 
+
+    /*
+     * Create a team
+     */
     public function createTeam(Request $request): JsonResponse
     {
         $this->validate($request, [
@@ -32,9 +36,22 @@ class TeamController extends Controller
         if (count($exist) < 1) {
             $team = new Team(array('team_name' => $team_name));
             $user->ownTeams()->save($team);
+            return response()->json($team, 200);
         }
 
-        return response()->json($team);
+            return response()->json('Not created, team with this name already exists', 304);
     }
+
+    /*
+     * Update team
+     */
+    public function updateTeam($team_id, Request $request): JsonResponse
+    {
+        $team = Event::findOrFail($team_id);
+        $team->update($request->all());
+        return response()->json($team, 200);
+    }
+
+
 
 }

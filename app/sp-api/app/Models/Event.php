@@ -54,7 +54,7 @@ class Event extends Model
 
     protected array $fillable = [
         'ext_id',
-        'owner_id',
+        'user_id',
         'created_at',
         'updated_at',
         'name',

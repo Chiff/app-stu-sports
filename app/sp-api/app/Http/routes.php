@@ -32,18 +32,19 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->get('', ['uses' => 'EventsController@showAllEvents']);
         $router->get('/my', ['uses' => 'EventsController@showUserEvents']);
-        $router->get('/{id}', ['uses' => 'EventsController@showOneEventById']);
-        $router->get('/{eventName}', ['uses' => 'EventsController@showOneEventByEventName']);
+        $router->get('/byid/{id}', ['uses' => 'EventsController@showOneEventById']);
+        $router->get('/byname/{name}', ['uses' => 'EventsController@showOneEventsByEventName']);
         $router->post('', ['uses' => 'EventsController@createOneEvent']);
         $router->delete('/{id}', ['uses' => 'EventsController@deleteOneEvent']);
         $router->put('/{id}', ['uses' => 'EventsController@update']);
         $router->post('/create', ['uses' => 'EventsController@createOneEvent']);
-        $router->post('/createOne', ['uses' => 'EventsController@addOneParticipantToEventById']);
-        $router->post('/createOne', ['uses' => 'EventsController@addOneParticipantToEventByEmail']);
+        $router->post('/addTeamById', ['uses' => 'EventsController@signTeamById']);
+        $router->post('/addParticipantByMail', ['uses' => 'EventsController@addOneParticipantToEventByEmail']);
     });
 
     $router->group(['prefix' => 'team'], function () use ($router) {
         $router->post('create', ['uses' => 'TeamController@createTeam']);
+          $router->put('update', ['uses' => 'TeamController@updateTeam']);
     });
 
 });
