@@ -35,7 +35,7 @@ class UserService extends AbstractNetgrifService
     public function getLoggedUserUsingGET(): UserResource
     {
         $url = self::getFullRequestUrl($this->apiPaths['getLoggedUserUsingGET']);
-        $response = self::beginRequest()->get($url);
+        $response = self::beginRequestAsSystem()->get($url);
 
         if ($response->failed()) {
             $response->throw();
@@ -50,7 +50,7 @@ class UserService extends AbstractNetgrifService
     public function getAllUsingGET(): EmbeddedUsers
     {
         $url = self::getFullRequestUrl($this->apiPaths['getAllUsingGET2']);
-        $response = self::beginRequest()->get($url);
+        $response = self::beginRequestAsSystem()->get($url);
 
         if ($response->failed()) {
             $response->throw();
@@ -63,7 +63,7 @@ class UserService extends AbstractNetgrifService
     public function searchUsingPOST(string $fulltext, string $roles): EmbeddedUsers
     {
         $url = self::getFullRequestUrl($this->apiPaths['getAllUsingGET2']);
-        $response = self::beginRequest()->get($url, array('fulltext' => $fulltext, 'roles' => $roles));
+        $response = self::beginRequestAsSystem()->get($url, array('fulltext' => $fulltext, 'roles' => $roles));
 
         if ($response->failed()) {
             $response->throw();
@@ -77,7 +77,7 @@ class UserService extends AbstractNetgrifService
     public function updateUserUsingPOST($id, string $avatar = null, string $name = null, string $surname = null, string $telNumber = null): UserResource
     {
         $url = self::getFullRequestUrl($this->apiPaths['getAllUsingGET2']);
-        $response = self::beginRequest()->get($url, array('avatar' => $avatar, 'name' => $name, 'surname' => $surname, 'telNumber' => $telNumber));
+        $response = self::beginRequestAsSystem()->get($url, array('avatar' => $avatar, 'name' => $name, 'surname' => $surname, 'telNumber' => $telNumber));
 
         if ($response->failed()) {
             $response->throw();

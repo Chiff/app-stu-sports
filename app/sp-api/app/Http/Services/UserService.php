@@ -54,4 +54,58 @@ class UserService
     {
         return $this->netgrifUser->getAllUsingGET();
     }
+
+
+    // https://stackoverflow.com/a/52495210
+    private static string $credentialsSeparator = "_:_";
+    private static string $cipher = "aes-256-gcm";
+
+    // save credentials as [login]_:_[password] string, encrypted with jwt token
+    public function encodeCredentials(LoginCredentials $credentials)
+    {
+        $user = $this->getLoggedUserAsModel();
+        $token = auth()->tokenById($user->getAuthIdentifier());
+
+        $data = $credentials->email . self::$credentialsSeparator . $credentials->password;
+        $iv_len = openssl_cipher_iv_length(self::$cipher);
+        $iv = openssl_random_pseudo_bytes($iv_len);
+        $tag = ""; // will be filled by openssl_encrypt
+        $tag_length = 16;
+
+        $cipherText = openssl_encrypt($data, self::$cipher, $token, OPENSSL_RAW_DATA, $iv, $tag, "", $tag_length);
+        $encrypted = base64_encode($iv . $cipherText . $tag);
+
+        $user->encrypted_auth = $encrypted;
+        $user->save();
+    }
+
+    // decrypt credentials to base64 string [login:password] from jwt token
+    public function decodeCredentials(): LoginCredentials
+    {
+        $credentials = new LoginCredentials();
+
+        $user = $this->getLoggedUserAsModel();
+        $token = auth()->tokenById($user->getAuthIdentifier());
+
+        $textToDecrypt = $user->encrypted_auth;
+        $encrypted = base64_decode($textToDecrypt);
+        $iv_len = openssl_cipher_iv_length(self::$cipher);
+        $tag_length = 16;
+        $iv = substr($encrypted, 0, $iv_len);
+        $ciphertext = substr($encrypted, $iv_len, -$tag_length);
+        $tag = substr($encrypted, -$tag_length);
+
+        $decrypted = openssl_decrypt($ciphertext, self::$cipher, $token, OPENSSL_RAW_DATA, $iv, $tag);
+        $data = preg_split("/". self::$credentialsSeparator."/", $decrypted);
+
+        $credentials->email = $data[0];
+        $credentials->password = $data[1];
+
+        return $credentials;
+    }
+
+    private function getLoggedUserAsModel(): User
+    {
+        return auth()->user();
+    }
 }

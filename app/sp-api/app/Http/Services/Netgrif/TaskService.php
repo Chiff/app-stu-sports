@@ -13,10 +13,13 @@ class TaskService extends AbstractNetgrifService
 {
 
     private JsonMapper $mapper;
+    private \App\Http\Services\UserService $userService;
 
-    public function __construct(JsonMapper $mapper)
+    public function __construct(JsonMapper $mapper, \App\Http\Services\UserService $userService)
     {
         $this->mapper = $mapper;
+        $this->userService = $userService;
+
         $this->apiPaths = [
             'getAllUsingGET' => 'api/task',
             'assignUsingGET' => 'api/task/assign/{id}',
@@ -46,7 +49,7 @@ class TaskService extends AbstractNetgrifService
     public function assignUsingGET($task_id): MessageResource
     {
         $url = self::getFullRequestUrl($this->apiPaths['assignUsingGET'], $task_id);
-        $response = self::beginRequest()->get($url);
+        $response = self::beginRequestAsSystem()->get($url);
 
         if ($response->failed()) {
             $response->throw();
@@ -59,7 +62,7 @@ class TaskService extends AbstractNetgrifService
     public function cancelUsingGET($task_id): MessageResource
     {
         $url = self::getFullRequestUrl($this->apiPaths['cancelUsingGET'], $task_id);
-        $response = self::beginRequest()->get($url);
+        $response = self::beginRequestAsSystem()->get($url);
 
         if ($response->failed()) {
             $response->throw();
@@ -72,7 +75,7 @@ class TaskService extends AbstractNetgrifService
     public function finishUsingGET($task_id): MessageResource
     {
         $url = self::getFullRequestUrl($this->apiPaths['finishUsingGET'], $task_id);
-        $response = self::beginRequest()->get($url);
+        $response = self::beginRequestAsSystem()->get($url);
 
         if ($response->failed()) {
             $response->throw();
@@ -85,7 +88,7 @@ class TaskService extends AbstractNetgrifService
     public function getOneUsingGET($task_id): LocalisedTaskResource
     {
         $url = self::getFullRequestUrl($this->apiPaths['getOneUsingGET'], $task_id);
-        $response = self::beginRequest()->get($url);
+        $response = self::beginRequestAsSystem()->get($url);
 
         if ($response->failed()) {
             $response->throw();
@@ -98,7 +101,7 @@ class TaskService extends AbstractNetgrifService
     public function getTasksOfCaseUsingGET($case_id): TaskReference
     {
         $url = self::getFullRequestUrl($this->apiPaths['getTasksOfCaseUsingGET'], $case_id);
-        $response = self::beginRequest()->get($url);
+        $response = self::beginRequestAsSystem()->get($url);
 
         if ($response->failed()) {
             $response->throw();

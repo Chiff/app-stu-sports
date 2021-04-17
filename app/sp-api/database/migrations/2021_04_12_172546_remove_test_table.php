@@ -1,10 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class EditPrimarykeyEvent extends Migration
+class RemoveTestTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +12,7 @@ class EditPrimarykeyEvent extends Migration
      */
     public function up()
     {
-        Schema::table('events', function (Blueprint $table) {
-            $table->id()->change()->type('string');
-        });
+        Schema::drop('table_test');
     }
 
     /**

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class EditPrimarykeyEvent extends Migration
+class UserEncodeCredentials extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class EditPrimarykeyEvent extends Migration
      */
     public function up()
     {
-        Schema::table('events', function (Blueprint $table) {
-            $table->id()->change()->type('string');
+        Schema::table('user', function (Blueprint $table) {
+            $table->string('encrypted_auth', 256)->nullable(true);
         });
     }
 
@@ -25,6 +25,8 @@ class EditPrimarykeyEvent extends Migration
      */
     public function down()
     {
-        throw new Exception("rollback not supported, clear db pls (php artisan migrate:fresh)");
+        Schema::table('user', function (Blueprint $table) {
+            $table->dropColumn('encrypted_auth');
+        });
     }
 }

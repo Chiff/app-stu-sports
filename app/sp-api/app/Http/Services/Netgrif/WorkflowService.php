@@ -4,7 +4,6 @@
 namespace App\Http\Services\Netgrif;
 
 
-
 use App\Models\Netgrif\CaseResource;
 use App\Models\Netgrif\EmbededCases;
 use App\Models\Netgrif\MessageResource;
@@ -13,10 +12,12 @@ use JsonMapper\JsonMapper;
 class WorkflowService extends AbstractNetgrifService
 {
     private JsonMapper $mapper;
+    private \App\Http\Services\UserService $userService;
 
-    public function __construct(JsonMapper $mapper)
+    public function __construct(JsonMapper $mapper, \App\Http\Services\UserService $userService)
     {
         $this->mapper = $mapper;
+        $this->userService = $userService;
 
         $this->apiPaths = [
             'getAllUsingGET' => 'api/workflow/all',
@@ -38,7 +39,7 @@ class WorkflowService extends AbstractNetgrifService
     public function deleteCaseUsingDELETE($id): MessageResource
     {
         $url = self::getFullRequestUrl($this->apiPaths['deleteCaseUsingDELETE'], $id);
-        $response = self::beginRequest()->delete($url);
+        $response = self::beginRequestAsSystem()->delete($url);
 
         if ($response->failed()) {
             $response->throw();
@@ -52,7 +53,7 @@ class WorkflowService extends AbstractNetgrifService
     public function getOneUsingGET($id): CaseResource
     {
         $url = self::getFullRequestUrl($this->apiPaths['getOneUsingGET'], $id);
-        $response = self::beginRequest()->get($url);
+        $response = self::beginRequestAsSystem()->get($url);
 
         if ($response->failed()) {
             $response->throw();
@@ -67,7 +68,7 @@ class WorkflowService extends AbstractNetgrifService
     public function getAllUsingGET(): EmbededCases
     {
         $url = self::getFullRequestUrl($this->apiPaths['getAllUsingGET']);
-        $response = self::beginRequest()->get($url);
+        $response = self::beginRequestAsSystem()->get($url);
 
         if ($response->failed()) {
             $response->throw();
@@ -80,7 +81,13 @@ class WorkflowService extends AbstractNetgrifService
     public function createCaseUsingPOST(): CaseResource
     {
         $url = self::getFullRequestUrl($this->apiPaths['createCaseUsingPOST']);
-        $response = self::beginRequest()->post($url, array('color' => 'black', 'netId' => env('API_INTERES_EVENT_NET_ID'), 'title' => 'event'));
+
+        $credentials = $this->userService->decodeCredentials();
+
+        // TODO - 17/04/2021 - @mrybar - set id podla prihlaseneho usera do casu noveho podujatia
+        // $userId = auth()->user()->ext_id
+
+        $response = self::beginRequestAsUser($credentials)->post($url, array('color' => 'black', 'netId' => env('API_INTERES_EVENT_NET_ID'), 'title' => 'event'));
         if ($response->failed()) {
             $response->throw();
         }
@@ -95,7 +102,7 @@ class WorkflowService extends AbstractNetgrifService
     {
 
         $url = self::getFullRequestUrl($this->apiPaths['searchUsingPOST']);
-        $response = self::beginRequest()->post($url, array('author' => array('id' => $authorId)));
+        $response = self::beginRequestAsSystem()->post($url, array('author' => array('id' => $authorId)));
 
         if ($response->failed()) {
             $response->throw();

@@ -18,12 +18,16 @@ class EventService
     private WorkflowService $workflowService;
     private UserService $userService;
 
-    public function __construct(AuthenticationService $authService, JsonMapper $mapper)
-    {
+    public function __construct(
+        AuthenticationService $authService,
+        WorkflowService $workflowService,
+        UserService $userService,
+        JsonMapper $mapper,
+    ) {
         $this->mapper = $mapper;
-        $this->workflowService = new WorkflowService($mapper);
+        $this->workflowService = $workflowService;
         $this->auth = $authService;
-        $this->userService = new UserService($mapper);
+        $this->userService = $userService;
     }
 
     public function deleteEvent($id): MessageResource

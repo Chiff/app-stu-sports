@@ -29,7 +29,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     });
 
     $router->group(['prefix' => 'event'], function () use ($router) {
-
         $router->get('', ['uses' => 'EventsController@showAllEvents']);
         $router->get('/my', ['uses' => 'EventsController@showUserEvents']);
         $router->get('/byid/{id}', ['uses' => 'EventsController@showOneEventById']);
@@ -44,7 +43,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->group(['prefix' => 'team'], function () use ($router) {
         $router->post('create', ['uses' => 'TeamController@createTeam']);
-          $router->put('update', ['uses' => 'TeamController@updateTeam']);
+        $router->put('update', ['uses' => 'TeamController@updateTeam']);
     });
 
 });

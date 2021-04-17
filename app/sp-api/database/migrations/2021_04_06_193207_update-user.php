@@ -33,6 +33,6 @@ class UpdateUser extends Migration
      */
     public function down()
     {
-        throw new Exception("rollback not supported");
+        throw new Exception("rollback not supported, clear db pls (php artisan migrate:fresh)");
     }
 }

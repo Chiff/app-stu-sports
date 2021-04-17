@@ -44,14 +44,13 @@ class UserController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        // $this->userService->encodeCredentials($credentials, $token, $user);
-
+        $this->userService->encodeCredentials($credentials);
         return $this->respondWithToken($user, $token);
     }
 
     public function logout(): JsonResponse
     {
-        $token = auth()->tokenById(auth()->user()->id);
+        $token = auth()->tokenById(auth()->user()->getAuthIdentifier());
         auth()->invalidate(true);
         auth()->logout();
 

@@ -8,6 +8,8 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Lumen\Auth\Authorizable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -25,7 +27,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $date->format("Y-m-d\TH:i:s");
     }
 
-
     // The attributes that are mass assignable.
     protected array $fillable = [
         'name', 'email',
@@ -33,7 +34,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     // The attributes excluded from the model's JSON form.
     protected array $hidden = [
-        'ext_id',
+        'ext_id', 'encrypted_auth'
     ];
 
     //Get the identifier that will be stored in the subject claim of the JWT.
@@ -52,7 +53,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * Get events, which user owns
      */
-    public function ownEvents(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function ownEvents(): HasMany
     {
         return $this->hasMany(Event::class);
     }
@@ -60,7 +61,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * Get teams, which user owns
      */
-    public function ownTeams(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function ownTeams(): HasMany
     {
         return $this->hasMany(Team::class);
     }
@@ -68,7 +69,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * Get events on which user is signed
      */
-    public function getSignedEvents(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function getSignedEvents(): BelongsToMany
     {
         return $this->belongsToMany(Event::class, 'user_event');
     }
@@ -76,7 +77,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * Get all teams of which is user member
      */
-    public function teams(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function teams(): BelongsToMany
     {
         return $this->belongsToMany(Team::class, 'user_team');
     }
