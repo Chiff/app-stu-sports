@@ -10,8 +10,9 @@ use App\Models\Netgrif\CaseResource;
 use App\Models\Netgrif\EmbededCases;
 use App\Models\Netgrif\MessageResource;
 use JsonMapper\JsonMapper;
+use phpDocumentor\Reflection\Types\Boolean;
 
-class EventService
+class SystemService
 {
     private AuthenticationService $auth;
     private JsonMapper $mapper;
@@ -30,33 +31,38 @@ class EventService
         $this->userService = $userService;
     }
 
-    public function deleteEvent($id): MessageResource
+
+    /*
+     * return cases of type System
+     */
+    public function getAllSystemCases(): EmbededCases
     {
-        return $this->workflowService->deleteCaseUsingDELETE($id);
+        $params = array('petriNet' => array('identifier' => env('API_INTERES_SYSTEM_NED_IDENTIFIER')));
+        return $this->workflowService->searchCasesElastic($params);
     }
 
-    public function showUserEvents(): EmbededCases
+    /*
+     * Checks if any system case exists
+     */
+    public function systemCaseExists():bool
     {
-        $user = $this->userService->getLoggedUserUsingGET();
-        $authorId = $user->id;
-        return $this->workflowService->findAllByAuthorUsingPOST($authorId);
+        $exists = false;
+        $systemCases = $this->getAllSystemCases()->_embedded->cases;
+        if(sizeof($systemCases) > 0) {
+            $exists = true;
+        }
+        return $exists;
     }
 
-    public function showAllEvents(): EmbededCases
+    /*
+     * Create system case
+     */
+    public function createSystemCase(): CaseResource
     {
-        return $this->workflowService->getAllUsingGET();
-    }
-
-    public function showOneEvent($id): CaseResource
-    {
-        return $this->workflowService->getOneUsingGET($id);
-    }
-
-    public function createOneEvent(): CaseResource
-    {
-        $netId = env('API_INTERES_EVENT_NET_ID');
-        $title = "event";
-        //TODO mozno dorobit, nech sa caseu nastavuje ako title nazov podujatia
+        $netId = env('API_INTERES_SYSTEM_NET_ID');
+        $title = "system";
+        //TODO mozno nastavovat system v tvare system_username
         return $this->workflowService->createCaseUsingPOST($netId, $title);
     }
+
 }

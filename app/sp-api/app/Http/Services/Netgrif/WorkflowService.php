@@ -8,6 +8,7 @@ use App\Models\Netgrif\CaseResource;
 use App\Models\Netgrif\EmbededCases;
 use App\Models\Netgrif\MessageResource;
 use JsonMapper\JsonMapper;
+use Symfony\Component\VarDumper\Cloner\Data;
 
 class WorkflowService extends AbstractNetgrifService
 {
@@ -78,7 +79,7 @@ class WorkflowService extends AbstractNetgrifService
         return $cases;
     }
 
-    public function createCaseUsingPOST(): CaseResource
+    public function createCaseUsingPOST(string $netId, string $caseTitle): CaseResource
     {
         $url = self::getFullRequestUrl($this->apiPaths['createCaseUsingPOST']);
 
@@ -87,7 +88,7 @@ class WorkflowService extends AbstractNetgrifService
         // TODO - 17/04/2021 - @mrybar - set id podla prihlaseneho usera do casu noveho podujatia
         // $userId = auth()->user()->ext_id
 
-        $response = self::beginRequestAsUser($credentials)->post($url, array('color' => 'black', 'netId' => env('API_INTERES_EVENT_NET_ID'), 'title' => 'event'));
+        $response = self::beginRequestAsUser($credentials)->post($url, array('color' => 'black', 'netId' => $netId, 'title' => $caseTitle));
         if ($response->failed()) {
             $response->throw();
         }
@@ -96,6 +97,20 @@ class WorkflowService extends AbstractNetgrifService
         $this->mapper->mapObject($response->object(), $case);
 
         return $case;
+    }
+
+    public function searchCasesElastic(array $parameters): EmbededCases
+    {
+        $url = self::getFullRequestUrl($this->apiPaths['searchUsingPOST']);
+        $response = self::beginRequestAsSystem()->post($url, $parameters);
+
+        if ($response->failed()) {
+            $response->throw();
+        }
+        $cases = new EmbededCases();
+        $this->mapper->mapObject($response->object(), $cases);
+
+        return $cases;
     }
 
     public function findAllByAuthorUsingPOST($authorId): EmbededCases

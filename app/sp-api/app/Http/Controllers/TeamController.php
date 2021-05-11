@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\SystemService;
 use App\Models\Event;
 use App\Models\Team;
 use App\Models\User;
@@ -12,9 +13,13 @@ use Laravel\Lumen\Routing\Controller;
 
 class TeamController extends Controller
 {
-    public function __construct(array $attributes = [])
+    private SystemService $systemService;
+
+    public function __construct(SystemService $systemService)
     {
+
         $this->middleware('auth');
+        $this->systemService = $systemService;
     }
 
 
@@ -51,7 +56,5 @@ class TeamController extends Controller
         $team->update($request->all());
         return response()->json($team, 200);
     }
-
-
 
 }

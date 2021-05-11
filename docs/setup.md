@@ -29,7 +29,7 @@ php artisan migrate
 php artisan jwt:secret
 
 # serve BE
-php -S 127.0.0.1:8080 -t public 
+///
 ```
 
 ## run fe
