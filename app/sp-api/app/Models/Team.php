@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class Team extends Model
 {
-    protected string $table = 'team';
+    protected $table = 'team';
 
 
     /**
@@ -40,10 +40,10 @@ class Team extends Model
     }
 
 
-    protected array $fillable = [
+    protected $fillable = [
         'team_name'
     ];
-    protected array $hidden = [];
+    protected $hidden = [];
 
 
 }

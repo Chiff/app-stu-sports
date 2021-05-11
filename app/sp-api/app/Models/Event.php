@@ -22,7 +22,7 @@ class Event extends Model
 
     // https://laravel.com/docs/8.x/eloquent-serialization#date-serialization
 
-    protected string $table = 'events';
+    protected $table = 'events';
 
     protected $dates = ['created_at', 'updated_at', 'registration_start', 'registration_end', 'event_start', 'event_end'];
 
@@ -55,7 +55,7 @@ class Event extends Model
         return $this->belongsToMany(Team::class, 'event_team');
     }
 
-    protected array $fillable = [
+    protected $fillable = [
         'ext_id',
         'user_id',
         'created_at',
@@ -76,11 +76,7 @@ class Event extends Model
      *
      * @var array
      */
-    protected array $hidden = [
+    protected $hidden = [
         'ext_id'
     ];
-
-
-
-
 }
