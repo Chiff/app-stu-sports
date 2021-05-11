@@ -100,6 +100,7 @@ $app->configure('app');
  $app->register(App\Providers\AuthServiceProvider::class);
  $app->register(Irazasyed\Larasupport\Providers\ArtisanServiceProvider::class);
  $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class,);
+ $app->register(Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,);
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes

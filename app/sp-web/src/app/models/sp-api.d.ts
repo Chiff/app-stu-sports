@@ -1,10 +1,6 @@
-export interface AccountModel {
+export interface AccountModel extends UserDTO {
   id: number;
-  email: string;
-  firstname: string;
-  surname: string;
-  created_at: string; // yyyy-MM-ddTHH:mm:ss
-  updated_at: string; // yyyy-MM-ddTHH:mm:ss
+  updated_at: DateTimeAsString; // yyyy-MM-ddTHH:mm:ss
   permissions: AccountPermissionEnum[];
 }
 
@@ -14,3 +10,29 @@ export enum AccountPermissionEnum {
   TEAM_MANAGER,
   PARTICIPANT,
 }
+
+export interface EventDTO {
+  id: string;
+  user_id: string;
+  name: string;
+  min_teams: number;
+  max_teams: number;
+  min_team_members: number;
+  max_team_member: number;
+  created_at: DateTimeAsString;
+  updated_at: DateTimeAsString;
+  registration_start: DateTimeAsString;
+  registration_end: DateTimeAsString;
+  event_start: DateTimeAsString;
+  event_end: DateTimeAsString;
+  owner: UserDTO;
+}
+
+export interface UserDTO {
+  firstname: string;
+  surname: string;
+  email: string;
+  created_at: DateTimeAsString;
+}
+
+export type DateTimeAsString = string;

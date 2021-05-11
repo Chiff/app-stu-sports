@@ -1,1 +1,48 @@
-<p>dashboard works!</p>
+<div class="row">
+  <div class="col-sm-12 col-lg-6 my-4">
+    <h2>Moje podujatia</h2>
+    <div class="card">
+      <div class="card-body">
+        <div class="alert alert-warning m-0" *ngIf="!myEvents?.length">momentalne nemate ziadne aktivne podujatia</div>
+        <table class="table table-bordered m-0" *ngIf="myEvents?.length">
+          <thead>
+            <tr>
+              <th width="1"></th>
+              <th>Názov</th>
+              <th>Začiatok</th>
+              <th>Koniec</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let e of myEvents">
+              <td>
+                <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
+              </td>
+              <td>{{ e.name }}</td>
+              <td>{{ e.event_start | date }}</td>
+              <td>{{ e.event_end | date }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12 col-lg-6 my-4">
+    <h2>Moje timy</h2>
+    <div class="card">
+      <div class="card-body">
+        <div class="alert alert-warning m-0">momentalne nie ste v ziadnom time</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12 col-lg-6 my-4">
+    <h2>Moj ucet</h2>
+    <div class="card">
+      <div class="card-body">
+        <div class="alert alert-warning m-0">lorem ipsum dolor sit amet</div>
+      </div>
+    </div>
+  </div>
+</div>

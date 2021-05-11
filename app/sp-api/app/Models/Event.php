@@ -6,6 +6,9 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 
 
+/**
+ * @mixin IdeHelperEvent
+ */
 class Event extends Model
 {
     // ani jedno riesenie vsak nie je ok, lebo toto budeme vzdy musiet definovat, taktiez pokial bude mat Model DATE aj DATETIME aj TIME tak musime pouzit cast

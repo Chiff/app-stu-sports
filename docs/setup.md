@@ -45,6 +45,14 @@ cd app/sp-api
 php artisan make:migration [nazov migracie]
 ``` 
 
+## ide-helper
+https://github.com/barryvdh/laravel-ide-helper
+```
+php artisan ide-helper:models -M
+php artisan ide-helper:generate
+php artisan ide-helper:eloquent
+```
+
 ## linky
 https://auth0.com/blog/developing-restful-apis-with-lumen/
 https://laravel.com/docs/8.x/migrations#column-modifiers

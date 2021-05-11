@@ -6,12 +6,12 @@ import { LoginComponent } from './shared/shared/components/login/login.component
 
 const routes: Routes = [
   {
-    path: 'mock',
-    loadChildren: () => import('./routes/mock/mock.module').then((m) => m.MockModule),
-  },
-  {
     path: 'dashboard',
     loadChildren: () => import('./routes/dashboard/dashboard.module').then((m) => m.DashboardModule),
+  },
+  {
+    path: 'event',
+    loadChildren: () => import('./routes/event/event.module').then((m) => m.EventModule),
   },
   {
     path: 'logout.html',
@@ -24,7 +24,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'dashboard',
+    redirectTo: 'event',
   },
 ];
 

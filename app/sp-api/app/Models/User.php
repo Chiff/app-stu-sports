@@ -14,6 +14,9 @@ use Laravel\Lumen\Auth\Authorizable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 // TODO - 05/04/2021 - use NOTIFIABLE - https://laravel.com/api/5.5/Illuminate/Notifications/Notifiable.html
+/**
+ * @mixin IdeHelperUser
+ */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
 {
     use Authenticatable, Authorizable, HasFactory;

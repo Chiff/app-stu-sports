@@ -31,9 +31,7 @@ class EventsController extends Controller
      */
     public function showAllEvents(): JsonResponse
     {
-        $todayDate = date('Y/m/d H:m:i');
-        $events = Event::where('registration_end', '>=', $todayDate)->get();
-
+        $events = $this->eventService->getPublicEvents();
         return response()->json($events, 200);
     }
 
@@ -42,10 +40,7 @@ class EventsController extends Controller
      */
     public function showUserEvents(): JsonResponse
     {
-        $user_id = auth()->id();
-        $user = User::findOrFail($user_id);
-        $events = $user->ownEvents()->get();
-
+        $events = $this->eventService->getOwnEvents(true);
         return response()->json($events, 200);
     }
 
