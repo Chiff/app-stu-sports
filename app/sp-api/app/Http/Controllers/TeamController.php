@@ -64,16 +64,10 @@ class TeamController extends Controller
         return response()->json($team, 200);
     }
 
-    public function showUserTeams(): JsonResponse
-    {
-        $teams = $this->teamService->getOwnTeams();
-        return response()->json($teams, 200);
-    }
-
     public function showAllUserTeams(): JsonResponse
     {
         $teams = $this->teamService->getAllteamsWhereIsUser();
-        return response()->json($teams, 200);
+        return response()->json($teams);
     }
 
 

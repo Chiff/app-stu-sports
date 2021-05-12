@@ -70,19 +70,10 @@ class UserTeamAS
      * @param User $user
      * @return TeamDTO[]
      */
-    public function appendTeamsToUser(User $user): array
+    public function getTeamsByUser(User $user): array
     {
-        $result = [];
-        $teams = Team::all();
-
-        foreach ($teams as $team) {
-            if ($team->teamMembers()->where('user_id', '=', $user->id)) {
-                $teamDTO = $this->mapTeamWithOwner($team);
-                array_push($result, $teamDTO);
-            }
-        }
-
-        return $result;
+        $teams = $user->teams()->get();
+        return $this->mapTeamsWithOwner($teams);
     }
 
 }

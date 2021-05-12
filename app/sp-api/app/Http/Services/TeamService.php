@@ -58,9 +58,8 @@ class TeamService
     {
         $user_id = auth()->id();
         $user = User::whereId($user_id)->first();
-        $teams = $user->teams()->get();
 
-        return $this->userTeamAS->mapTeamsWithOwner($teams);
+        return $this->userTeamAS->getTeamsByUser($user);
     }
 
 }

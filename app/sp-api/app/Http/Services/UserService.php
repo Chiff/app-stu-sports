@@ -62,7 +62,7 @@ class UserService
         $user = User::whereId(auth()->id())->get()->first();
         $userDTO = new UserDTO();
         $this->mapper->mapObjectFromString($user->toJson(), $userDTO);
-        $userDTO->teams = $this->userTeamAS->appendTeamsToUser($user);
+        $userDTO->teams = $this->userTeamAS->getTeamsByUser($user);
 
         return $userDTO;
     }
