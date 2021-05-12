@@ -39,15 +39,6 @@ class TeamService
     }
 
 
-    // TODO: nie je spravene posielanie na netgrif
-    public function getOwnTeams(): array
-    {
-        $user_id = auth()->id();
-        $user = User::whereId($user_id)->first();
-        $teams = $user->ownTeams()->get();
-
-        return $this->userTeamAS->mapTeamsWithOwner($teams);
-    }
 
     public function getTeamById(int $id): TeamDTO
     {
