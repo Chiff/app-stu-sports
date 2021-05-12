@@ -53,6 +53,18 @@ class UserTeamAS
         return $teamDTO;
     }
 
+    public function mapTeamDetail(Team $team): TeamDTO
+    {
+        $teamDto = $this->mapTeamWithOwner($team);
+
+        // TODO - 12/05/2021 - @msteklac/@mrybar - pridaj uzivatelov
+        // TODO - 12/05/2021 - @msteklac/@mrybar - pridaj akitvne eventy teamu
+        // TODO - 12/05/2021 - @msteklac/@mrybar - pridaj skoncene eventy teamu
+        // TODO - 12/05/2021 - @mfilo - pridaj statistiku? - vyhry, clenovia, sporty...
+
+        return $teamDto;
+    }
+
 
     /**
      * @param User $user

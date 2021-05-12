@@ -1,0 +1,44 @@
+.table-border-none {
+  border-collapse: collapse;
+  border: none;
+}
+
+//.border-none td {
+//  border: 1px solid black;
+//}
+
+.table-border-none tr:first-child th,
+.table-border-none tr:first-child td {
+  border-top: none;
+}
+
+.table-border-none tr:last-child th,
+.table-border-none tr:last-child td {
+  border-bottom: none;
+}
+
+.table-border-none tr th:first-child,
+.table-border-none tr td:first-child {
+  border-left: none;
+}
+
+.table-border-none tr th:last-child,
+.table-border-none tr td:last-child {
+  border-right: none;
+}
+
+.table-bordered.table-border-none > :not(caption) > tr:last-child {
+  border-width: 2px 0 0 0;
+}
+
+.table-bordered.table-border-none thead tr {
+  border-width: 0 !important;
+}
+
+.table-bordered.table-border-none > :not(caption) thead > tr:first-child:not(:only-child) {
+  border-width: 0 0 2px 0;
+}
+
+.table-bordered.table-border-none > :not(caption) tbody > tr:first-child:not(:only-child) {
+  border-width: 0 0 2px 0;
+}

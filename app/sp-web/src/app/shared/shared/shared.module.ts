@@ -8,5 +8,6 @@ import { LoginComponent } from './components/login/login.component';
 @NgModule({
   declarations: [LogoutComponent, LoginComponent],
   imports: [CommonModule, FormsModule, HttpClientModule],
+  exports: [FormsModule, HttpClientModule],
 })
 export class SharedModule {}

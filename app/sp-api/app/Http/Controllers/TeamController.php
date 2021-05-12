@@ -3,11 +3,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\SystemService;
 use App\Http\Services\TeamService;
 use App\Models\Event;
 use App\Models\Team;
 use App\Models\User;
+use Exception;
 use App\Models\UserTeam;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
@@ -18,12 +18,10 @@ class TeamController extends Controller
 {
     private TeamService $teamService;
 
-    public function __construct(TeamService $teamService )
+    public function __construct(TeamService $teamService)
     {
-
         $this->middleware('auth');
         $this->teamService = $teamService;
-
     }
 
 
@@ -33,13 +31,13 @@ class TeamController extends Controller
     public function createTeam(Request $request): JsonResponse
     {
         $this->validate($request, [
-            'teamName' => 'required'
+            'team_name' => 'required'
         ]);
         $team = null;
         $user_id = auth()->id();
         $user = User::findorfail($user_id);
 
-        $team_name = $request->get('teamName');
+        $team_name = $request->get('team_name');
 
 
         $exist = $user->ownTeams()->where('team_name', $team_name)->get();
@@ -50,12 +48,15 @@ class TeamController extends Controller
             return response()->json($team, 200);
         }
 
-            return response()->json('Not created, team with this name already exists', 304);
+        throw new Exception("Not created, team with this name already exists", 304);
     }
 
-    /*
-     * Update team
-     */
+    public function getTeamById(int $id): JsonResponse
+    {
+        $team = $this->teamService->getTeamById($id);
+        return response()->json($team, 200);
+    }
+
     public function updateTeam($team_id, Request $request): JsonResponse
     {
         $team = Event::findOrFail($team_id);
@@ -76,7 +77,7 @@ class TeamController extends Controller
     }
 
 
-     // TODO:: zatial nefunkcne
+    // TODO:: zatial nefunkcne
     public function showAllTeams(): JsonResponse
     {
         $teams = $this->teamService->getAllTeams();

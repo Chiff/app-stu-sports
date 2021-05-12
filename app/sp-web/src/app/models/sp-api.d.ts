@@ -1,4 +1,6 @@
 // TODO - 12/05/2021 - permissions
+import { HttpErrorResponse } from '@angular/common/http';
+
 export interface AccountModel extends UserDTO {
   permissions: AccountPermissionEnum[];
 }
@@ -46,3 +48,14 @@ export interface UserDTO {
 }
 
 export type DateTimeAsString = string;
+
+interface CustomHttpError<T> extends HttpErrorResponse {
+  error: T;
+}
+
+export interface ErrorResponse {
+  error: {
+    code: number;
+    message: string;
+  };
+}

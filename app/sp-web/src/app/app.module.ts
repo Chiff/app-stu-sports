@@ -39,7 +39,7 @@ const beforeAppInit = (authService: AuthService, router: Router) => {
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, HttpClientModule, AppRoutingModule, SharedModule],
+  imports: [BrowserModule, AppRoutingModule, SharedModule],
   providers: [
     { provide: APP_INITIALIZER, useFactory: beforeAppInit, deps: [AuthService, Router], multi: true },
     { provide: LOCALE_ID, useValue: 'sk' },
