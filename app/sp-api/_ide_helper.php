@@ -11,87 +11,11 @@
  * @see https://github.com/barryvdh/laravel-ide-helper
  */
 
-    namespace Illuminate\Support\Facades {
-
-        use App\Models\User;
-        use BadMethodCallException;
-        use Closure;
-        use DateInterval;
-        use DateTimeInterface;
-        use Doctrine\DBAL\DBALException;
-        use Doctrine\DBAL\Schema\AbstractSchemaManager;
-        use Doctrine\DBAL\Schema\Column;
-        use Generator;
-        use Illuminate\Auth\Access\AuthorizationException;
-        use Illuminate\Auth\Access\iterable;
-        use Illuminate\Auth\AuthenticationException;
-        use Illuminate\Auth\AuthManager;
-        use Illuminate\Auth\SessionGuard;
-        use Illuminate\Auth\TokenGuard;
-        use Illuminate\Cache\CacheManager;
-        use Illuminate\Cache\FileStore;
-        use Illuminate\Cache\Repository;
-        use Illuminate\Cache\TaggedCache;
-        use Illuminate\Contracts\Auth\Authenticatable;
-        use Illuminate\Contracts\Auth\Guard;
-        use Illuminate\Contracts\Auth\StatefulGuard;
-        use Illuminate\Contracts\Auth\UserProvider;
-        use Illuminate\Contracts\Cache\Lock;
-        use Illuminate\Contracts\Cache\Store;
-        use Illuminate\Contracts\Container\BindingResolutionException;
-        use Illuminate\Contracts\Container\Container;
-        use Illuminate\Contracts\Filesystem\Cloud;
-        use Illuminate\Contracts\Filesystem\FileExistsException;
-        use Illuminate\Contracts\Filesystem\FileNotFoundException;
-        use Illuminate\Contracts\Foundation\Application;
-        use Illuminate\Contracts\Queue\Job;
-        use Illuminate\Contracts\Translation\Translator;
-        use Illuminate\Database\Connection;
-        use Illuminate\Database\DatabaseManager;
-        use Illuminate\Database\DatabaseTransactionsManager;
-        use Illuminate\Database\Grammar;
-        use Illuminate\Database\MySqlConnection;
-        use Illuminate\Database\Query\Builder;
-        use Illuminate\Database\Query\Expression;
-        use Illuminate\Database\Query\Processors\Processor;
-        use Illuminate\Database\Schema\MySqlBuilder;
-        use Illuminate\Database\Schema\MySqlSchemaState;
-        use Illuminate\Events\Dispatcher;
-        use Illuminate\Filesystem\Filesystem;
-        use Illuminate\Filesystem\FilesystemAdapter;
-        use Illuminate\Filesystem\FilesystemManager;
-        use Illuminate\Http\UploadedFile;
-        use Illuminate\Log\LogManager;
-        use Illuminate\Queue\QueueManager;
-        use Illuminate\Queue\SyncQueue;
-        use Illuminate\Support\Collection;
-        use Illuminate\Support\Testing\Fakes\EventFake;
-        use Illuminate\Support\Testing\Fakes\QueueFake;
-        use Illuminate\Validation\Factory;
-        use Illuminate\Validation\PresenceVerifierInterface;
-        use Illuminate\Validation\ValidationException;
-        use InvalidArgumentException;
-        use League\Flysystem\AwsS3v3\AwsS3Adapter;
-        use League\Flysystem\FilesystemInterface;
-        use LogicException;
-        use PDO;
-        use PDOStatement;
-        use Psr\Log\LoggerInterface;
-        use ReflectionException;
-        use RuntimeException;
-        use Symfony\Component\HttpFoundation\StreamedResponse;
-        use Throwable;
-        use Tymon\JWTAuth\Contracts\JWTSubject;
-        use Tymon\JWTAuth\Exceptions\UserNotDefinedException;
-        use Tymon\JWTAuth\JWT;
-        use Tymon\JWTAuth\JWTGuard;
-        use Tymon\JWTAuth\Payload;
-        use Tymon\JWTAuth\Token;
-
-        /**
+    namespace Illuminate\Support\Facades { 
+            /**
+     * 
      *
-     *
-     * @method static Authenticatable loginUsingId(mixed $id, bool $remember = false)
+     * @method static \Illuminate\Contracts\Auth\Authenticatable loginUsingId(mixed $id, bool $remember = false)
      * @method static \Symfony\Component\HttpFoundation\Response|null onceBasic(string $field = 'email',array $extraConditions = [])
      * @method static bool viaRemember()
      * @method static bool|null logoutOtherDevices(string $password, string $attribute = 'password')
@@ -100,18 +24,18 @@
      * @see \Illuminate\Contracts\Auth\Factory
      * @see \Illuminate\Contracts\Auth\Guard
      * @see \Illuminate\Contracts\Auth\StatefulGuard
-     */
+     */ 
         class Auth {
                     /**
          * Attempt to get the guard from the local cache.
          *
          * @param string|null $name
-         * @return Guard|StatefulGuard
-         * @static
-         */
+         * @return \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard 
+         * @static 
+         */ 
         public static function guard($name = null)
         {
-                        /** @var AuthManager $instance */
+                        /** @var \Illuminate\Auth\AuthManager $instance */
                         return $instance->guard($name);
         }
                     /**
@@ -119,12 +43,12 @@
          *
          * @param string $name
          * @param array $config
-         * @return SessionGuard
-         * @static
-         */
+         * @return \Illuminate\Auth\SessionGuard 
+         * @static 
+         */ 
         public static function createSessionDriver($name, $config)
         {
-                        /** @var AuthManager $instance */
+                        /** @var \Illuminate\Auth\AuthManager $instance */
                         return $instance->createSessionDriver($name, $config);
         }
                     /**
@@ -132,47 +56,47 @@
          *
          * @param string $name
          * @param array $config
-         * @return TokenGuard
-         * @static
-         */
+         * @return \Illuminate\Auth\TokenGuard 
+         * @static 
+         */ 
         public static function createTokenDriver($name, $config)
         {
-                        /** @var AuthManager $instance */
+                        /** @var \Illuminate\Auth\AuthManager $instance */
                         return $instance->createTokenDriver($name, $config);
         }
                     /**
          * Get the default authentication driver name.
          *
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function getDefaultDriver()
         {
-                        /** @var AuthManager $instance */
+                        /** @var \Illuminate\Auth\AuthManager $instance */
                         return $instance->getDefaultDriver();
         }
                     /**
          * Set the default guard driver the factory should serve.
          *
          * @param string $name
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function shouldUse($name)
         {
-                        /** @var AuthManager $instance */
+                        /** @var \Illuminate\Auth\AuthManager $instance */
                         $instance->shouldUse($name);
         }
                     /**
          * Set the default authentication driver name.
          *
          * @param string $name
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function setDefaultDriver($name)
         {
-                        /** @var AuthManager $instance */
+                        /** @var \Illuminate\Auth\AuthManager $instance */
                         $instance->setDefaultDriver($name);
         }
                     /**
@@ -180,154 +104,154 @@
          *
          * @param string $driver
          * @param callable $callback
-         * @return AuthManager
-         * @static
-         */
+         * @return \Illuminate\Auth\AuthManager 
+         * @static 
+         */ 
         public static function viaRequest($driver, $callback)
         {
-                        /** @var AuthManager $instance */
+                        /** @var \Illuminate\Auth\AuthManager $instance */
                         return $instance->viaRequest($driver, $callback);
         }
                     /**
          * Get the user resolver callback.
          *
-         * @return Closure
-         * @static
-         */
+         * @return \Closure 
+         * @static 
+         */ 
         public static function userResolver()
         {
-                        /** @var AuthManager $instance */
+                        /** @var \Illuminate\Auth\AuthManager $instance */
                         return $instance->userResolver();
         }
                     /**
          * Set the callback to be used to resolve users.
          *
-         * @param Closure $userResolver
-         * @return AuthManager
-         * @static
-         */
+         * @param \Closure $userResolver
+         * @return \Illuminate\Auth\AuthManager 
+         * @static 
+         */ 
         public static function resolveUsersUsing($userResolver)
         {
-                        /** @var AuthManager $instance */
+                        /** @var \Illuminate\Auth\AuthManager $instance */
                         return $instance->resolveUsersUsing($userResolver);
         }
                     /**
          * Register a custom driver creator Closure.
          *
          * @param string $driver
-         * @param Closure $callback
-         * @return AuthManager
-         * @static
-         */
+         * @param \Closure $callback
+         * @return \Illuminate\Auth\AuthManager 
+         * @static 
+         */ 
         public static function extend($driver, $callback)
         {
-                        /** @var AuthManager $instance */
+                        /** @var \Illuminate\Auth\AuthManager $instance */
                         return $instance->extend($driver, $callback);
         }
                     /**
          * Register a custom provider creator Closure.
          *
          * @param string $name
-         * @param Closure $callback
-         * @return AuthManager
-         * @static
-         */
+         * @param \Closure $callback
+         * @return \Illuminate\Auth\AuthManager 
+         * @static 
+         */ 
         public static function provider($name, $callback)
         {
-                        /** @var AuthManager $instance */
+                        /** @var \Illuminate\Auth\AuthManager $instance */
                         return $instance->provider($name, $callback);
         }
                     /**
          * Determines if any guards have already been resolved.
          *
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function hasResolvedGuards()
         {
-                        /** @var AuthManager $instance */
+                        /** @var \Illuminate\Auth\AuthManager $instance */
                         return $instance->hasResolvedGuards();
         }
                     /**
          * Forget all of the resolved guard instances.
          *
-         * @return AuthManager
-         * @static
-         */
+         * @return \Illuminate\Auth\AuthManager 
+         * @static 
+         */ 
         public static function forgetGuards()
         {
-                        /** @var AuthManager $instance */
+                        /** @var \Illuminate\Auth\AuthManager $instance */
                         return $instance->forgetGuards();
         }
                     /**
          * Set the application instance used by the manager.
          *
-         * @param Application $app
-         * @return AuthManager
-         * @static
-         */
+         * @param \Illuminate\Contracts\Foundation\Application $app
+         * @return \Illuminate\Auth\AuthManager 
+         * @static 
+         */ 
         public static function setApplication($app)
         {
-                        /** @var AuthManager $instance */
+                        /** @var \Illuminate\Auth\AuthManager $instance */
                         return $instance->setApplication($app);
         }
                     /**
          * Create the user provider implementation for the driver.
          *
          * @param string|null $provider
-         * @return UserProvider|null
-         * @throws InvalidArgumentException
-         * @static
-         */
+         * @return \Illuminate\Contracts\Auth\UserProvider|null 
+         * @throws \InvalidArgumentException
+         * @static 
+         */ 
         public static function createUserProvider($provider = null)
         {
-                        /** @var AuthManager $instance */
+                        /** @var \Illuminate\Auth\AuthManager $instance */
                         return $instance->createUserProvider($provider);
         }
                     /**
          * Get the default user provider name.
          *
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function getDefaultUserProvider()
         {
-                        /** @var AuthManager $instance */
+                        /** @var \Illuminate\Auth\AuthManager $instance */
                         return $instance->getDefaultUserProvider();
         }
                     /**
          * Get the currently authenticated user.
          *
-         * @return User|null
-         * @static
-         */
+         * @return \App\Models\User|null 
+         * @static 
+         */ 
         public static function user()
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->user();
         }
                     /**
          * Get the currently authenticated user or throws an exception.
          *
-         * @throws UserNotDefinedException
-         * @return User
-         * @static
-         */
+         * @throws \Tymon\JWTAuth\Exceptions\UserNotDefinedException
+         * @return \App\Models\User 
+         * @static 
+         */ 
         public static function userOrFail()
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->userOrFail();
         }
                     /**
          * Validate a user's credentials.
          *
          * @param array $credentials
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function validate($credentials = [])
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->validate($credentials);
         }
                     /**
@@ -335,36 +259,36 @@
          *
          * @param array $credentials
          * @param bool $login
-         * @return bool|string
-         * @static
-         */
+         * @return bool|string 
+         * @static 
+         */ 
         public static function attempt($credentials = [], $login = true)
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->attempt($credentials, $login);
         }
                     /**
          * Create a token for a user.
          *
-         * @param JWTSubject $user
-         * @return string
-         * @static
-         */
+         * @param \Tymon\JWTAuth\Contracts\JWTSubject $user
+         * @return string 
+         * @static 
+         */ 
         public static function login($user)
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->login($user);
         }
                     /**
          * Logout the user, thus invalidating the token.
          *
          * @param bool $forceForever
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function logout($forceForever = false)
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         $instance->logout($forceForever);
         }
                     /**
@@ -372,266 +296,266 @@
          *
          * @param bool $forceForever
          * @param bool $resetClaims
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function refresh($forceForever = false, $resetClaims = false)
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->refresh($forceForever, $resetClaims);
         }
                     /**
          * Invalidate the token.
          *
          * @param bool $forceForever
-         * @return JWT
-         * @static
-         */
+         * @return \Tymon\JWTAuth\JWT 
+         * @static 
+         */ 
         public static function invalidate($forceForever = false)
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->invalidate($forceForever);
         }
                     /**
          * Create a new token by User id.
          *
          * @param mixed $id
-         * @return string|null
-         * @static
-         */
+         * @return string|null 
+         * @static 
+         */ 
         public static function tokenById($id)
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->tokenById($id);
         }
                     /**
          * Log a user into the application using their credentials.
          *
          * @param array $credentials
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function once($credentials = [])
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->once($credentials);
         }
                     /**
          * Log the given User into the application.
          *
          * @param mixed $id
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function onceUsingId($id)
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->onceUsingId($id);
         }
                     /**
          * Alias for onceUsingId.
          *
          * @param mixed $id
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function byId($id)
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->byId($id);
         }
                     /**
          * Add any custom claims.
          *
          * @param array $claims
-         * @return JWTGuard
-         * @static
-         */
+         * @return \Tymon\JWTAuth\JWTGuard 
+         * @static 
+         */ 
         public static function claims($claims)
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->claims($claims);
         }
                     /**
          * Get the raw Payload instance.
          *
-         * @return Payload
-         * @static
-         */
+         * @return \Tymon\JWTAuth\Payload 
+         * @static 
+         */ 
         public static function getPayload()
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->getPayload();
         }
                     /**
          * Alias for getPayload().
          *
-         * @return Payload
-         * @static
-         */
+         * @return \Tymon\JWTAuth\Payload 
+         * @static 
+         */ 
         public static function payload()
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->payload();
         }
                     /**
          * Set the token.
          *
-         * @param Token|string $token
-         * @return JWTGuard
-         * @static
-         */
+         * @param \Tymon\JWTAuth\Token|string $token
+         * @return \Tymon\JWTAuth\JWTGuard 
+         * @static 
+         */ 
         public static function setToken($token)
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->setToken($token);
         }
                     /**
          * Set the token ttl.
          *
          * @param int $ttl
-         * @return JWTGuard
-         * @static
-         */
+         * @return \Tymon\JWTAuth\JWTGuard 
+         * @static 
+         */ 
         public static function setTTL($ttl)
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->setTTL($ttl);
         }
                     /**
          * Get the user provider used by the guard.
          *
-         * @return UserProvider
-         * @static
-         */
+         * @return \Illuminate\Contracts\Auth\UserProvider 
+         * @static 
+         */ 
         public static function getProvider()
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->getProvider();
         }
                     /**
          * Set the user provider used by the guard.
          *
-         * @param UserProvider $provider
-         * @return JWTGuard
-         * @static
-         */
+         * @param \Illuminate\Contracts\Auth\UserProvider $provider
+         * @return \Tymon\JWTAuth\JWTGuard 
+         * @static 
+         */ 
         public static function setProvider($provider)
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->setProvider($provider);
         }
                     /**
          * Return the currently cached user.
          *
-         * @return User|null
-         * @static
-         */
+         * @return \App\Models\User|null 
+         * @static 
+         */ 
         public static function getUser()
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->getUser();
         }
                     /**
          * Get the current request instance.
          *
-         * @return \Illuminate\Http\Request
-         * @static
-         */
+         * @return \Illuminate\Http\Request 
+         * @static 
+         */ 
         public static function getRequest()
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->getRequest();
         }
                     /**
          * Set the current request instance.
          *
          * @param \Illuminate\Http\Request $request
-         * @return JWTGuard
-         * @static
-         */
+         * @return \Tymon\JWTAuth\JWTGuard 
+         * @static 
+         */ 
         public static function setRequest($request)
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->setRequest($request);
         }
                     /**
          * Get the last user we attempted to authenticate.
          *
-         * @return User
-         * @static
-         */
+         * @return \App\Models\User 
+         * @static 
+         */ 
         public static function getLastAttempted()
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->getLastAttempted();
         }
                     /**
          * Determine if the current user is authenticated. If not, throw an exception.
          *
-         * @return User
-         * @throws AuthenticationException
-         * @static
-         */
+         * @return \App\Models\User 
+         * @throws \Illuminate\Auth\AuthenticationException
+         * @static 
+         */ 
         public static function authenticate()
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->authenticate();
         }
                     /**
          * Determine if the guard has a user instance.
          *
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function hasUser()
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->hasUser();
         }
                     /**
          * Determine if the current user is authenticated.
          *
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function check()
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->check();
         }
                     /**
          * Determine if the current user is a guest.
          *
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function guest()
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->guest();
         }
                     /**
          * Get the ID for the currently authenticated user.
          *
-         * @return int|string|null
-         * @static
-         */
+         * @return int|string|null 
+         * @static 
+         */ 
         public static function id()
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->id();
         }
                     /**
          * Set the current user.
          *
-         * @param Authenticatable $user
-         * @return JWTGuard
-         * @static
-         */
+         * @param \Illuminate\Contracts\Auth\Authenticatable $user
+         * @return \Tymon\JWTAuth\JWTGuard 
+         * @static 
+         */ 
         public static function setUser($user)
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->setUser($user);
         }
                     /**
@@ -639,106 +563,106 @@
          *
          * @param string $name
          * @param object|callable $macro
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function macro($name, $macro)
         {
-                        JWTGuard::macro($name, $macro);
+                        \Tymon\JWTAuth\JWTGuard::macro($name, $macro);
         }
                     /**
          * Mix another object into the class.
          *
          * @param object $mixin
          * @param bool $replace
-         * @return void
-         * @throws ReflectionException
-         * @static
-         */
+         * @return void 
+         * @throws \ReflectionException
+         * @static 
+         */ 
         public static function mixin($mixin, $replace = true)
         {
-                        JWTGuard::mixin($mixin, $replace);
+                        \Tymon\JWTAuth\JWTGuard::mixin($mixin, $replace);
         }
                     /**
          * Checks if macro is registered.
          *
          * @param string $name
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function hasMacro($name)
         {
-                        return JWTGuard::hasMacro($name);
+                        return \Tymon\JWTAuth\JWTGuard::hasMacro($name);
         }
                     /**
          * Dynamically handle calls to the class.
          *
          * @param string $method
          * @param array $parameters
-         * @return mixed
-         * @throws BadMethodCallException
-         * @static
-         */
+         * @return mixed 
+         * @throws \BadMethodCallException
+         * @static 
+         */ 
         public static function macroCall($method, $parameters)
         {
-                        /** @var JWTGuard $instance */
+                        /** @var \Tymon\JWTAuth\JWTGuard $instance */
                         return $instance->macroCall($method, $parameters);
         }
-
+         
     }
             /**
-     *
+     * 
      *
      * @see \Illuminate\Database\DatabaseManager
      * @see \Illuminate\Database\Connection
-     */
+     */ 
         class DB {
                     /**
          * Get a database connection instance.
          *
          * @param string|null $name
-         * @return Connection
-         * @static
-         */
+         * @return \Illuminate\Database\Connection 
+         * @static 
+         */ 
         public static function connection($name = null)
         {
-                        /** @var DatabaseManager $instance */
+                        /** @var \Illuminate\Database\DatabaseManager $instance */
                         return $instance->connection($name);
         }
                     /**
          * Disconnect from the given database and remove from local cache.
          *
          * @param string|null $name
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function purge($name = null)
         {
-                        /** @var DatabaseManager $instance */
+                        /** @var \Illuminate\Database\DatabaseManager $instance */
                         $instance->purge($name);
         }
                     /**
          * Disconnect from the given database.
          *
          * @param string|null $name
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function disconnect($name = null)
         {
-                        /** @var DatabaseManager $instance */
+                        /** @var \Illuminate\Database\DatabaseManager $instance */
                         $instance->disconnect($name);
         }
                     /**
          * Reconnect to the given database.
          *
          * @param string|null $name
-         * @return Connection
-         * @static
-         */
+         * @return \Illuminate\Database\Connection 
+         * @static 
+         */ 
         public static function reconnect($name = null)
         {
-                        /** @var DatabaseManager $instance */
+                        /** @var \Illuminate\Database\DatabaseManager $instance */
                         return $instance->reconnect($name);
         }
                     /**
@@ -746,57 +670,57 @@
          *
          * @param string $name
          * @param callable $callback
-         * @return mixed
-         * @static
-         */
+         * @return mixed 
+         * @static 
+         */ 
         public static function usingConnection($name, $callback)
         {
-                        /** @var DatabaseManager $instance */
+                        /** @var \Illuminate\Database\DatabaseManager $instance */
                         return $instance->usingConnection($name, $callback);
         }
                     /**
          * Get the default connection name.
          *
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function getDefaultConnection()
         {
-                        /** @var DatabaseManager $instance */
+                        /** @var \Illuminate\Database\DatabaseManager $instance */
                         return $instance->getDefaultConnection();
         }
                     /**
          * Set the default connection name.
          *
          * @param string $name
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function setDefaultConnection($name)
         {
-                        /** @var DatabaseManager $instance */
+                        /** @var \Illuminate\Database\DatabaseManager $instance */
                         $instance->setDefaultConnection($name);
         }
                     /**
          * Get all of the support drivers.
          *
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function supportedDrivers()
         {
-                        /** @var DatabaseManager $instance */
+                        /** @var \Illuminate\Database\DatabaseManager $instance */
                         return $instance->supportedDrivers();
         }
                     /**
          * Get all of the drivers that are actually available.
          *
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function availableDrivers()
         {
-                        /** @var DatabaseManager $instance */
+                        /** @var \Illuminate\Database\DatabaseManager $instance */
                         return $instance->availableDrivers();
         }
                     /**
@@ -804,127 +728,127 @@
          *
          * @param string $name
          * @param callable $resolver
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function extend($name, $resolver)
         {
-                        /** @var DatabaseManager $instance */
+                        /** @var \Illuminate\Database\DatabaseManager $instance */
                         $instance->extend($name, $resolver);
         }
                     /**
          * Return all of the created connections.
          *
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function getConnections()
         {
-                        /** @var DatabaseManager $instance */
+                        /** @var \Illuminate\Database\DatabaseManager $instance */
                         return $instance->getConnections();
         }
                     /**
          * Set the database reconnector callback.
          *
          * @param callable $reconnector
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function setReconnector($reconnector)
         {
-                        /** @var DatabaseManager $instance */
+                        /** @var \Illuminate\Database\DatabaseManager $instance */
                         $instance->setReconnector($reconnector);
         }
                     /**
          * Determine if the connected database is a MariaDB database.
          *
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function isMaria()
         {
-                        /** @var MySqlConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->isMaria();
         }
                     /**
          * Get a schema builder instance for the connection.
          *
-         * @return MySqlBuilder
-         * @static
-         */
+         * @return \Illuminate\Database\Schema\MySqlBuilder 
+         * @static 
+         */ 
         public static function getSchemaBuilder()
         {
-                        /** @var MySqlConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getSchemaBuilder();
         }
                     /**
          * Get the schema state for the connection.
          *
-         * @param Filesystem|null $files
+         * @param \Illuminate\Filesystem\Filesystem|null $files
          * @param callable|null $processFactory
-         * @return MySqlSchemaState
-         * @static
-         */
+         * @return \Illuminate\Database\Schema\MySqlSchemaState 
+         * @static 
+         */ 
         public static function getSchemaState($files = null, $processFactory = null)
         {
-                        /** @var MySqlConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getSchemaState($files, $processFactory);
         }
                     /**
          * Set the query grammar to the default implementation.
          *
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function useDefaultQueryGrammar()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->useDefaultQueryGrammar();
         }
                     /**
          * Set the schema grammar to the default implementation.
          *
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function useDefaultSchemaGrammar()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->useDefaultSchemaGrammar();
         }
                     /**
          * Set the query post processor to the default implementation.
          *
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function useDefaultPostProcessor()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->useDefaultPostProcessor();
         }
                     /**
          * Begin a fluent query against a database table.
          *
-         * @param Closure|Builder|string $table
+         * @param \Closure|\Illuminate\Database\Query\Builder|string $table
          * @param string|null $as
-         * @return Builder
-         * @static
-         */
+         * @return \Illuminate\Database\Query\Builder 
+         * @static 
+         */ 
         public static function table($table, $as = null)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->table($table, $as);
         }
                     /**
          * Get a new query builder instance.
          *
-         * @return Builder
-         * @static
-         */
+         * @return \Illuminate\Database\Query\Builder 
+         * @static 
+         */ 
         public static function query()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->query();
         }
                     /**
@@ -933,12 +857,12 @@
          * @param string $query
          * @param array $bindings
          * @param bool $useReadPdo
-         * @return mixed
-         * @static
-         */
+         * @return mixed 
+         * @static 
+         */ 
         public static function selectOne($query, $bindings = [], $useReadPdo = true)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->selectOne($query, $bindings, $useReadPdo);
         }
                     /**
@@ -946,12 +870,12 @@
          *
          * @param string $query
          * @param array $bindings
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function selectFromWriteConnection($query, $bindings = [])
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->selectFromWriteConnection($query, $bindings);
         }
                     /**
@@ -960,12 +884,12 @@
          * @param string $query
          * @param array $bindings
          * @param bool $useReadPdo
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function select($query, $bindings = [], $useReadPdo = true)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->select($query, $bindings, $useReadPdo);
         }
                     /**
@@ -974,12 +898,12 @@
          * @param string $query
          * @param array $bindings
          * @param bool $useReadPdo
-         * @return Generator
-         * @static
-         */
+         * @return \Generator 
+         * @static 
+         */ 
         public static function cursor($query, $bindings = [], $useReadPdo = true)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->cursor($query, $bindings, $useReadPdo);
         }
                     /**
@@ -987,12 +911,12 @@
          *
          * @param string $query
          * @param array $bindings
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function insert($query, $bindings = [])
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->insert($query, $bindings);
         }
                     /**
@@ -1000,12 +924,12 @@
          *
          * @param string $query
          * @param array $bindings
-         * @return int
-         * @static
-         */
+         * @return int 
+         * @static 
+         */ 
         public static function update($query, $bindings = [])
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->update($query, $bindings);
         }
                     /**
@@ -1013,12 +937,12 @@
          *
          * @param string $query
          * @param array $bindings
-         * @return int
-         * @static
-         */
+         * @return int 
+         * @static 
+         */ 
         public static function delete($query, $bindings = [])
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->delete($query, $bindings);
         }
                     /**
@@ -1026,12 +950,12 @@
          *
          * @param string $query
          * @param array $bindings
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function statement($query, $bindings = [])
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->statement($query, $bindings);
         }
                     /**
@@ -1039,61 +963,61 @@
          *
          * @param string $query
          * @param array $bindings
-         * @return int
-         * @static
-         */
+         * @return int 
+         * @static 
+         */ 
         public static function affectingStatement($query, $bindings = [])
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->affectingStatement($query, $bindings);
         }
                     /**
          * Run a raw, unprepared query against the PDO connection.
          *
          * @param string $query
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function unprepared($query)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->unprepared($query);
         }
                     /**
          * Execute the given callback in "dry run" mode.
          *
-         * @param Closure $callback
-         * @return array
-         * @static
-         */
+         * @param \Closure $callback
+         * @return array 
+         * @static 
+         */ 
         public static function pretend($callback)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->pretend($callback);
         }
                     /**
          * Bind values to their parameters in the given statement.
          *
-         * @param PDOStatement $statement
+         * @param \PDOStatement $statement
          * @param array $bindings
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function bindValues($statement, $bindings)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->bindValues($statement, $bindings);
         }
                     /**
          * Prepare the query bindings for execution.
          *
          * @param array $bindings
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function prepareBindings($bindings)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->prepareBindings($bindings);
         }
                     /**
@@ -1102,70 +1026,70 @@
          * @param string $query
          * @param array $bindings
          * @param float|null $time
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function logQuery($query, $bindings, $time = null)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->logQuery($query, $bindings, $time);
         }
                     /**
          * Register a database query listener with the connection.
          *
-         * @param Closure $callback
-         * @return void
-         * @static
-         */
+         * @param \Closure $callback
+         * @return void 
+         * @static 
+         */ 
         public static function listen($callback)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->listen($callback);
         }
                     /**
          * Get a new raw query expression.
          *
          * @param mixed $value
-         * @return Expression
-         * @static
-         */
+         * @return \Illuminate\Database\Query\Expression 
+         * @static 
+         */ 
         public static function raw($value)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->raw($value);
         }
                     /**
          * Indicate if any records have been modified.
          *
          * @param bool $value
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function recordsHaveBeenModified($value = true)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->recordsHaveBeenModified($value);
         }
                     /**
          * Reset the record modification state.
          *
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function forgetRecordModificationState()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->forgetRecordModificationState();
         }
                     /**
          * Is Doctrine available?
          *
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function isDoctrineAvailable()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->isDoctrineAvailable();
         }
                     /**
@@ -1173,623 +1097,623 @@
          *
          * @param string $table
          * @param string $column
-         * @return Column
-         * @static
-         */
+         * @return \Doctrine\DBAL\Schema\Column 
+         * @static 
+         */ 
         public static function getDoctrineColumn($table, $column)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getDoctrineColumn($table, $column);
         }
                     /**
          * Get the Doctrine DBAL schema manager for the connection.
          *
-         * @return AbstractSchemaManager
-         * @static
-         */
+         * @return \Doctrine\DBAL\Schema\AbstractSchemaManager 
+         * @static 
+         */ 
         public static function getDoctrineSchemaManager()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getDoctrineSchemaManager();
         }
                     /**
          * Get the Doctrine DBAL database connection instance.
          *
-         * @return \Doctrine\DBAL\Connection
-         * @static
-         */
+         * @return \Doctrine\DBAL\Connection 
+         * @static 
+         */ 
         public static function getDoctrineConnection()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getDoctrineConnection();
         }
                     /**
          * Get the current PDO connection.
          *
-         * @return PDO
-         * @static
-         */
+         * @return \PDO 
+         * @static 
+         */ 
         public static function getPdo()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getPdo();
         }
                     /**
          * Get the current PDO connection parameter without executing any reconnect logic.
          *
-         * @return PDO|Closure|null
-         * @static
-         */
+         * @return \PDO|\Closure|null 
+         * @static 
+         */ 
         public static function getRawPdo()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getRawPdo();
         }
                     /**
          * Get the current PDO connection used for reading.
          *
-         * @return PDO
-         * @static
-         */
+         * @return \PDO 
+         * @static 
+         */ 
         public static function getReadPdo()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getReadPdo();
         }
                     /**
          * Get the current read PDO connection parameter without executing any reconnect logic.
          *
-         * @return PDO|Closure|null
-         * @static
-         */
+         * @return \PDO|\Closure|null 
+         * @static 
+         */ 
         public static function getRawReadPdo()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getRawReadPdo();
         }
                     /**
          * Set the PDO connection.
          *
-         * @param PDO|Closure|null $pdo
-         * @return MySqlConnection
-         * @static
-         */
+         * @param \PDO|\Closure|null $pdo
+         * @return \Illuminate\Database\MySqlConnection 
+         * @static 
+         */ 
         public static function setPdo($pdo)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->setPdo($pdo);
         }
                     /**
          * Set the PDO connection used for reading.
          *
-         * @param PDO|Closure|null $pdo
-         * @return MySqlConnection
-         * @static
-         */
+         * @param \PDO|\Closure|null $pdo
+         * @return \Illuminate\Database\MySqlConnection 
+         * @static 
+         */ 
         public static function setReadPdo($pdo)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->setReadPdo($pdo);
         }
                     /**
          * Get the database connection name.
          *
-         * @return string|null
-         * @static
-         */
+         * @return string|null 
+         * @static 
+         */ 
         public static function getName()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getName();
         }
                     /**
          * Get an option from the configuration options.
          *
          * @param string|null $option
-         * @return mixed
-         * @static
-         */
+         * @return mixed 
+         * @static 
+         */ 
         public static function getConfig($option = null)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getConfig($option);
         }
                     /**
          * Get the PDO driver name.
          *
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function getDriverName()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getDriverName();
         }
                     /**
          * Get the query grammar used by the connection.
          *
-         * @return \Illuminate\Database\Query\Grammars\Grammar
-         * @static
-         */
+         * @return \Illuminate\Database\Query\Grammars\Grammar 
+         * @static 
+         */ 
         public static function getQueryGrammar()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getQueryGrammar();
         }
                     /**
          * Set the query grammar used by the connection.
          *
          * @param \Illuminate\Database\Query\Grammars\Grammar $grammar
-         * @return MySqlConnection
-         * @static
-         */
+         * @return \Illuminate\Database\MySqlConnection 
+         * @static 
+         */ 
         public static function setQueryGrammar($grammar)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->setQueryGrammar($grammar);
         }
                     /**
          * Get the schema grammar used by the connection.
          *
-         * @return \Illuminate\Database\Schema\Grammars\Grammar
-         * @static
-         */
+         * @return \Illuminate\Database\Schema\Grammars\Grammar 
+         * @static 
+         */ 
         public static function getSchemaGrammar()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getSchemaGrammar();
         }
                     /**
          * Set the schema grammar used by the connection.
          *
          * @param \Illuminate\Database\Schema\Grammars\Grammar $grammar
-         * @return MySqlConnection
-         * @static
-         */
+         * @return \Illuminate\Database\MySqlConnection 
+         * @static 
+         */ 
         public static function setSchemaGrammar($grammar)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->setSchemaGrammar($grammar);
         }
                     /**
          * Get the query post processor used by the connection.
          *
-         * @return Processor
-         * @static
-         */
+         * @return \Illuminate\Database\Query\Processors\Processor 
+         * @static 
+         */ 
         public static function getPostProcessor()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getPostProcessor();
         }
                     /**
          * Set the query post processor used by the connection.
          *
-         * @param Processor $processor
-         * @return MySqlConnection
-         * @static
-         */
+         * @param \Illuminate\Database\Query\Processors\Processor $processor
+         * @return \Illuminate\Database\MySqlConnection 
+         * @static 
+         */ 
         public static function setPostProcessor($processor)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->setPostProcessor($processor);
         }
                     /**
          * Get the event dispatcher used by the connection.
          *
-         * @return \Illuminate\Contracts\Events\Dispatcher
-         * @static
-         */
+         * @return \Illuminate\Contracts\Events\Dispatcher 
+         * @static 
+         */ 
         public static function getEventDispatcher()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getEventDispatcher();
         }
                     /**
          * Set the event dispatcher instance on the connection.
          *
          * @param \Illuminate\Contracts\Events\Dispatcher $events
-         * @return MySqlConnection
-         * @static
-         */
+         * @return \Illuminate\Database\MySqlConnection 
+         * @static 
+         */ 
         public static function setEventDispatcher($events)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->setEventDispatcher($events);
         }
                     /**
          * Unset the event dispatcher for this connection.
          *
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function unsetEventDispatcher()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->unsetEventDispatcher();
         }
                     /**
          * Set the transaction manager instance on the connection.
          *
-         * @param DatabaseTransactionsManager $manager
-         * @return MySqlConnection
-         * @static
-         */
+         * @param \Illuminate\Database\DatabaseTransactionsManager $manager
+         * @return \Illuminate\Database\MySqlConnection 
+         * @static 
+         */ 
         public static function setTransactionManager($manager)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->setTransactionManager($manager);
         }
                     /**
          * Unset the transaction manager for this connection.
          *
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function unsetTransactionManager()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->unsetTransactionManager();
         }
                     /**
          * Determine if the connection is in a "dry run".
          *
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function pretending()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->pretending();
         }
                     /**
          * Get the connection query log.
          *
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function getQueryLog()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getQueryLog();
         }
                     /**
          * Clear the query log.
          *
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function flushQueryLog()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->flushQueryLog();
         }
                     /**
          * Enable the query log on the connection.
          *
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function enableQueryLog()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->enableQueryLog();
         }
                     /**
          * Disable the query log on the connection.
          *
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function disableQueryLog()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->disableQueryLog();
         }
                     /**
          * Determine whether we're logging queries.
          *
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function logging()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->logging();
         }
                     /**
          * Get the name of the connected database.
          *
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function getDatabaseName()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getDatabaseName();
         }
                     /**
          * Set the name of the connected database.
          *
          * @param string $database
-         * @return MySqlConnection
-         * @static
-         */
+         * @return \Illuminate\Database\MySqlConnection 
+         * @static 
+         */ 
         public static function setDatabaseName($database)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->setDatabaseName($database);
         }
                     /**
          * Get the table prefix for the connection.
          *
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function getTablePrefix()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getTablePrefix();
         }
                     /**
          * Set the table prefix in use by the connection.
          *
          * @param string $prefix
-         * @return MySqlConnection
-         * @static
-         */
+         * @return \Illuminate\Database\MySqlConnection 
+         * @static 
+         */ 
         public static function setTablePrefix($prefix)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->setTablePrefix($prefix);
         }
                     /**
          * Set the table prefix and return the grammar.
          *
-         * @param Grammar $grammar
-         * @return Grammar
-         * @static
-         */
+         * @param \Illuminate\Database\Grammar $grammar
+         * @return \Illuminate\Database\Grammar 
+         * @static 
+         */ 
         public static function withTablePrefix($grammar)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->withTablePrefix($grammar);
         }
                     /**
          * Register a connection resolver.
          *
          * @param string $driver
-         * @param Closure $callback
-         * @return void
-         * @static
-         */
+         * @param \Closure $callback
+         * @return void 
+         * @static 
+         */ 
         public static function resolverFor($driver, $callback)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        MySqlConnection::resolverFor($driver, $callback);
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        \Illuminate\Database\MySqlConnection::resolverFor($driver, $callback);
         }
                     /**
          * Get the connection resolver for the given driver.
          *
          * @param string $driver
-         * @return mixed
-         * @static
-         */
+         * @return mixed 
+         * @static 
+         */ 
         public static function getResolver($driver)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        return MySqlConnection::getResolver($driver);
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        return \Illuminate\Database\MySqlConnection::getResolver($driver);
         }
                     /**
          * Execute a Closure within a transaction.
          *
-         * @param Closure $callback
+         * @param \Closure $callback
          * @param int $attempts
-         * @return mixed
-         * @throws Throwable
-         * @static
-         */
+         * @return mixed 
+         * @throws \Throwable
+         * @static 
+         */ 
         public static function transaction($callback, $attempts = 1)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->transaction($callback, $attempts);
         }
                     /**
          * Start a new database transaction.
          *
-         * @return void
-         * @throws Throwable
-         * @static
-         */
+         * @return void 
+         * @throws \Throwable
+         * @static 
+         */ 
         public static function beginTransaction()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->beginTransaction();
         }
                     /**
          * Commit the active database transaction.
          *
-         * @return void
-         * @throws Throwable
-         * @static
-         */
+         * @return void 
+         * @throws \Throwable
+         * @static 
+         */ 
         public static function commit()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->commit();
         }
                     /**
          * Rollback the active database transaction.
          *
          * @param int|null $toLevel
-         * @return void
-         * @throws Throwable
-         * @static
-         */
+         * @return void 
+         * @throws \Throwable
+         * @static 
+         */ 
         public static function rollBack($toLevel = null)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->rollBack($toLevel);
         }
                     /**
          * Get the number of active transactions.
          *
-         * @return int
-         * @static
-         */
+         * @return int 
+         * @static 
+         */ 
         public static function transactionLevel()
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->transactionLevel();
         }
                     /**
          * Execute the callback after a transaction commits.
          *
          * @param callable $callback
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function afterCommit($callback)
-        {            //Method inherited from \Illuminate\Database\Connection
-                        /** @var MySqlConnection $instance */
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->afterCommit($callback);
         }
-
+         
     }
             /**
-     *
+     * 
      *
      * @see \Illuminate\Cache\CacheManager
      * @see \Illuminate\Cache\Repository
-     */
+     */ 
         class Cache {
                     /**
          * Get a cache store instance by name, wrapped in a repository.
          *
          * @param string|null $name
-         * @return \Illuminate\Contracts\Cache\Repository
-         * @static
-         */
+         * @return \Illuminate\Contracts\Cache\Repository 
+         * @static 
+         */ 
         public static function store($name = null)
         {
-                        /** @var CacheManager $instance */
+                        /** @var \Illuminate\Cache\CacheManager $instance */
                         return $instance->store($name);
         }
                     /**
          * Get a cache driver instance.
          *
          * @param string|null $driver
-         * @return \Illuminate\Contracts\Cache\Repository
-         * @static
-         */
+         * @return \Illuminate\Contracts\Cache\Repository 
+         * @static 
+         */ 
         public static function driver($driver = null)
         {
-                        /** @var CacheManager $instance */
+                        /** @var \Illuminate\Cache\CacheManager $instance */
                         return $instance->driver($driver);
         }
                     /**
          * Create a new cache repository with the given implementation.
          *
-         * @param Store $store
-         * @return Repository
-         * @static
-         */
+         * @param \Illuminate\Contracts\Cache\Store $store
+         * @return \Illuminate\Cache\Repository 
+         * @static 
+         */ 
         public static function repository($store)
         {
-                        /** @var CacheManager $instance */
+                        /** @var \Illuminate\Cache\CacheManager $instance */
                         return $instance->repository($store);
         }
                     /**
          * Re-set the event dispatcher on all resolved cache repositories.
          *
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function refreshEventDispatcher()
         {
-                        /** @var CacheManager $instance */
+                        /** @var \Illuminate\Cache\CacheManager $instance */
                         $instance->refreshEventDispatcher();
         }
                     /**
          * Get the default cache driver name.
          *
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function getDefaultDriver()
         {
-                        /** @var CacheManager $instance */
+                        /** @var \Illuminate\Cache\CacheManager $instance */
                         return $instance->getDefaultDriver();
         }
                     /**
          * Set the default cache driver name.
          *
          * @param string $name
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function setDefaultDriver($name)
         {
-                        /** @var CacheManager $instance */
+                        /** @var \Illuminate\Cache\CacheManager $instance */
                         $instance->setDefaultDriver($name);
         }
                     /**
          * Unset the given driver instances.
          *
          * @param array|string|null $name
-         * @return CacheManager
-         * @static
-         */
+         * @return \Illuminate\Cache\CacheManager 
+         * @static 
+         */ 
         public static function forgetDriver($name = null)
         {
-                        /** @var CacheManager $instance */
+                        /** @var \Illuminate\Cache\CacheManager $instance */
                         return $instance->forgetDriver($name);
         }
                     /**
          * Disconnect the given driver and remove from local cache.
          *
          * @param string|null $name
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function purge($name = null)
         {
-                        /** @var CacheManager $instance */
+                        /** @var \Illuminate\Cache\CacheManager $instance */
                         $instance->purge($name);
         }
                     /**
          * Register a custom driver creator Closure.
          *
          * @param string $driver
-         * @param Closure $callback
-         * @return CacheManager
-         * @static
-         */
+         * @param \Closure $callback
+         * @return \Illuminate\Cache\CacheManager 
+         * @static 
+         */ 
         public static function extend($driver, $callback)
         {
-                        /** @var CacheManager $instance */
+                        /** @var \Illuminate\Cache\CacheManager $instance */
                         return $instance->extend($driver, $callback);
         }
                     /**
          * Determine if an item exists in the cache.
          *
          * @param string $key
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function has($key)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->has($key);
         }
                     /**
          * Determine if an item doesn't exist in the cache.
          *
          * @param string $key
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function missing($key)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->missing($key);
         }
                     /**
@@ -1797,26 +1721,26 @@
          *
          * @param string $key
          * @param mixed $default
-         * @return mixed
-         * @static
-         */
+         * @return mixed 
+         * @static 
+         */ 
         public static function get($key, $default = null)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->get($key, $default);
         }
                     /**
          * Retrieve multiple items from the cache by key.
-         *
+         * 
          * Items not found in the cache will have a null value.
          *
          * @param array $keys
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function many($keys)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->many($keys);
         }
                     /**
@@ -1828,11 +1752,11 @@
          * @throws \Psr\SimpleCache\InvalidArgumentException
          *   MUST be thrown if $keys is neither an array nor a Traversable,
          *   or if any of the $keys are not a legal value.
-         * @static
-         */
+         * @static 
+         */ 
         public static function getMultiple($keys, $default = null)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->getMultiple($keys, $default);
         }
                     /**
@@ -1840,12 +1764,12 @@
          *
          * @param string $key
          * @param mixed $default
-         * @return mixed
-         * @static
-         */
+         * @return mixed 
+         * @static 
+         */ 
         public static function pull($key, $default = null)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->pull($key, $default);
         }
                     /**
@@ -1853,13 +1777,13 @@
          *
          * @param string $key
          * @param mixed $value
-         * @param DateTimeInterface|DateInterval|int|null $ttl
-         * @return bool
-         * @static
-         */
+         * @param \DateTimeInterface|\DateInterval|int|null $ttl
+         * @return bool 
+         * @static 
+         */ 
         public static function put($key, $value, $ttl = null)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->put($key, $value, $ttl);
         }
                     /**
@@ -1867,48 +1791,48 @@
          *
          * @param string $key The key of the item to store.
          * @param mixed $value The value of the item to store, must be serializable.
-         * @param null|int|DateInterval $ttl Optional. The TTL value of this item. If no value is sent and
+         * @param null|int|\DateInterval $ttl Optional. The TTL value of this item. If no value is sent and
          *                                      the driver supports TTL then the library may set a default value
          *                                      for it or let the driver take care of that.
          * @return bool True on success and false on failure.
          * @throws \Psr\SimpleCache\InvalidArgumentException
          *   MUST be thrown if the $key string is not a legal value.
-         * @static
-         */
+         * @static 
+         */ 
         public static function set($key, $value, $ttl = null)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->set($key, $value, $ttl);
         }
                     /**
          * Store multiple items in the cache for a given number of seconds.
          *
          * @param array $values
-         * @param DateTimeInterface|DateInterval|int|null $ttl
-         * @return bool
-         * @static
-         */
+         * @param \DateTimeInterface|\DateInterval|int|null $ttl
+         * @return bool 
+         * @static 
+         */ 
         public static function putMany($values, $ttl = null)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->putMany($values, $ttl);
         }
                     /**
          * Persists a set of key => value pairs in the cache, with an optional TTL.
          *
          * @param \Psr\SimpleCache\iterable $values A list of key => value pairs for a multiple-set operation.
-         * @param null|int|DateInterval $ttl Optional. The TTL value of this item. If no value is sent and
+         * @param null|int|\DateInterval $ttl Optional. The TTL value of this item. If no value is sent and
          *                                       the driver supports TTL then the library may set a default value
          *                                       for it or let the driver take care of that.
          * @return bool True on success and false on failure.
          * @throws \Psr\SimpleCache\InvalidArgumentException
          *   MUST be thrown if $values is neither an array nor a Traversable,
          *   or if any of the $values are not a legal value.
-         * @static
-         */
+         * @static 
+         */ 
         public static function setMultiple($values, $ttl = null)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->setMultiple($values, $ttl);
         }
                     /**
@@ -1916,13 +1840,13 @@
          *
          * @param string $key
          * @param mixed $value
-         * @param DateTimeInterface|DateInterval|int|null $ttl
-         * @return bool
-         * @static
-         */
+         * @param \DateTimeInterface|\DateInterval|int|null $ttl
+         * @return bool 
+         * @static 
+         */ 
         public static function add($key, $value, $ttl = null)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->add($key, $value, $ttl);
         }
                     /**
@@ -1930,12 +1854,12 @@
          *
          * @param string $key
          * @param mixed $value
-         * @return int|bool
-         * @static
-         */
+         * @return int|bool 
+         * @static 
+         */ 
         public static function increment($key, $value = 1)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->increment($key, $value);
         }
                     /**
@@ -1943,12 +1867,12 @@
          *
          * @param string $key
          * @param mixed $value
-         * @return int|bool
-         * @static
-         */
+         * @return int|bool 
+         * @static 
+         */ 
         public static function decrement($key, $value = 1)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->decrement($key, $value);
         }
                     /**
@@ -1956,64 +1880,64 @@
          *
          * @param string $key
          * @param mixed $value
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function forever($key, $value)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->forever($key, $value);
         }
                     /**
          * Get an item from the cache, or execute the given Closure and store the result.
          *
          * @param string $key
-         * @param DateTimeInterface|DateInterval|int|null $ttl
-         * @param Closure $callback
-         * @return mixed
-         * @static
-         */
+         * @param \DateTimeInterface|\DateInterval|int|null $ttl
+         * @param \Closure $callback
+         * @return mixed 
+         * @static 
+         */ 
         public static function remember($key, $ttl, $callback)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->remember($key, $ttl, $callback);
         }
                     /**
          * Get an item from the cache, or execute the given Closure and store the result forever.
          *
          * @param string $key
-         * @param Closure $callback
-         * @return mixed
-         * @static
-         */
+         * @param \Closure $callback
+         * @return mixed 
+         * @static 
+         */ 
         public static function sear($key, $callback)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->sear($key, $callback);
         }
                     /**
          * Get an item from the cache, or execute the given Closure and store the result forever.
          *
          * @param string $key
-         * @param Closure $callback
-         * @return mixed
-         * @static
-         */
+         * @param \Closure $callback
+         * @return mixed 
+         * @static 
+         */ 
         public static function rememberForever($key, $callback)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->rememberForever($key, $callback);
         }
                     /**
          * Remove an item from the cache.
          *
          * @param string $key
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function forget($key)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->forget($key);
         }
                     /**
@@ -2023,11 +1947,11 @@
          * @return bool True if the item was successfully removed. False if there was an error.
          * @throws \Psr\SimpleCache\InvalidArgumentException
          *   MUST be thrown if the $key string is not a legal value.
-         * @static
-         */
+         * @static 
+         */ 
         public static function delete($key)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->delete($key);
         }
                     /**
@@ -2038,127 +1962,127 @@
          * @throws \Psr\SimpleCache\InvalidArgumentException
          *   MUST be thrown if $keys is neither an array nor a Traversable,
          *   or if any of the $keys are not a legal value.
-         * @static
-         */
+         * @static 
+         */ 
         public static function deleteMultiple($keys)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->deleteMultiple($keys);
         }
                     /**
          * Wipes clean the entire cache's keys.
          *
          * @return bool True on success and false on failure.
-         * @static
-         */
+         * @static 
+         */ 
         public static function clear()
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->clear();
         }
                     /**
          * Begin executing a new tags operation if the store supports it.
          *
          * @param array|mixed $names
-         * @return TaggedCache
-         * @throws BadMethodCallException
-         * @static
-         */
+         * @return \Illuminate\Cache\TaggedCache 
+         * @throws \BadMethodCallException
+         * @static 
+         */ 
         public static function tags($names)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->tags($names);
         }
                     /**
          * Determine if the current store supports tags.
          *
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function supportsTags()
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->supportsTags();
         }
                     /**
          * Get the default cache time.
          *
-         * @return int|null
-         * @static
-         */
+         * @return int|null 
+         * @static 
+         */ 
         public static function getDefaultCacheTime()
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->getDefaultCacheTime();
         }
                     /**
          * Set the default cache time in seconds.
          *
          * @param int|null $seconds
-         * @return Repository
-         * @static
-         */
+         * @return \Illuminate\Cache\Repository 
+         * @static 
+         */ 
         public static function setDefaultCacheTime($seconds)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->setDefaultCacheTime($seconds);
         }
                     /**
          * Get the cache store implementation.
          *
-         * @return Store
-         * @static
-         */
+         * @return \Illuminate\Contracts\Cache\Store 
+         * @static 
+         */ 
         public static function getStore()
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->getStore();
         }
                     /**
          * Get the event dispatcher instance.
          *
-         * @return \Illuminate\Contracts\Events\Dispatcher
-         * @static
-         */
+         * @return \Illuminate\Contracts\Events\Dispatcher 
+         * @static 
+         */ 
         public static function getEventDispatcher()
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->getEventDispatcher();
         }
                     /**
          * Set the event dispatcher instance.
          *
          * @param \Illuminate\Contracts\Events\Dispatcher $events
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function setEventDispatcher($events)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         $instance->setEventDispatcher($events);
         }
                     /**
          * Determine if a cached value exists.
          *
          * @param string $key
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function offsetExists($key)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->offsetExists($key);
         }
                     /**
          * Retrieve an item from the cache by key.
          *
          * @param string $key
-         * @return mixed
-         * @static
-         */
+         * @return mixed 
+         * @static 
+         */ 
         public static function offsetGet($key)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->offsetGet($key);
         }
                     /**
@@ -2166,24 +2090,24 @@
          *
          * @param string $key
          * @param mixed $value
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function offsetSet($key, $value)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         $instance->offsetSet($key, $value);
         }
                     /**
          * Remove an item from the cache.
          *
          * @param string $key
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function offsetUnset($key)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         $instance->offsetUnset($key);
         }
                     /**
@@ -2191,93 +2115,93 @@
          *
          * @param string $name
          * @param object|callable $macro
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function macro($name, $macro)
         {
-                        Repository::macro($name, $macro);
+                        \Illuminate\Cache\Repository::macro($name, $macro);
         }
                     /**
          * Mix another object into the class.
          *
          * @param object $mixin
          * @param bool $replace
-         * @return void
-         * @throws ReflectionException
-         * @static
-         */
+         * @return void 
+         * @throws \ReflectionException
+         * @static 
+         */ 
         public static function mixin($mixin, $replace = true)
         {
-                        Repository::mixin($mixin, $replace);
+                        \Illuminate\Cache\Repository::mixin($mixin, $replace);
         }
                     /**
          * Checks if macro is registered.
          *
          * @param string $name
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function hasMacro($name)
         {
-                        return Repository::hasMacro($name);
+                        return \Illuminate\Cache\Repository::hasMacro($name);
         }
                     /**
          * Dynamically handle calls to the class.
          *
          * @param string $method
          * @param array $parameters
-         * @return mixed
-         * @throws BadMethodCallException
-         * @static
-         */
+         * @return mixed 
+         * @throws \BadMethodCallException
+         * @static 
+         */ 
         public static function macroCall($method, $parameters)
         {
-                        /** @var Repository $instance */
+                        /** @var \Illuminate\Cache\Repository $instance */
                         return $instance->macroCall($method, $parameters);
         }
                     /**
          * Remove all items from the cache.
          *
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function flush()
         {
-                        /** @var FileStore $instance */
+                        /** @var \Illuminate\Cache\FileStore $instance */
                         return $instance->flush();
         }
                     /**
          * Get the Filesystem instance.
          *
-         * @return Filesystem
-         * @static
-         */
+         * @return \Illuminate\Filesystem\Filesystem 
+         * @static 
+         */ 
         public static function getFilesystem()
         {
-                        /** @var FileStore $instance */
+                        /** @var \Illuminate\Cache\FileStore $instance */
                         return $instance->getFilesystem();
         }
                     /**
          * Get the working directory of the cache.
          *
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function getDirectory()
         {
-                        /** @var FileStore $instance */
+                        /** @var \Illuminate\Cache\FileStore $instance */
                         return $instance->getDirectory();
         }
                     /**
          * Get the cache key prefix.
          *
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function getPrefix()
         {
-                        /** @var FileStore $instance */
+                        /** @var \Illuminate\Cache\FileStore $instance */
                         return $instance->getPrefix();
         }
                     /**
@@ -2286,12 +2210,12 @@
          * @param string $name
          * @param int $seconds
          * @param string|null $owner
-         * @return Lock
-         * @static
-         */
+         * @return \Illuminate\Contracts\Cache\Lock 
+         * @static 
+         */ 
         public static function lock($name, $seconds = 0, $owner = null)
         {
-                        /** @var FileStore $instance */
+                        /** @var \Illuminate\Cache\FileStore $instance */
                         return $instance->lock($name, $seconds, $owner);
         }
                     /**
@@ -2299,57 +2223,57 @@
          *
          * @param string $name
          * @param string $owner
-         * @return Lock
-         * @static
-         */
+         * @return \Illuminate\Contracts\Cache\Lock 
+         * @static 
+         */ 
         public static function restoreLock($name, $owner)
         {
-                        /** @var FileStore $instance */
+                        /** @var \Illuminate\Cache\FileStore $instance */
                         return $instance->restoreLock($name, $owner);
         }
-
+         
     }
             /**
-     *
+     * 
      *
      * @see \Illuminate\Events\Dispatcher
-     */
+     */ 
         class Event {
                     /**
          * Register an event listener with the dispatcher.
          *
-         * @param Closure|string|array $events
-         * @param Closure|string|array|null $listener
-         * @return void
-         * @static
-         */
+         * @param \Closure|string|array $events
+         * @param \Closure|string|array|null $listener
+         * @return void 
+         * @static 
+         */ 
         public static function listen($events, $listener = null)
         {
-                        /** @var Dispatcher $instance */
+                        /** @var \Illuminate\Events\Dispatcher $instance */
                         $instance->listen($events, $listener);
         }
                     /**
          * Determine if a given event has listeners.
          *
          * @param string $eventName
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function hasListeners($eventName)
         {
-                        /** @var Dispatcher $instance */
+                        /** @var \Illuminate\Events\Dispatcher $instance */
                         return $instance->hasListeners($eventName);
         }
                     /**
          * Determine if the given event has any wildcard listeners.
          *
          * @param string $eventName
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function hasWildcardListeners($eventName)
         {
-                        /** @var Dispatcher $instance */
+                        /** @var \Illuminate\Events\Dispatcher $instance */
                         return $instance->hasWildcardListeners($eventName);
         }
                     /**
@@ -2357,36 +2281,36 @@
          *
          * @param string $event
          * @param array $payload
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function push($event, $payload = [])
         {
-                        /** @var Dispatcher $instance */
+                        /** @var \Illuminate\Events\Dispatcher $instance */
                         $instance->push($event, $payload);
         }
                     /**
          * Flush a set of pushed events.
          *
          * @param string $event
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function flush($event)
         {
-                        /** @var Dispatcher $instance */
+                        /** @var \Illuminate\Events\Dispatcher $instance */
                         $instance->flush($event);
         }
                     /**
          * Register an event subscriber with the dispatcher.
          *
          * @param object|string $subscriber
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function subscribe($subscriber)
         {
-                        /** @var Dispatcher $instance */
+                        /** @var \Illuminate\Events\Dispatcher $instance */
                         $instance->subscribe($subscriber);
         }
                     /**
@@ -2394,12 +2318,12 @@
          *
          * @param string|object $event
          * @param mixed $payload
-         * @return array|null
-         * @static
-         */
+         * @return array|null 
+         * @static 
+         */ 
         public static function until($event, $payload = [])
         {
-                        /** @var Dispatcher $instance */
+                        /** @var \Illuminate\Events\Dispatcher $instance */
                         return $instance->until($event, $payload);
         }
                     /**
@@ -2408,37 +2332,37 @@
          * @param string|object $event
          * @param mixed $payload
          * @param bool $halt
-         * @return array|null
-         * @static
-         */
+         * @return array|null 
+         * @static 
+         */ 
         public static function dispatch($event, $payload = [], $halt = false)
         {
-                        /** @var Dispatcher $instance */
+                        /** @var \Illuminate\Events\Dispatcher $instance */
                         return $instance->dispatch($event, $payload, $halt);
         }
                     /**
          * Get all of the listeners for a given event name.
          *
          * @param string $eventName
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function getListeners($eventName)
         {
-                        /** @var Dispatcher $instance */
+                        /** @var \Illuminate\Events\Dispatcher $instance */
                         return $instance->getListeners($eventName);
         }
                     /**
          * Register an event listener with the dispatcher.
          *
-         * @param Closure|string $listener
+         * @param \Closure|string $listener
          * @param bool $wildcard
-         * @return Closure
-         * @static
-         */
+         * @return \Closure 
+         * @static 
+         */ 
         public static function makeListener($listener, $wildcard = false)
         {
-                        /** @var Dispatcher $instance */
+                        /** @var \Illuminate\Events\Dispatcher $instance */
                         return $instance->makeListener($listener, $wildcard);
         }
                     /**
@@ -2446,47 +2370,47 @@
          *
          * @param string $listener
          * @param bool $wildcard
-         * @return Closure
-         * @static
-         */
+         * @return \Closure 
+         * @static 
+         */ 
         public static function createClassListener($listener, $wildcard = false)
         {
-                        /** @var Dispatcher $instance */
+                        /** @var \Illuminate\Events\Dispatcher $instance */
                         return $instance->createClassListener($listener, $wildcard);
         }
                     /**
          * Remove a set of listeners from the dispatcher.
          *
          * @param string $event
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function forget($event)
         {
-                        /** @var Dispatcher $instance */
+                        /** @var \Illuminate\Events\Dispatcher $instance */
                         $instance->forget($event);
         }
                     /**
          * Forget all of the pushed listeners.
          *
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function forgetPushed()
         {
-                        /** @var Dispatcher $instance */
+                        /** @var \Illuminate\Events\Dispatcher $instance */
                         $instance->forgetPushed();
         }
                     /**
          * Set the queue resolver implementation.
          *
          * @param callable $resolver
-         * @return Dispatcher
-         * @static
-         */
+         * @return \Illuminate\Events\Dispatcher 
+         * @static 
+         */ 
         public static function setQueueResolver($resolver)
         {
-                        /** @var Dispatcher $instance */
+                        /** @var \Illuminate\Events\Dispatcher $instance */
                         return $instance->setQueueResolver($resolver);
         }
                     /**
@@ -2494,61 +2418,61 @@
          *
          * @param string $name
          * @param object|callable $macro
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function macro($name, $macro)
         {
-                        Dispatcher::macro($name, $macro);
+                        \Illuminate\Events\Dispatcher::macro($name, $macro);
         }
                     /**
          * Mix another object into the class.
          *
          * @param object $mixin
          * @param bool $replace
-         * @return void
-         * @throws ReflectionException
-         * @static
-         */
+         * @return void 
+         * @throws \ReflectionException
+         * @static 
+         */ 
         public static function mixin($mixin, $replace = true)
         {
-                        Dispatcher::mixin($mixin, $replace);
+                        \Illuminate\Events\Dispatcher::mixin($mixin, $replace);
         }
                     /**
          * Checks if macro is registered.
          *
          * @param string $name
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function hasMacro($name)
         {
-                        return Dispatcher::hasMacro($name);
+                        return \Illuminate\Events\Dispatcher::hasMacro($name);
         }
                     /**
          * Assert if an event has a listener attached to it.
          *
          * @param string $expectedEvent
          * @param string $expectedListener
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function assertListening($expectedEvent, $expectedListener)
         {
-                        /** @var EventFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\EventFake $instance */
                         $instance->assertListening($expectedEvent, $expectedListener);
         }
                     /**
          * Assert if an event was dispatched based on a truth-test callback.
          *
-         * @param string|Closure $event
+         * @param string|\Closure $event
          * @param callable|int|null $callback
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function assertDispatched($event, $callback = null)
         {
-                        /** @var EventFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\EventFake $instance */
                         $instance->assertDispatched($event, $callback);
         }
                     /**
@@ -2556,36 +2480,36 @@
          *
          * @param string $event
          * @param int $times
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function assertDispatchedTimes($event, $times = 1)
         {
-                        /** @var EventFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\EventFake $instance */
                         $instance->assertDispatchedTimes($event, $times);
         }
                     /**
          * Determine if an event was dispatched based on a truth-test callback.
          *
-         * @param string|Closure $event
+         * @param string|\Closure $event
          * @param callable|null $callback
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function assertNotDispatched($event, $callback = null)
         {
-                        /** @var EventFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\EventFake $instance */
                         $instance->assertNotDispatched($event, $callback);
         }
                     /**
          * Assert that no events were dispatched.
          *
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function assertNothingDispatched()
         {
-                        /** @var EventFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\EventFake $instance */
                         $instance->assertNothingDispatched();
         }
                     /**
@@ -2593,130 +2517,130 @@
          *
          * @param string $event
          * @param callable|null $callback
-         * @return Collection
-         * @static
-         */
+         * @return \Illuminate\Support\Collection 
+         * @static 
+         */ 
         public static function dispatched($event, $callback = null)
         {
-                        /** @var EventFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\EventFake $instance */
                         return $instance->dispatched($event, $callback);
         }
                     /**
          * Determine if the given event has been dispatched.
          *
          * @param string $event
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function hasDispatched($event)
         {
-                        /** @var EventFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\EventFake $instance */
                         return $instance->hasDispatched($event);
         }
-
+         
     }
             /**
-     *
+     * 
      *
      * @method static void write(string $level, string $message, array $context = [])
-     * @method static void listen(Closure $callback)
+     * @method static void listen(\Closure $callback)
      * @see \Illuminate\Log\Logger
-     */
+     */ 
         class Log {
                     /**
          * Create a new, on-demand aggregate logger instance.
          *
          * @param array $channels
          * @param string|null $channel
-         * @return LoggerInterface
-         * @static
-         */
+         * @return \Psr\Log\LoggerInterface 
+         * @static 
+         */ 
         public static function stack($channels, $channel = null)
         {
-                        /** @var LogManager $instance */
+                        /** @var \Illuminate\Log\LogManager $instance */
                         return $instance->stack($channels, $channel);
         }
                     /**
          * Get a log channel instance.
          *
          * @param string|null $channel
-         * @return LoggerInterface
-         * @static
-         */
+         * @return \Psr\Log\LoggerInterface 
+         * @static 
+         */ 
         public static function channel($channel = null)
         {
-                        /** @var LogManager $instance */
+                        /** @var \Illuminate\Log\LogManager $instance */
                         return $instance->channel($channel);
         }
                     /**
          * Get a log driver instance.
          *
          * @param string|null $driver
-         * @return LoggerInterface
-         * @static
-         */
+         * @return \Psr\Log\LoggerInterface 
+         * @static 
+         */ 
         public static function driver($driver = null)
         {
-                        /** @var LogManager $instance */
+                        /** @var \Illuminate\Log\LogManager $instance */
                         return $instance->driver($driver);
         }
                     /**
+         * 
          *
-         *
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function getChannels()
         {
-                        /** @var LogManager $instance */
+                        /** @var \Illuminate\Log\LogManager $instance */
                         return $instance->getChannels();
         }
                     /**
          * Get the default log driver name.
          *
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function getDefaultDriver()
         {
-                        /** @var LogManager $instance */
+                        /** @var \Illuminate\Log\LogManager $instance */
                         return $instance->getDefaultDriver();
         }
                     /**
          * Set the default log driver name.
          *
          * @param string $name
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function setDefaultDriver($name)
         {
-                        /** @var LogManager $instance */
+                        /** @var \Illuminate\Log\LogManager $instance */
                         $instance->setDefaultDriver($name);
         }
                     /**
          * Register a custom driver creator Closure.
          *
          * @param string $driver
-         * @param Closure $callback
-         * @return LogManager
-         * @static
-         */
+         * @param \Closure $callback
+         * @return \Illuminate\Log\LogManager 
+         * @static 
+         */ 
         public static function extend($driver, $callback)
         {
-                        /** @var LogManager $instance */
+                        /** @var \Illuminate\Log\LogManager $instance */
                         return $instance->extend($driver, $callback);
         }
                     /**
          * Unset the given channel instance.
          *
          * @param string|null $driver
-         * @return LogManager
-         * @static
-         */
+         * @return \Illuminate\Log\LogManager 
+         * @static 
+         */ 
         public static function forgetChannel($driver = null)
         {
-                        /** @var LogManager $instance */
+                        /** @var \Illuminate\Log\LogManager $instance */
                         return $instance->forgetChannel($driver);
         }
                     /**
@@ -2724,43 +2648,43 @@
          *
          * @param string $message
          * @param array $context
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function emergency($message, $context = [])
         {
-                        /** @var LogManager $instance */
+                        /** @var \Illuminate\Log\LogManager $instance */
                         $instance->emergency($message, $context);
         }
                     /**
          * Action must be taken immediately.
-         *
+         * 
          * Example: Entire website down, database unavailable, etc. This should
          * trigger the SMS alerts and wake you up.
          *
          * @param string $message
          * @param array $context
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function alert($message, $context = [])
         {
-                        /** @var LogManager $instance */
+                        /** @var \Illuminate\Log\LogManager $instance */
                         $instance->alert($message, $context);
         }
                     /**
          * Critical conditions.
-         *
+         * 
          * Example: Application component unavailable, unexpected exception.
          *
          * @param string $message
          * @param array $context
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function critical($message, $context = [])
         {
-                        /** @var LogManager $instance */
+                        /** @var \Illuminate\Log\LogManager $instance */
                         $instance->critical($message, $context);
         }
                     /**
@@ -2769,28 +2693,28 @@
          *
          * @param string $message
          * @param array $context
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function error($message, $context = [])
         {
-                        /** @var LogManager $instance */
+                        /** @var \Illuminate\Log\LogManager $instance */
                         $instance->error($message, $context);
         }
                     /**
          * Exceptional occurrences that are not errors.
-         *
+         * 
          * Example: Use of deprecated APIs, poor use of an API, undesirable things
          * that are not necessarily wrong.
          *
          * @param string $message
          * @param array $context
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function warning($message, $context = [])
         {
-                        /** @var LogManager $instance */
+                        /** @var \Illuminate\Log\LogManager $instance */
                         $instance->warning($message, $context);
         }
                     /**
@@ -2798,27 +2722,27 @@
          *
          * @param string $message
          * @param array $context
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function notice($message, $context = [])
         {
-                        /** @var LogManager $instance */
+                        /** @var \Illuminate\Log\LogManager $instance */
                         $instance->notice($message, $context);
         }
                     /**
          * Interesting events.
-         *
+         * 
          * Example: User logs in, SQL logs.
          *
          * @param string $message
          * @param array $context
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function info($message, $context = [])
         {
-                        /** @var LogManager $instance */
+                        /** @var \Illuminate\Log\LogManager $instance */
                         $instance->info($message, $context);
         }
                     /**
@@ -2826,12 +2750,12 @@
          *
          * @param string $message
          * @param array $context
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function debug($message, $context = [])
         {
-                        /** @var LogManager $instance */
+                        /** @var \Illuminate\Log\LogManager $instance */
                         $instance->debug($message, $context);
         }
                     /**
@@ -2840,229 +2764,229 @@
          * @param mixed $level
          * @param string $message
          * @param array $context
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function log($level, $message, $context = [])
         {
-                        /** @var LogManager $instance */
+                        /** @var \Illuminate\Log\LogManager $instance */
                         $instance->log($level, $message, $context);
         }
-
+         
     }
             /**
-     *
+     * 
      *
      * @method static void popUsing(string $workerName, callable $callback)
      * @see \Illuminate\Queue\QueueManager
      * @see \Illuminate\Queue\Queue
-     */
+     */ 
         class Queue {
                     /**
          * Register an event listener for the before job event.
          *
          * @param mixed $callback
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function before($callback)
         {
-                        /** @var QueueManager $instance */
+                        /** @var \Illuminate\Queue\QueueManager $instance */
                         $instance->before($callback);
         }
                     /**
          * Register an event listener for the after job event.
          *
          * @param mixed $callback
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function after($callback)
         {
-                        /** @var QueueManager $instance */
+                        /** @var \Illuminate\Queue\QueueManager $instance */
                         $instance->after($callback);
         }
                     /**
          * Register an event listener for the exception occurred job event.
          *
          * @param mixed $callback
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function exceptionOccurred($callback)
         {
-                        /** @var QueueManager $instance */
+                        /** @var \Illuminate\Queue\QueueManager $instance */
                         $instance->exceptionOccurred($callback);
         }
                     /**
          * Register an event listener for the daemon queue loop.
          *
          * @param mixed $callback
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function looping($callback)
         {
-                        /** @var QueueManager $instance */
+                        /** @var \Illuminate\Queue\QueueManager $instance */
                         $instance->looping($callback);
         }
                     /**
          * Register an event listener for the failed job event.
          *
          * @param mixed $callback
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function failing($callback)
         {
-                        /** @var QueueManager $instance */
+                        /** @var \Illuminate\Queue\QueueManager $instance */
                         $instance->failing($callback);
         }
                     /**
          * Register an event listener for the daemon queue stopping.
          *
          * @param mixed $callback
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function stopping($callback)
         {
-                        /** @var QueueManager $instance */
+                        /** @var \Illuminate\Queue\QueueManager $instance */
                         $instance->stopping($callback);
         }
                     /**
          * Determine if the driver is connected.
          *
          * @param string|null $name
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function connected($name = null)
         {
-                        /** @var QueueManager $instance */
+                        /** @var \Illuminate\Queue\QueueManager $instance */
                         return $instance->connected($name);
         }
                     /**
          * Resolve a queue connection instance.
          *
          * @param string|null $name
-         * @return \Illuminate\Contracts\Queue\Queue
-         * @static
-         */
+         * @return \Illuminate\Contracts\Queue\Queue 
+         * @static 
+         */ 
         public static function connection($name = null)
         {
-                        /** @var QueueManager $instance */
+                        /** @var \Illuminate\Queue\QueueManager $instance */
                         return $instance->connection($name);
         }
                     /**
          * Add a queue connection resolver.
          *
          * @param string $driver
-         * @param Closure $resolver
-         * @return void
-         * @static
-         */
+         * @param \Closure $resolver
+         * @return void 
+         * @static 
+         */ 
         public static function extend($driver, $resolver)
         {
-                        /** @var QueueManager $instance */
+                        /** @var \Illuminate\Queue\QueueManager $instance */
                         $instance->extend($driver, $resolver);
         }
                     /**
          * Add a queue connection resolver.
          *
          * @param string $driver
-         * @param Closure $resolver
-         * @return void
-         * @static
-         */
+         * @param \Closure $resolver
+         * @return void 
+         * @static 
+         */ 
         public static function addConnector($driver, $resolver)
         {
-                        /** @var QueueManager $instance */
+                        /** @var \Illuminate\Queue\QueueManager $instance */
                         $instance->addConnector($driver, $resolver);
         }
                     /**
          * Get the name of the default queue connection.
          *
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function getDefaultDriver()
         {
-                        /** @var QueueManager $instance */
+                        /** @var \Illuminate\Queue\QueueManager $instance */
                         return $instance->getDefaultDriver();
         }
                     /**
          * Set the name of the default queue connection.
          *
          * @param string $name
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function setDefaultDriver($name)
         {
-                        /** @var QueueManager $instance */
+                        /** @var \Illuminate\Queue\QueueManager $instance */
                         $instance->setDefaultDriver($name);
         }
                     /**
          * Get the full name for the given connection.
          *
          * @param string|null $connection
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function getName($connection = null)
         {
-                        /** @var QueueManager $instance */
+                        /** @var \Illuminate\Queue\QueueManager $instance */
                         return $instance->getName($connection);
         }
                     /**
          * Get the application instance used by the manager.
          *
-         * @return Application
-         * @static
-         */
+         * @return \Illuminate\Contracts\Foundation\Application 
+         * @static 
+         */ 
         public static function getApplication()
         {
-                        /** @var QueueManager $instance */
+                        /** @var \Illuminate\Queue\QueueManager $instance */
                         return $instance->getApplication();
         }
                     /**
          * Set the application instance used by the manager.
          *
-         * @param Application $app
-         * @return QueueManager
-         * @static
-         */
+         * @param \Illuminate\Contracts\Foundation\Application $app
+         * @return \Illuminate\Queue\QueueManager 
+         * @static 
+         */ 
         public static function setApplication($app)
         {
-                        /** @var QueueManager $instance */
+                        /** @var \Illuminate\Queue\QueueManager $instance */
                         return $instance->setApplication($app);
         }
                     /**
          * Assert if a job was pushed based on a truth-test callback.
          *
-         * @param string|Closure $job
+         * @param string|\Closure $job
          * @param callable|int|null $callback
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function assertPushed($job, $callback = null)
         {
-                        /** @var QueueFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         $instance->assertPushed($job, $callback);
         }
                     /**
          * Assert if a job was pushed based on a truth-test callback.
          *
          * @param string $queue
-         * @param string|Closure $job
+         * @param string|\Closure $job
          * @param callable|null $callback
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function assertPushedOn($queue, $job, $callback = null)
         {
-                        /** @var QueueFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         $instance->assertPushedOn($queue, $job, $callback);
         }
                     /**
@@ -3071,12 +2995,12 @@
          * @param string $job
          * @param array $expectedChain
          * @param callable|null $callback
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function assertPushedWithChain($job, $expectedChain = [], $callback = null)
         {
-                        /** @var QueueFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         $instance->assertPushedWithChain($job, $expectedChain, $callback);
         }
                     /**
@@ -3084,36 +3008,36 @@
          *
          * @param string $job
          * @param callable|null $callback
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function assertPushedWithoutChain($job, $callback = null)
         {
-                        /** @var QueueFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         $instance->assertPushedWithoutChain($job, $callback);
         }
                     /**
          * Determine if a job was pushed based on a truth-test callback.
          *
-         * @param string|Closure $job
+         * @param string|\Closure $job
          * @param callable|null $callback
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function assertNotPushed($job, $callback = null)
         {
-                        /** @var QueueFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         $instance->assertNotPushed($job, $callback);
         }
                     /**
          * Assert that no jobs were pushed.
          *
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function assertNothingPushed()
         {
-                        /** @var QueueFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         $instance->assertNothingPushed();
         }
                     /**
@@ -3121,36 +3045,36 @@
          *
          * @param string $job
          * @param callable|null $callback
-         * @return Collection
-         * @static
-         */
+         * @return \Illuminate\Support\Collection 
+         * @static 
+         */ 
         public static function pushed($job, $callback = null)
         {
-                        /** @var QueueFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         return $instance->pushed($job, $callback);
         }
                     /**
          * Determine if there are any stored jobs for a given class.
          *
          * @param string $job
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function hasPushed($job)
         {
-                        /** @var QueueFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         return $instance->hasPushed($job);
         }
                     /**
          * Get the size of the queue.
          *
          * @param string|null $queue
-         * @return int
-         * @static
-         */
+         * @return int 
+         * @static 
+         */ 
         public static function size($queue = null)
         {
-                        /** @var QueueFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         return $instance->size($queue);
         }
                     /**
@@ -3159,12 +3083,12 @@
          * @param string $job
          * @param mixed $data
          * @param string|null $queue
-         * @return mixed
-         * @static
-         */
+         * @return mixed 
+         * @static 
+         */ 
         public static function push($job, $data = '', $queue = null)
         {
-                        /** @var QueueFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         return $instance->push($job, $data, $queue);
         }
                     /**
@@ -3173,27 +3097,27 @@
          * @param string $payload
          * @param string|null $queue
          * @param array $options
-         * @return mixed
-         * @static
-         */
+         * @return mixed 
+         * @static 
+         */ 
         public static function pushRaw($payload, $queue = null, $options = [])
         {
-                        /** @var QueueFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         return $instance->pushRaw($payload, $queue, $options);
         }
                     /**
          * Push a new job onto the queue after a delay.
          *
-         * @param DateTimeInterface|DateInterval|int $delay
+         * @param \DateTimeInterface|\DateInterval|int $delay
          * @param string $job
          * @param mixed $data
          * @param string|null $queue
-         * @return mixed
-         * @static
-         */
+         * @return mixed 
+         * @static 
+         */ 
         public static function later($delay, $job, $data = '', $queue = null)
         {
-                        /** @var QueueFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         return $instance->later($delay, $job, $data, $queue);
         }
                     /**
@@ -3202,39 +3126,39 @@
          * @param string $queue
          * @param string $job
          * @param mixed $data
-         * @return mixed
-         * @static
-         */
+         * @return mixed 
+         * @static 
+         */ 
         public static function pushOn($queue, $job, $data = '')
         {
-                        /** @var QueueFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         return $instance->pushOn($queue, $job, $data);
         }
                     /**
          * Push a new job onto the queue after a delay.
          *
          * @param string $queue
-         * @param DateTimeInterface|DateInterval|int $delay
+         * @param \DateTimeInterface|\DateInterval|int $delay
          * @param string $job
          * @param mixed $data
-         * @return mixed
-         * @static
-         */
+         * @return mixed 
+         * @static 
+         */ 
         public static function laterOn($queue, $delay, $job, $data = '')
         {
-                        /** @var QueueFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         return $instance->laterOn($queue, $delay, $job, $data);
         }
                     /**
          * Pop the next job off of the queue.
          *
          * @param string|null $queue
-         * @return Job|null
-         * @static
-         */
+         * @return \Illuminate\Contracts\Queue\Job|null 
+         * @static 
+         */ 
         public static function pop($queue = null)
         {
-                        /** @var QueueFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         return $instance->pop($queue);
         }
                     /**
@@ -3243,249 +3167,249 @@
          * @param array $jobs
          * @param mixed $data
          * @param string|null $queue
-         * @return mixed
-         * @static
-         */
+         * @return mixed 
+         * @static 
+         */ 
         public static function bulk($jobs, $data = '', $queue = null)
         {
-                        /** @var QueueFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         return $instance->bulk($jobs, $data, $queue);
         }
                     /**
          * Get the jobs that have been pushed.
          *
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function pushedJobs()
         {
-                        /** @var QueueFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         return $instance->pushedJobs();
         }
                     /**
          * Get the connection name for the queue.
          *
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function getConnectionName()
         {
-                        /** @var QueueFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         return $instance->getConnectionName();
         }
                     /**
          * Set the connection name for the queue.
          *
          * @param string $name
-         * @return QueueFake
-         * @static
-         */
+         * @return \Illuminate\Support\Testing\Fakes\QueueFake 
+         * @static 
+         */ 
         public static function setConnectionName($name)
         {
-                        /** @var QueueFake $instance */
+                        /** @var \Illuminate\Support\Testing\Fakes\QueueFake $instance */
                         return $instance->setConnectionName($name);
         }
                     /**
          * Get the backoff for an object-based queue handler.
          *
          * @param mixed $job
-         * @return mixed
-         * @static
-         */
+         * @return mixed 
+         * @static 
+         */ 
         public static function getJobBackoff($job)
-        {            //Method inherited from \Illuminate\Queue\Queue
-                        /** @var SyncQueue $instance */
+        {            //Method inherited from \Illuminate\Queue\Queue         
+                        /** @var \Illuminate\Queue\SyncQueue $instance */
                         return $instance->getJobBackoff($job);
         }
                     /**
          * Get the expiration timestamp for an object-based queue handler.
          *
          * @param mixed $job
-         * @return mixed
-         * @static
-         */
+         * @return mixed 
+         * @static 
+         */ 
         public static function getJobExpiration($job)
-        {            //Method inherited from \Illuminate\Queue\Queue
-                        /** @var SyncQueue $instance */
+        {            //Method inherited from \Illuminate\Queue\Queue         
+                        /** @var \Illuminate\Queue\SyncQueue $instance */
                         return $instance->getJobExpiration($job);
         }
                     /**
          * Register a callback to be executed when creating job payloads.
          *
          * @param callable|null $callback
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function createPayloadUsing($callback)
-        {            //Method inherited from \Illuminate\Queue\Queue
-                        SyncQueue::createPayloadUsing($callback);
+        {            //Method inherited from \Illuminate\Queue\Queue         
+                        \Illuminate\Queue\SyncQueue::createPayloadUsing($callback);
         }
                     /**
          * Get the container instance being used by the connection.
          *
-         * @return \Illuminate\Container\Container
-         * @static
-         */
+         * @return \Illuminate\Container\Container 
+         * @static 
+         */ 
         public static function getContainer()
-        {            //Method inherited from \Illuminate\Queue\Queue
-                        /** @var SyncQueue $instance */
+        {            //Method inherited from \Illuminate\Queue\Queue         
+                        /** @var \Illuminate\Queue\SyncQueue $instance */
                         return $instance->getContainer();
         }
                     /**
          * Set the IoC container instance.
          *
          * @param \Illuminate\Container\Container $container
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function setContainer($container)
-        {            //Method inherited from \Illuminate\Queue\Queue
-                        /** @var SyncQueue $instance */
+        {            //Method inherited from \Illuminate\Queue\Queue         
+                        /** @var \Illuminate\Queue\SyncQueue $instance */
                         $instance->setContainer($container);
         }
-
+         
     }
             /**
-     *
+     * 
      *
      * @see \Illuminate\Database\Schema\Builder
-     */
+     */ 
         class Schema {
                     /**
          * Create a database in the schema.
          *
          * @param string $name
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function createDatabase($name)
         {
-                        /** @var MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->createDatabase($name);
         }
                     /**
          * Drop a database from the schema if the database exists.
          *
          * @param string $name
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function dropDatabaseIfExists($name)
         {
-                        /** @var MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->dropDatabaseIfExists($name);
         }
                     /**
          * Determine if the given table exists.
          *
          * @param string $table
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function hasTable($table)
         {
-                        /** @var MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->hasTable($table);
         }
                     /**
          * Get the column listing for a given table.
          *
          * @param string $table
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function getColumnListing($table)
         {
-                        /** @var MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->getColumnListing($table);
         }
                     /**
          * Drop all tables from the database.
          *
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function dropAllTables()
         {
-                        /** @var MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         $instance->dropAllTables();
         }
                     /**
          * Drop all views from the database.
          *
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function dropAllViews()
         {
-                        /** @var MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         $instance->dropAllViews();
         }
                     /**
          * Get all of the table names for the database.
          *
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function getAllTables()
         {
-                        /** @var MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->getAllTables();
         }
                     /**
          * Get all of the view names for the database.
          *
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function getAllViews()
         {
-                        /** @var MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->getAllViews();
         }
                     /**
          * Set the default string length for migrations.
          *
          * @param int $length
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function defaultStringLength($length)
-        {            //Method inherited from \Illuminate\Database\Schema\Builder
-                        MySqlBuilder::defaultStringLength($length);
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        \Illuminate\Database\Schema\MySqlBuilder::defaultStringLength($length);
         }
                     /**
          * Set the default morph key type for migrations.
          *
          * @param string $type
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function defaultMorphKeyType($type)
-        {            //Method inherited from \Illuminate\Database\Schema\Builder
-                        MySqlBuilder::defaultMorphKeyType($type);
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        \Illuminate\Database\Schema\MySqlBuilder::defaultMorphKeyType($type);
         }
                     /**
          * Set the default morph key type for migrations to UUIDs.
          *
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function morphUsingUuids()
-        {            //Method inherited from \Illuminate\Database\Schema\Builder
-                        MySqlBuilder::morphUsingUuids();
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        \Illuminate\Database\Schema\MySqlBuilder::morphUsingUuids();
         }
                     /**
          * Determine if the given table has a given column.
          *
          * @param string $table
          * @param string $column
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function hasColumn($table, $column)
-        {            //Method inherited from \Illuminate\Database\Schema\Builder
-                        /** @var MySqlBuilder $instance */
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->hasColumn($table, $column);
         }
                     /**
@@ -3493,12 +3417,12 @@
          *
          * @param string $table
          * @param array $columns
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function hasColumns($table, $columns)
-        {            //Method inherited from \Illuminate\Database\Schema\Builder
-                        /** @var MySqlBuilder $instance */
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->hasColumns($table, $columns);
         }
                     /**
@@ -3506,62 +3430,62 @@
          *
          * @param string $table
          * @param string $column
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function getColumnType($table, $column)
-        {            //Method inherited from \Illuminate\Database\Schema\Builder
-                        /** @var MySqlBuilder $instance */
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->getColumnType($table, $column);
         }
                     /**
          * Modify a table on the schema.
          *
          * @param string $table
-         * @param Closure $callback
-         * @return void
-         * @static
-         */
+         * @param \Closure $callback
+         * @return void 
+         * @static 
+         */ 
         public static function table($table, $callback)
-        {            //Method inherited from \Illuminate\Database\Schema\Builder
-                        /** @var MySqlBuilder $instance */
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         $instance->table($table, $callback);
         }
                     /**
          * Create a new table on the schema.
          *
          * @param string $table
-         * @param Closure $callback
-         * @return void
-         * @static
-         */
+         * @param \Closure $callback
+         * @return void 
+         * @static 
+         */ 
         public static function create($table, $callback)
-        {            //Method inherited from \Illuminate\Database\Schema\Builder
-                        /** @var MySqlBuilder $instance */
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         $instance->create($table, $callback);
         }
                     /**
          * Drop a table from the schema.
          *
          * @param string $table
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function drop($table)
-        {            //Method inherited from \Illuminate\Database\Schema\Builder
-                        /** @var MySqlBuilder $instance */
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         $instance->drop($table);
         }
                     /**
          * Drop a table from the schema if it exists.
          *
          * @param string $table
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function dropIfExists($table)
-        {            //Method inherited from \Illuminate\Database\Schema\Builder
-                        /** @var MySqlBuilder $instance */
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         $instance->dropIfExists($table);
         }
                     /**
@@ -3569,24 +3493,24 @@
          *
          * @param string $table
          * @param string|array $columns
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function dropColumns($table, $columns)
-        {            //Method inherited from \Illuminate\Database\Schema\Builder
-                        /** @var MySqlBuilder $instance */
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         $instance->dropColumns($table, $columns);
         }
                     /**
          * Drop all types from the database.
          *
-         * @return void
-         * @throws LogicException
-         * @static
-         */
+         * @return void 
+         * @throws \LogicException
+         * @static 
+         */ 
         public static function dropAllTypes()
-        {            //Method inherited from \Illuminate\Database\Schema\Builder
-                        /** @var MySqlBuilder $instance */
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         $instance->dropAllTypes();
         }
                     /**
@@ -3594,34 +3518,34 @@
          *
          * @param string $from
          * @param string $to
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function rename($from, $to)
-        {            //Method inherited from \Illuminate\Database\Schema\Builder
-                        /** @var MySqlBuilder $instance */
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         $instance->rename($from, $to);
         }
                     /**
          * Enable foreign key constraints.
          *
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function enableForeignKeyConstraints()
-        {            //Method inherited from \Illuminate\Database\Schema\Builder
-                        /** @var MySqlBuilder $instance */
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->enableForeignKeyConstraints();
         }
                     /**
          * Disable foreign key constraints.
          *
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function disableForeignKeyConstraints()
-        {            //Method inherited from \Illuminate\Database\Schema\Builder
-                        /** @var MySqlBuilder $instance */
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->disableForeignKeyConstraints();
         }
                     /**
@@ -3630,140 +3554,140 @@
          * @param string $class
          * @param string $name
          * @param string $type
-         * @return void
-         * @throws DBALException
-         * @throws RuntimeException
-         * @static
-         */
+         * @return void 
+         * @throws \Doctrine\DBAL\DBALException
+         * @throws \RuntimeException
+         * @static 
+         */ 
         public static function registerCustomDoctrineType($class, $name, $type)
-        {            //Method inherited from \Illuminate\Database\Schema\Builder
-                        /** @var MySqlBuilder $instance */
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         $instance->registerCustomDoctrineType($class, $name, $type);
         }
                     /**
          * Get the database connection instance.
          *
-         * @return Connection
-         * @static
-         */
+         * @return \Illuminate\Database\Connection 
+         * @static 
+         */ 
         public static function getConnection()
-        {            //Method inherited from \Illuminate\Database\Schema\Builder
-                        /** @var MySqlBuilder $instance */
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->getConnection();
         }
                     /**
          * Set the database connection instance.
          *
-         * @param Connection $connection
-         * @return MySqlBuilder
-         * @static
-         */
+         * @param \Illuminate\Database\Connection $connection
+         * @return \Illuminate\Database\Schema\MySqlBuilder 
+         * @static 
+         */ 
         public static function setConnection($connection)
-        {            //Method inherited from \Illuminate\Database\Schema\Builder
-                        /** @var MySqlBuilder $instance */
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->setConnection($connection);
         }
                     /**
          * Set the Schema Blueprint resolver callback.
          *
-         * @param Closure $resolver
-         * @return void
-         * @static
-         */
+         * @param \Closure $resolver
+         * @return void 
+         * @static 
+         */ 
         public static function blueprintResolver($resolver)
-        {            //Method inherited from \Illuminate\Database\Schema\Builder
-                        /** @var MySqlBuilder $instance */
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         $instance->blueprintResolver($resolver);
         }
-
+         
     }
             /**
-     *
+     * 
      *
      * @see \Illuminate\Filesystem\FilesystemManager
-     */
+     */ 
         class Storage {
                     /**
          * Get a filesystem instance.
          *
          * @param string|null $name
-         * @return FilesystemAdapter
-         * @static
-         */
+         * @return \Illuminate\Filesystem\FilesystemAdapter 
+         * @static 
+         */ 
         public static function drive($name = null)
         {
-                        /** @var FilesystemManager $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemManager $instance */
                         return $instance->drive($name);
         }
                     /**
          * Get a filesystem instance.
          *
          * @param string|null $name
-         * @return FilesystemAdapter
-         * @static
-         */
+         * @return \Illuminate\Filesystem\FilesystemAdapter 
+         * @static 
+         */ 
         public static function disk($name = null)
         {
-                        /** @var FilesystemManager $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemManager $instance */
                         return $instance->disk($name);
         }
                     /**
          * Get a default cloud filesystem instance.
          *
-         * @return FilesystemAdapter
-         * @static
-         */
+         * @return \Illuminate\Filesystem\FilesystemAdapter 
+         * @static 
+         */ 
         public static function cloud()
         {
-                        /** @var FilesystemManager $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemManager $instance */
                         return $instance->cloud();
         }
                     /**
          * Create an instance of the local driver.
          *
          * @param array $config
-         * @return FilesystemAdapter
-         * @static
-         */
+         * @return \Illuminate\Filesystem\FilesystemAdapter 
+         * @static 
+         */ 
         public static function createLocalDriver($config)
         {
-                        /** @var FilesystemManager $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemManager $instance */
                         return $instance->createLocalDriver($config);
         }
                     /**
          * Create an instance of the ftp driver.
          *
          * @param array $config
-         * @return FilesystemAdapter
-         * @static
-         */
+         * @return \Illuminate\Filesystem\FilesystemAdapter 
+         * @static 
+         */ 
         public static function createFtpDriver($config)
         {
-                        /** @var FilesystemManager $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemManager $instance */
                         return $instance->createFtpDriver($config);
         }
                     /**
          * Create an instance of the sftp driver.
          *
          * @param array $config
-         * @return FilesystemAdapter
-         * @static
-         */
+         * @return \Illuminate\Filesystem\FilesystemAdapter 
+         * @static 
+         */ 
         public static function createSftpDriver($config)
         {
-                        /** @var FilesystemManager $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemManager $instance */
                         return $instance->createSftpDriver($config);
         }
                     /**
          * Create an instance of the Amazon S3 driver.
          *
          * @param array $config
-         * @return Cloud
-         * @static
-         */
+         * @return \Illuminate\Contracts\Filesystem\Cloud 
+         * @static 
+         */ 
         public static function createS3Driver($config)
         {
-                        /** @var FilesystemManager $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemManager $instance */
                         return $instance->createS3Driver($config);
         }
                     /**
@@ -3771,71 +3695,71 @@
          *
          * @param string $name
          * @param mixed $disk
-         * @return FilesystemManager
-         * @static
-         */
+         * @return \Illuminate\Filesystem\FilesystemManager 
+         * @static 
+         */ 
         public static function set($name, $disk)
         {
-                        /** @var FilesystemManager $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemManager $instance */
                         return $instance->set($name, $disk);
         }
                     /**
          * Get the default driver name.
          *
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function getDefaultDriver()
         {
-                        /** @var FilesystemManager $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemManager $instance */
                         return $instance->getDefaultDriver();
         }
                     /**
          * Get the default cloud driver name.
          *
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function getDefaultCloudDriver()
         {
-                        /** @var FilesystemManager $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemManager $instance */
                         return $instance->getDefaultCloudDriver();
         }
                     /**
          * Unset the given disk instances.
          *
          * @param array|string $disk
-         * @return FilesystemManager
-         * @static
-         */
+         * @return \Illuminate\Filesystem\FilesystemManager 
+         * @static 
+         */ 
         public static function forgetDisk($disk)
         {
-                        /** @var FilesystemManager $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemManager $instance */
                         return $instance->forgetDisk($disk);
         }
                     /**
          * Disconnect the given disk and remove from local cache.
          *
          * @param string|null $name
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function purge($name = null)
         {
-                        /** @var FilesystemManager $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemManager $instance */
                         $instance->purge($name);
         }
                     /**
          * Register a custom driver creator Closure.
          *
          * @param string $driver
-         * @param Closure $callback
-         * @return FilesystemManager
-         * @static
-         */
+         * @param \Closure $callback
+         * @return \Illuminate\Filesystem\FilesystemManager 
+         * @static 
+         */ 
         public static function extend($driver, $callback)
         {
-                        /** @var FilesystemManager $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemManager $instance */
                         return $instance->extend($driver, $callback);
         }
                     /**
@@ -3843,73 +3767,73 @@
          *
          * @param string|array $path
          * @param string|null $content
-         * @return FilesystemAdapter
-         * @static
-         */
+         * @return \Illuminate\Filesystem\FilesystemAdapter 
+         * @static 
+         */ 
         public static function assertExists($path, $content = null)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->assertExists($path, $content);
         }
                     /**
          * Assert that the given file does not exist.
          *
          * @param string|array $path
-         * @return FilesystemAdapter
-         * @static
-         */
+         * @return \Illuminate\Filesystem\FilesystemAdapter 
+         * @static 
+         */ 
         public static function assertMissing($path)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->assertMissing($path);
         }
                     /**
          * Determine if a file exists.
          *
          * @param string $path
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function exists($path)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->exists($path);
         }
                     /**
          * Determine if a file or directory is missing.
          *
          * @param string $path
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function missing($path)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->missing($path);
         }
                     /**
          * Get the full path for the file at the given "short" path.
          *
          * @param string $path
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function path($path)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->path($path);
         }
                     /**
          * Get the contents of a file.
          *
          * @param string $path
-         * @return string
-         * @throws FileNotFoundException
-         * @static
-         */
+         * @return string 
+         * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+         * @static 
+         */ 
         public static function get($path)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->get($path);
         }
                     /**
@@ -3919,12 +3843,12 @@
          * @param string|null $name
          * @param array|null $headers
          * @param string|null $disposition
-         * @return StreamedResponse
-         * @static
-         */
+         * @return \Symfony\Component\HttpFoundation\StreamedResponse 
+         * @static 
+         */ 
         public static function response($path, $name = null, $headers = [], $disposition = 'inline')
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->response($path, $name, $headers, $disposition);
         }
                     /**
@@ -3933,12 +3857,12 @@
          * @param string $path
          * @param string|null $name
          * @param array|null $headers
-         * @return StreamedResponse
-         * @static
-         */
+         * @return \Symfony\Component\HttpFoundation\StreamedResponse 
+         * @static 
+         */ 
         public static function download($path, $name = null, $headers = [])
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->download($path, $name, $headers);
         }
                     /**
@@ -3947,53 +3871,53 @@
          * @param string $path
          * @param string|resource $contents
          * @param mixed $options
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function put($path, $contents, $options = [])
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->put($path, $contents, $options);
         }
                     /**
          * Store the uploaded file on the disk.
          *
          * @param string $path
-         * @param \Illuminate\Http\File|UploadedFile|string $file
+         * @param \Illuminate\Http\File|\Illuminate\Http\UploadedFile|string $file
          * @param mixed $options
-         * @return string|false
-         * @static
-         */
+         * @return string|false 
+         * @static 
+         */ 
         public static function putFile($path, $file, $options = [])
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->putFile($path, $file, $options);
         }
                     /**
          * Store the uploaded file on the disk with a given name.
          *
          * @param string $path
-         * @param \Illuminate\Http\File|UploadedFile|string $file
+         * @param \Illuminate\Http\File|\Illuminate\Http\UploadedFile|string $file
          * @param string $name
          * @param mixed $options
-         * @return string|false
-         * @static
-         */
+         * @return string|false 
+         * @static 
+         */ 
         public static function putFileAs($path, $file, $name, $options = [])
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->putFileAs($path, $file, $name, $options);
         }
                     /**
          * Get the visibility for the given path.
          *
          * @param string $path
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function getVisibility($path)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->getVisibility($path);
         }
                     /**
@@ -4001,12 +3925,12 @@
          *
          * @param string $path
          * @param string $visibility
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function setVisibility($path, $visibility)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->setVisibility($path, $visibility);
         }
                     /**
@@ -4015,13 +3939,13 @@
          * @param string $path
          * @param string $data
          * @param string $separator
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function prepend($path, $data, $separator = '
 ')
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->prepend($path, $data, $separator);
         }
                     /**
@@ -4030,25 +3954,25 @@
          * @param string $path
          * @param string $data
          * @param string $separator
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function append($path, $data, $separator = '
 ')
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->append($path, $data, $separator);
         }
                     /**
          * Delete the file at a given path.
          *
          * @param string|array $paths
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function delete($paths)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->delete($paths);
         }
                     /**
@@ -4056,12 +3980,12 @@
          *
          * @param string $from
          * @param string $to
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function copy($from, $to)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->copy($from, $to);
         }
                     /**
@@ -4069,61 +3993,61 @@
          *
          * @param string $from
          * @param string $to
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function move($from, $to)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->move($from, $to);
         }
                     /**
          * Get the file size of a given file.
          *
          * @param string $path
-         * @return int
-         * @static
-         */
+         * @return int 
+         * @static 
+         */ 
         public static function size($path)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->size($path);
         }
                     /**
          * Get the mime-type of a given file.
          *
          * @param string $path
-         * @return string|false
-         * @static
-         */
+         * @return string|false 
+         * @static 
+         */ 
         public static function mimeType($path)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->mimeType($path);
         }
                     /**
          * Get the file's last modification time.
          *
          * @param string $path
-         * @return int
-         * @static
-         */
+         * @return int 
+         * @static 
+         */ 
         public static function lastModified($path)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->lastModified($path);
         }
                     /**
          * Get the URL for the file at the given path.
          *
          * @param string $path
-         * @return string
-         * @throws RuntimeException
-         * @static
-         */
+         * @return string 
+         * @throws \RuntimeException
+         * @static 
+         */ 
         public static function url($path)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->url($path);
         }
                     /**
@@ -4131,12 +4055,12 @@
          *
          * @param string $path
          * @return resource|null The path resource or null on failure.
-         * @throws FileNotFoundException
-         * @static
-         */
+         * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+         * @static 
+         */ 
         public static function readStream($path)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->readStream($path);
         }
                     /**
@@ -4145,44 +4069,44 @@
          * @param string $path
          * @param resource $resource
          * @param array $options
-         * @return bool
-         * @throws InvalidArgumentException If $resource is not a file handle.
-         * @throws FileExistsException
-         * @static
-         */
+         * @return bool 
+         * @throws \InvalidArgumentException If $resource is not a file handle.
+         * @throws \Illuminate\Contracts\Filesystem\FileExistsException
+         * @static 
+         */ 
         public static function writeStream($path, $resource, $options = [])
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->writeStream($path, $resource, $options);
         }
                     /**
          * Get a temporary URL for the file at the given path.
          *
          * @param string $path
-         * @param DateTimeInterface $expiration
+         * @param \DateTimeInterface $expiration
          * @param array $options
-         * @return string
-         * @throws RuntimeException
-         * @static
-         */
+         * @return string 
+         * @throws \RuntimeException
+         * @static 
+         */ 
         public static function temporaryUrl($path, $expiration, $options = [])
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->temporaryUrl($path, $expiration, $options);
         }
                     /**
          * Get a temporary URL for the file at the given path.
          *
-         * @param AwsS3Adapter $adapter
+         * @param \League\Flysystem\AwsS3v3\AwsS3Adapter $adapter
          * @param string $path
-         * @param DateTimeInterface $expiration
+         * @param \DateTimeInterface $expiration
          * @param array $options
-         * @return string
-         * @static
-         */
+         * @return string 
+         * @static 
+         */ 
         public static function getAwsTemporaryUrl($adapter, $path, $expiration, $options)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->getAwsTemporaryUrl($adapter, $path, $expiration, $options);
         }
                     /**
@@ -4190,24 +4114,24 @@
          *
          * @param string|null $directory
          * @param bool $recursive
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function files($directory = null, $recursive = false)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->files($directory, $recursive);
         }
                     /**
          * Get all of the files from the given directory (recursive).
          *
          * @param string|null $directory
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function allFiles($directory = null)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->allFiles($directory);
         }
                     /**
@@ -4215,79 +4139,79 @@
          *
          * @param string|null $directory
          * @param bool $recursive
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function directories($directory = null, $recursive = false)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->directories($directory, $recursive);
         }
                     /**
          * Get all (recursive) of the directories within a given directory.
          *
          * @param string|null $directory
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function allDirectories($directory = null)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->allDirectories($directory);
         }
                     /**
          * Create a directory.
          *
          * @param string $path
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function makeDirectory($path)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->makeDirectory($path);
         }
                     /**
          * Recursively delete a directory.
          *
          * @param string $directory
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function deleteDirectory($directory)
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->deleteDirectory($directory);
         }
                     /**
          * Flush the Flysystem cache.
          *
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function flushCache()
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         $instance->flushCache();
         }
                     /**
          * Get the Flysystem driver.
          *
-         * @return FilesystemInterface
-         * @static
-         */
+         * @return \League\Flysystem\FilesystemInterface 
+         * @static 
+         */ 
         public static function getDriver()
         {
-                        /** @var FilesystemAdapter $instance */
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->getDriver();
         }
-
+         
     }
             /**
-     *
+     * 
      *
      * @see \Illuminate\Validation\Factory
-     */
+     */ 
         class Validator {
                     /**
          * Create a new Validator instance.
@@ -4296,12 +4220,12 @@
          * @param array $rules
          * @param array $messages
          * @param array $customAttributes
-         * @return \Illuminate\Validation\Validator
-         * @static
-         */
+         * @return \Illuminate\Validation\Validator 
+         * @static 
+         */ 
         public static function make($data, $rules, $messages = [], $customAttributes = [])
         {
-                        /** @var Factory $instance */
+                        /** @var \Illuminate\Validation\Factory $instance */
                         return $instance->make($data, $rules, $messages, $customAttributes);
         }
                     /**
@@ -4311,154 +4235,154 @@
          * @param array $rules
          * @param array $messages
          * @param array $customAttributes
-         * @return array
-         * @throws ValidationException
-         * @static
-         */
+         * @return array 
+         * @throws \Illuminate\Validation\ValidationException
+         * @static 
+         */ 
         public static function validate($data, $rules, $messages = [], $customAttributes = [])
         {
-                        /** @var Factory $instance */
+                        /** @var \Illuminate\Validation\Factory $instance */
                         return $instance->validate($data, $rules, $messages, $customAttributes);
         }
                     /**
          * Register a custom validator extension.
          *
          * @param string $rule
-         * @param Closure|string $extension
+         * @param \Closure|string $extension
          * @param string|null $message
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function extend($rule, $extension, $message = null)
         {
-                        /** @var Factory $instance */
+                        /** @var \Illuminate\Validation\Factory $instance */
                         $instance->extend($rule, $extension, $message);
         }
                     /**
          * Register a custom implicit validator extension.
          *
          * @param string $rule
-         * @param Closure|string $extension
+         * @param \Closure|string $extension
          * @param string|null $message
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function extendImplicit($rule, $extension, $message = null)
         {
-                        /** @var Factory $instance */
+                        /** @var \Illuminate\Validation\Factory $instance */
                         $instance->extendImplicit($rule, $extension, $message);
         }
                     /**
          * Register a custom dependent validator extension.
          *
          * @param string $rule
-         * @param Closure|string $extension
+         * @param \Closure|string $extension
          * @param string|null $message
-         * @return void
-         * @static
-         */
+         * @return void 
+         * @static 
+         */ 
         public static function extendDependent($rule, $extension, $message = null)
         {
-                        /** @var Factory $instance */
+                        /** @var \Illuminate\Validation\Factory $instance */
                         $instance->extendDependent($rule, $extension, $message);
         }
                     /**
          * Register a custom validator message replacer.
          *
          * @param string $rule
-         * @param Closure|string $replacer
-         * @return void
-         * @static
-         */
+         * @param \Closure|string $replacer
+         * @return void 
+         * @static 
+         */ 
         public static function replacer($rule, $replacer)
         {
-                        /** @var Factory $instance */
+                        /** @var \Illuminate\Validation\Factory $instance */
                         $instance->replacer($rule, $replacer);
         }
                     /**
          * Set the Validator instance resolver.
          *
-         * @param Closure $resolver
-         * @return void
-         * @static
-         */
+         * @param \Closure $resolver
+         * @return void 
+         * @static 
+         */ 
         public static function resolver($resolver)
         {
-                        /** @var Factory $instance */
+                        /** @var \Illuminate\Validation\Factory $instance */
                         $instance->resolver($resolver);
         }
                     /**
          * Get the Translator implementation.
          *
-         * @return Translator
-         * @static
-         */
+         * @return \Illuminate\Contracts\Translation\Translator 
+         * @static 
+         */ 
         public static function getTranslator()
         {
-                        /** @var Factory $instance */
+                        /** @var \Illuminate\Validation\Factory $instance */
                         return $instance->getTranslator();
         }
                     /**
          * Get the Presence Verifier implementation.
          *
-         * @return PresenceVerifierInterface
-         * @static
-         */
+         * @return \Illuminate\Validation\PresenceVerifierInterface 
+         * @static 
+         */ 
         public static function getPresenceVerifier()
         {
-                        /** @var Factory $instance */
+                        /** @var \Illuminate\Validation\Factory $instance */
                         return $instance->getPresenceVerifier();
         }
                     /**
          * Set the Presence Verifier implementation.
          *
-         * @param PresenceVerifierInterface $presenceVerifier
-         * @return void
-         * @static
-         */
+         * @param \Illuminate\Validation\PresenceVerifierInterface $presenceVerifier
+         * @return void 
+         * @static 
+         */ 
         public static function setPresenceVerifier($presenceVerifier)
         {
-                        /** @var Factory $instance */
+                        /** @var \Illuminate\Validation\Factory $instance */
                         $instance->setPresenceVerifier($presenceVerifier);
         }
                     /**
          * Get the container instance used by the validation factory.
          *
-         * @return Container
-         * @static
-         */
+         * @return \Illuminate\Contracts\Container\Container 
+         * @static 
+         */ 
         public static function getContainer()
         {
-                        /** @var Factory $instance */
+                        /** @var \Illuminate\Validation\Factory $instance */
                         return $instance->getContainer();
         }
                     /**
          * Set the container instance used by the validation factory.
          *
-         * @param Container $container
-         * @return Factory
-         * @static
-         */
+         * @param \Illuminate\Contracts\Container\Container $container
+         * @return \Illuminate\Validation\Factory 
+         * @static 
+         */ 
         public static function setContainer($container)
         {
-                        /** @var Factory $instance */
+                        /** @var \Illuminate\Validation\Factory $instance */
                         return $instance->setContainer($container);
         }
-
+         
     }
             /**
-     *
+     * 
      *
      * @see \Illuminate\Contracts\Auth\Access\Gate
-     */
+     */ 
         class Gate {
                     /**
          * Determine if a given ability has been defined.
          *
          * @param string|array $ability
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function has($ability)
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4469,10 +4393,10 @@
          *
          * @param string $ability
          * @param callable|string $callback
-         * @return \Illuminate\Auth\Access\Gate
-         * @throws InvalidArgumentException
-         * @static
-         */
+         * @return \Illuminate\Auth\Access\Gate 
+         * @throws \InvalidArgumentException
+         * @static 
+         */ 
         public static function define($ability, $callback)
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4484,9 +4408,9 @@
          * @param string $name
          * @param string $class
          * @param array|null $abilities
-         * @return \Illuminate\Auth\Access\Gate
-         * @static
-         */
+         * @return \Illuminate\Auth\Access\Gate 
+         * @static 
+         */ 
         public static function resource($name, $class, $abilities = null)
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4497,9 +4421,9 @@
          *
          * @param string $class
          * @param string $policy
-         * @return \Illuminate\Auth\Access\Gate
-         * @static
-         */
+         * @return \Illuminate\Auth\Access\Gate 
+         * @static 
+         */ 
         public static function policy($class, $policy)
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4509,9 +4433,9 @@
          * Register a callback to run before all Gate checks.
          *
          * @param callable $callback
-         * @return \Illuminate\Auth\Access\Gate
-         * @static
-         */
+         * @return \Illuminate\Auth\Access\Gate 
+         * @static 
+         */ 
         public static function before($callback)
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4521,9 +4445,9 @@
          * Register a callback to run after all Gate checks.
          *
          * @param callable $callback
-         * @return \Illuminate\Auth\Access\Gate
-         * @static
-         */
+         * @return \Illuminate\Auth\Access\Gate 
+         * @static 
+         */ 
         public static function after($callback)
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4534,9 +4458,9 @@
          *
          * @param string $ability
          * @param array|mixed $arguments
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function allows($ability, $arguments = [])
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4547,9 +4471,9 @@
          *
          * @param string $ability
          * @param array|mixed $arguments
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function denies($ability, $arguments = [])
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4558,11 +4482,11 @@
                     /**
          * Determine if all of the given abilities should be granted for the current user.
          *
-         * @param iterable|string $abilities
+         * @param \Illuminate\Auth\Access\iterable|string $abilities
          * @param array|mixed $arguments
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function check($abilities, $arguments = [])
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4571,11 +4495,11 @@
                     /**
          * Determine if any one of the given abilities should be granted for the current user.
          *
-         * @param iterable|string $abilities
+         * @param \Illuminate\Auth\Access\iterable|string $abilities
          * @param array|mixed $arguments
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function any($abilities, $arguments = [])
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4584,11 +4508,11 @@
                     /**
          * Determine if all of the given abilities should be denied for the current user.
          *
-         * @param iterable|string $abilities
+         * @param \Illuminate\Auth\Access\iterable|string $abilities
          * @param array|mixed $arguments
-         * @return bool
-         * @static
-         */
+         * @return bool 
+         * @static 
+         */ 
         public static function none($abilities, $arguments = [])
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4599,10 +4523,10 @@
          *
          * @param string $ability
          * @param array|mixed $arguments
-         * @return \Illuminate\Auth\Access\Response
-         * @throws AuthorizationException
-         * @static
-         */
+         * @return \Illuminate\Auth\Access\Response 
+         * @throws \Illuminate\Auth\Access\AuthorizationException
+         * @static 
+         */ 
         public static function authorize($ability, $arguments = [])
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4613,9 +4537,9 @@
          *
          * @param string $ability
          * @param array|mixed $arguments
-         * @return \Illuminate\Auth\Access\Response
-         * @static
-         */
+         * @return \Illuminate\Auth\Access\Response 
+         * @static 
+         */ 
         public static function inspect($ability, $arguments = [])
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4626,10 +4550,10 @@
          *
          * @param string $ability
          * @param array|mixed $arguments
-         * @return mixed
-         * @throws AuthorizationException
-         * @static
-         */
+         * @return mixed 
+         * @throws \Illuminate\Auth\Access\AuthorizationException
+         * @static 
+         */ 
         public static function raw($ability, $arguments = [])
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4639,9 +4563,9 @@
          * Get a policy instance for a given class.
          *
          * @param object|string $class
-         * @return mixed
-         * @static
-         */
+         * @return mixed 
+         * @static 
+         */ 
         public static function getPolicyFor($class)
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4651,9 +4575,9 @@
          * Specify a callback to be used to guess policy names.
          *
          * @param callable $callback
-         * @return \Illuminate\Auth\Access\Gate
-         * @static
-         */
+         * @return \Illuminate\Auth\Access\Gate 
+         * @static 
+         */ 
         public static function guessPolicyNamesUsing($callback)
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4663,10 +4587,10 @@
          * Build a policy class instance of the given type.
          *
          * @param object|string $class
-         * @return mixed
-         * @throws BindingResolutionException
-         * @static
-         */
+         * @return mixed 
+         * @throws \Illuminate\Contracts\Container\BindingResolutionException
+         * @static 
+         */ 
         public static function resolvePolicy($class)
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4675,10 +4599,10 @@
                     /**
          * Get a gate instance for the given user.
          *
-         * @param Authenticatable|mixed $user
-         * @return static
-         * @static
-         */
+         * @param \Illuminate\Contracts\Auth\Authenticatable|mixed $user
+         * @return static 
+         * @static 
+         */ 
         public static function forUser($user)
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4687,9 +4611,9 @@
                     /**
          * Get all of the defined abilities.
          *
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function abilities()
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4698,9 +4622,9 @@
                     /**
          * Get all of the defined policies.
          *
-         * @return array
-         * @static
-         */
+         * @return array 
+         * @static 
+         */ 
         public static function policies()
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
@@ -4709,22 +4633,22 @@
                     /**
          * Set the container instance used by the gate.
          *
-         * @param Container $container
-         * @return \Illuminate\Auth\Access\Gate
-         * @static
-         */
+         * @param \Illuminate\Contracts\Container\Container $container
+         * @return \Illuminate\Auth\Access\Gate 
+         * @static 
+         */ 
         public static function setContainer($container)
         {
                         /** @var \Illuminate\Auth\Access\Gate $instance */
                         return $instance->setContainer($container);
         }
-
+         
     }
-
+     
 }
 
 
-namespace  {
+namespace  { 
             class Auth extends \Illuminate\Support\Facades\Auth {}
             class DB extends \Illuminate\Support\Facades\DB {}
             class Cache extends \Illuminate\Support\Facades\Cache {}
@@ -4735,7 +4659,7 @@ namespace  {
             class Storage extends \Illuminate\Support\Facades\Storage {}
             class Validator extends \Illuminate\Support\Facades\Validator {}
             class Gate extends \Illuminate\Support\Facades\Gate {}
-
+     
 }
 
 
