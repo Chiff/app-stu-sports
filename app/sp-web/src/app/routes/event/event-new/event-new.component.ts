@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import { CustomHttpError, ErrorResponse, EventDTO } from '../../../models/sp-api';
+import {NgForm} from "@angular/forms";
+import {HttpClient} from "@angular/common/http";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'sp-event-new',
@@ -6,11 +10,30 @@ import { Component, OnInit } from '@angular/core';
   styles: [
   ]
 })
-export class EventNewComponent implements OnInit {
+export class EventNewComponent {
+  @ViewChild('ngForm')
+  private ngForm: NgForm;
 
-  constructor() { }
+  public event: EventDTO = {} as EventDTO;
+  public error: string;
 
-  ngOnInit(): void {
+  constructor(private http: HttpClient, private router: Router) {}
+
+  send(): void {
+    this.error = null;
+
+    if (this.ngForm.invalid) {
+      this.error = 'Vyplňte všetky povinné údaje';
+      return;
+    }
+
+    this.http.post('api/event/create', this.event).subscribe({
+      next: (event: EventDTO) => {
+        this.router.navigate([`/event/detail/${event.id}`]);
+      },
+      error: (err: CustomHttpError<ErrorResponse>) => {
+        this.error = err.error.error.message;
+      },
+    });
   }
-
 }
