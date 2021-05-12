@@ -3,6 +3,8 @@
 
 namespace App\Http\Services;
 
+use App\Dto\Team\TeamDTO;
+use App\Exceptions\RequestErrorException;
 use App\Http\Services\AS\UserTeamAS;
 use App\Http\Services\Netgrif\AuthenticationService;
 use App\Http\Services\Netgrif\WorkflowService;
@@ -10,9 +12,6 @@ use App\Models\Team;
 use App\Models\User;
 use JsonMapper\JsonMapper;
 
-//TODO :: spravit vypisanie team memberov z timu - v Team classe je na to metoda, len neviem ci nemame napicu db model
-// napicu db model pojebava aj nieco na styl $teams = Team::whereUserId($user->id)->get();, kedze v db uchovavame len
-// ownera a nie ludi v time...
 class TeamService
 {
     private AuthenticationService $auth;
@@ -50,18 +49,18 @@ class TeamService
         return $this->userTeamAS->mapTeamsWithOwner($teams);
     }
 
-    // TODO:: otazka na matusa, vraca to vsetky timy kde je user prihlaseny alebo len kde je owner?
-    // TODO:: DTO spravit..
-    // TODO:: zatial nefunkcne
-//    public function getAllteamsWhereIsUser(): array
-//    {
-//        $result = [];
-//
-//        $user_id = auth()->id();
-//        $user = User::findOrFail($user_id);
-//        $teams = Team::whereUserId($user->id)->get();
-//
-//        return $teams;
-//    }
+    public function getTeamById(int $id): TeamDTO
+    {
+        $team = Team::whereId($id)->first();
+
+        if (!$team) {
+            throw new RequestErrorException("not found");
+        }
+
+        //TODO :: spravit vypisanie team memberov z timu - v Team classe je na to metoda, len neviem ci nemame napicu db model
+        // napicu db model pojebava aj nieco na styl $teams = Team::whereUserId($user->id)->get();, kedze v db uchovavame len
+        // ownera a nie ludi v time...
+        return $this->userTeamAS->mapTeamDetail($team);
+    }
 
 }

@@ -18,10 +18,8 @@ class TeamController extends Controller
 
     public function __construct(TeamService $teamService)
     {
-
         $this->middleware('auth');
         $this->teamService = $teamService;
-
     }
 
 
@@ -49,9 +47,12 @@ class TeamController extends Controller
         throw new Exception("Not created, team with this name already exists", 304);
     }
 
-    /*
-     * Update team
-     */
+    public function getTeamById(int $id): JsonResponse
+    {
+        $team = $this->teamService->getTeamById($id);
+        return response()->json($team, 200);
+    }
+
     public function updateTeam($team_id, Request $request): JsonResponse
     {
         $team = Event::findOrFail($team_id);

@@ -1,86 +1,90 @@
 <div class="row">
-  <div class="col-sm-12 col-lg-6 my-4">
-    <h2 class="text-primary d-flex justify-content-between">
-      Moje podujatia
+  <div class="flex-column col-lg-6 col-sm-12">
+    <div class="col mt-4">
+      <h2 class="text-primary d-flex justify-content-between">
+        Moje podujatia
 
-      <a routerLink="/event/new"><i class="fas fa-plus"></i></a>
-    </h2>
-    <div class="card">
-      <div class="card-body" [ngClass]="{ 'p-0': myEvents?.length }">
-        <div class="alert alert-warning m-0" *ngIf="!myEvents?.length">
-          Momentálne nemáte žiadne aktívne podujatia, môžete <a routerLink="/event/new">vytvoriť nové</a>.
+        <a routerLink="/event/new"><i class="fas fa-plus"></i></a>
+      </h2>
+      <div class="card">
+        <div class="card-body" [ngClass]="{ 'p-0': myEvents?.length }">
+          <div class="alert alert-warning m-0" *ngIf="!myEvents?.length">
+            Momentálne nemáte žiadne aktívne podujatia, môžete <a routerLink="/event/new">vytvoriť nové</a>.
+          </div>
+          <table class="table table-bordered m-0 table-border-none" *ngIf="myEvents?.length">
+            <thead>
+              <tr>
+                <th width="1"></th>
+                <th>Názov</th>
+                <th>Začiatok</th>
+                <th>Koniec</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let e of myEvents">
+                <td>
+                  <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
+                </td>
+                <td>{{ e.name }}</td>
+                <td>{{ e.event_start | date }}</td>
+                <td>{{ e.event_end | date }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <table class="table table-bordered m-0 table-border-none" *ngIf="myEvents?.length">
-          <thead>
-            <tr>
-              <th width="1"></th>
-              <th>Názov</th>
-              <th>Začiatok</th>
-              <th>Koniec</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let e of myEvents">
-              <td>
-                <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
-              </td>
-              <td>{{ e.name }}</td>
-              <td>{{ e.event_start | date }}</td>
-              <td>{{ e.event_end | date }}</td>
-            </tr>
-          </tbody>
-        </table>
       </div>
     </div>
   </div>
 
-  <div class="col-sm-12 col-lg-6 my-4">
-    <h2 class="text-primary d-flex justify-content-between">
-      Moje tímy
+  <div class="flex-column col-lg-6 col-sm-12">
+    <div class="col mt-4">
+      <h2 class="text-primary d-flex justify-content-between">
+        Moje tímy
 
-      <a routerLink="/team/new"><i class="fas fa-plus"></i></a>
-    </h2>
-    <div class="card">
-      <div class="card-body" [ngClass]="{ 'p-0': user?.teams?.length }">
-        <div class="alert alert-warning m-0" *ngIf="!user?.teams?.length">
-          Momentálne nie ste v žiadnom tíme, môžete <a routerLink="/team/new">vytvoriť nový</a>.
+        <a routerLink="/team/new"><i class="fas fa-plus"></i></a>
+      </h2>
+      <div class="card">
+        <div class="card-body" [ngClass]="{ 'p-0': user?.teams?.length }">
+          <div class="alert alert-warning m-0" *ngIf="!user?.teams?.length">
+            Momentálne nie ste v žiadnom tíme, môžete <a routerLink="/team/new">vytvoriť nový</a>.
+          </div>
+          <table class="table table-bordered m-0 table-border-none" *ngIf="user?.teams?.length">
+            <thead>
+              <tr>
+                <th width="1"></th>
+                <th>Názov</th>
+                <th>Zakladateľ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let e of user.teams">
+                <td>
+                  <a routerLink="/team/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
+                </td>
+                <td>{{ e.team_name }}</td>
+                <td>{{ e.owner?.firstname }} {{ e.owner?.surname }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <table class="table table-bordered m-0 table-border-none" *ngIf="user?.teams?.length">
-          <thead>
-            <tr>
-              <th width="1"></th>
-              <th>Názov</th>
-              <th>Zakladateľ</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let e of user.teams">
-              <td>
-                <a routerLink="/team/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
-              </td>
-              <td>{{ e.team_name }}</td>
-              <td>{{ e.owner?.firstname }} {{ e.owner?.surname }}</td>
-            </tr>
-          </tbody>
-        </table>
       </div>
     </div>
-  </div>
 
-  <div class="col-sm-12 col-lg-6 my-4">
-    <h2 class="text-primary">Môj účet</h2>
-    <div class="card">
-      <div class="card-body">
-        <dl class="row mb-0">
-          <dt class="col-sm-12 col-md-6">Meno</dt>
-          <dd class="col-sm-12 col-md-6">{{ user?.firstname }}</dd>
+    <div class="col mt-4">
+      <h2 class="text-primary">Môj účet</h2>
+      <div class="card">
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-12 col-md-6">Meno</dt>
+            <dd class="col-sm-12 col-md-6">{{ user?.firstname }}</dd>
 
-          <dt class="col-sm-12 col-md-6">Priezvisko</dt>
-          <dd class="col-sm-12 col-md-6">{{ user?.surname }}</dd>
+            <dt class="col-sm-12 col-md-6">Priezvisko</dt>
+            <dd class="col-sm-12 col-md-6">{{ user?.surname }}</dd>
 
-          <dt class="col-sm-12 col-md-6">Email</dt>
-          <dd class="col-sm-12 col-md-6">{{ user?.email }}</dd>
-        </dl>
+            <dt class="col-sm-12 col-md-6">Email</dt>
+            <dd class="col-sm-12 col-md-6">{{ user?.email }}</dd>
+          </dl>
+        </div>
       </div>
     </div>
   </div>
