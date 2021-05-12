@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Subject } from 'rxjs';
 import { AccountModel, AccountPermissionEnum } from '../../../models/sp-api';
 
 @Injectable({
@@ -11,9 +10,6 @@ export class AuthService {
   private userDto: AccountModel = null;
   private userPromise: Promise<AccountModel> = null;
   private inprogress: boolean = false;
-
-  private onUserChange: BehaviorSubject<AccountModel> = new BehaviorSubject<AccountModel>(null);
-  public onUserChangeObservable = this.onUserChange.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -30,14 +26,10 @@ export class AuthService {
         (user) => {
           this.inprogress = false;
           this.userDto = user;
-
-          this.onUserChange.next(this.userDto);
         },
         () => {
           this.inprogress = false;
           this.userDto = null;
-
-          this.onUserChange.next(this.userDto);
         }
       );
     }

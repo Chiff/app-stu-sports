@@ -30,7 +30,9 @@ export class AuthGuard implements CanActivate {
 
     if (!this.auth.isLogged()) return false;
 
-    if (new RegExp('^/dashboard').test(path)) return this.auth.isLogged();
+    if (new RegExp('^/dashboard.*').test(path)) return this.auth.isLogged();
+    if (new RegExp('^/team.*').test(path)) return this.auth.isLogged();
+    if (new RegExp('^/event/new').test(path)) return this.auth.isLogged();
 
     // if (new RegExp('^/app-settings').test(path))
     //   return this.auth.hasPermission([

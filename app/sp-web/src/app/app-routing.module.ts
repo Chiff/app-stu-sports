@@ -14,6 +14,10 @@ const routes: Routes = [
     loadChildren: () => import('./routes/event/event.module').then((m) => m.EventModule),
   },
   {
+    path: 'team',
+    loadChildren: () => import('./routes/team/team.module').then((m) => m.TeamModule),
+  },
+  {
     path: 'logout.html',
     canActivate: [AuthGuard],
     component: LogoutComponent,

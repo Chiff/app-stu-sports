@@ -1,0 +1,29 @@
+<h1 class="text-primary my-4">Nový tím</h1>
+
+<div class="card">
+  <div class="card-body">
+    <form #ngForm="ngForm">
+      <div class="form-group form-group-spaced">
+        <label class="form-control-required" for="team.team_name">Názov</label>
+        <input
+          type="text"
+          class="form-control"
+          id="team.team_name"
+          name="team.team_name"
+          [required]="true"
+          [(ngModel)]="team.team_name"
+        />
+      </div>
+
+      <div class="form-group form-group-spaced" *ngIf="error">
+        <div class="alert alert-danger m-0">
+          {{ error }}
+        </div>
+      </div>
+
+      <div class="form-group form-group-spaced">
+        <button class="btn btn-primary" type="button" (click)="send()">Vytvoriť</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,29 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AutoUnsubscribe, takeWhileAlive } from 'take-while-alive';
-import { takeWhile } from 'rxjs/operators';
-import { AccountModel, EventDTO } from '../../../models/sp-api';
-import { AuthService } from '../../../shared/shared/services/auth.service';
+import { AutoUnsubscribe } from 'take-while-alive';
+import { EventDTO, UserDTO } from '../../../models/sp-api';
 
 @AutoUnsubscribe()
 @Component({
   selector: 'sp-dashboard',
   templateUrl: './dashboard.component.html',
-  styles: [],
 })
 export class DashboardComponent implements OnInit {
   myEvents: EventDTO[];
-  user: AccountModel;
+  user: UserDTO;
 
-  constructor(private http: HttpClient, private auth: AuthService) {
-    this.auth.onUserChangeObservable.pipe(takeWhileAlive(this)).subscribe((data) => {
-      this.user = data;
-    });
-  }
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.http.get<EventDTO[]>('api/event/my').subscribe((data) => {
       this.myEvents = data;
+    });
+
+    this.http.get('api/user/detail').subscribe((data: UserDTO) => {
+      this.user = data;
     });
   }
 }

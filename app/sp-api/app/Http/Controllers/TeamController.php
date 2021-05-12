@@ -3,11 +3,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\SystemService;
 use App\Http\Services\TeamService;
 use App\Models\Event;
 use App\Models\Team;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller;
@@ -16,7 +16,7 @@ class TeamController extends Controller
 {
     private TeamService $teamService;
 
-    public function __construct(TeamService $teamService )
+    public function __construct(TeamService $teamService)
     {
 
         $this->middleware('auth');
@@ -31,13 +31,13 @@ class TeamController extends Controller
     public function createTeam(Request $request): JsonResponse
     {
         $this->validate($request, [
-            'teamName' => 'required'
+            'team_name' => 'required'
         ]);
         $team = null;
         $user_id = auth()->id();
         $user = User::findorfail($user_id);
 
-        $team_name = $request->get('teamName');
+        $team_name = $request->get('team_name');
 
         $exist = $user->ownTeams()->where('team_name', $team_name)->get();
         if (count($exist) < 1) {
@@ -46,7 +46,7 @@ class TeamController extends Controller
             return response()->json($team, 200);
         }
 
-            return response()->json('Not created, team with this name already exists', 304);
+        throw new Exception("Not created, team with this name already exists", 304);
     }
 
     /*
@@ -72,7 +72,7 @@ class TeamController extends Controller
     }
 
 
-     // TODO:: zatial nefunkcne
+    // TODO:: zatial nefunkcne
     public function showAllTeams(): JsonResponse
     {
         $teams = $this->teamService->getAllTeams();
