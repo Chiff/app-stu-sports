@@ -39,6 +39,11 @@ class Team extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function teamMembers()
+    {
+        return $this->hasMany(User::class, 'user_team');
+    }
+
 
     protected $fillable = [
         'team_name'

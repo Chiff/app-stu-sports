@@ -12,6 +12,7 @@ use App\Http\Services\Netgrif\PetriNetService;
 use App\Http\Services\Netgrif\TaskService;
 use App\Http\Services\Netgrif\UserService as NetgrifUserService;
 use App\Http\Services\Netgrif\WorkflowService;
+use App\Http\Services\TeamService;
 use App\Http\Services\UserService;
 use App\Http\Utils\DateUtil;
 use DateTime;
@@ -66,5 +67,6 @@ class AppServiceProvider extends ServiceProvider
         // sp services
         $this->app->singleton(EventService::class);
         $this->app->singleton(UserService::class);
+        $this->app->singleton(TeamService::class);
     }
 }

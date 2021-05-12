@@ -28,6 +28,15 @@ export interface EventDTO {
   owner: UserDTO;
 }
 
+export interface TeamDTO {
+  id: string;
+  team_name: string;
+  created_at: DateTimeAsString;
+  updated_at: DateTimeAsString;
+  registration_start: DateTimeAsString;
+  owner: UserDTO;
+}
+
 export interface UserDTO {
   firstname: string;
   surname: string;

@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Services\SystemService;
+use App\Http\Services\TeamService;
 use App\Models\Event;
 use App\Models\Team;
 use App\Models\User;
@@ -13,13 +14,14 @@ use Laravel\Lumen\Routing\Controller;
 
 class TeamController extends Controller
 {
-    private SystemService $systemService;
+    private TeamService $teamService;
 
-    public function __construct(SystemService $systemService)
+    public function __construct(TeamService $teamService )
     {
 
         $this->middleware('auth');
-        $this->systemService = $systemService;
+        $this->teamService = $teamService;
+
     }
 
 
@@ -56,5 +58,50 @@ class TeamController extends Controller
         $team->update($request->all());
         return response()->json($team, 200);
     }
+
+    public function showUserTeams(): JsonResponse
+    {
+        $teams = $this->teamService->getOwnTeams();
+        return response()->json($teams, 200);
+    }
+
+    public function showAllUserTeams(): JsonResponse
+    {
+        $teams = $this->teamService->getAllteamsWhereIsUser();
+        return response()->json($teams, 200);
+    }
+
+
+     // TODO:: zatial nefunkcne
+    public function showAllTeams(): JsonResponse
+    {
+        $teams = $this->teamService->getAllTeams();
+        return response()->json($teams, 200);
+    }
+
+
+    //TODO :: asi problem so vztahmi, dorobit... nefunguje
+    // "message": "Method Illuminate\\Database\\Eloquent\\Collection::teamMembers does not exist."
+    public function addOneMemberToTeamByEmail(Request $request)
+    {
+        $this->validate($request, [
+            'team_name' => 'required',
+            'user_mail' => 'required|email'
+        ]);
+
+        $team_name = $request->get('team_name');
+        $usermail = $request->get('user_mail');
+
+        $user = User::where('email', $usermail)->get();
+
+        $team = Team::where('team_name', $team_name)->get();
+
+        $team->teamMembers()->get->attach($user);
+        $team->save();
+
+
+        return response()->json('', 200);
+    }
+
 
 }

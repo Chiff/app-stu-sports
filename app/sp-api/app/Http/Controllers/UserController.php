@@ -3,12 +3,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Dto\Team\TeamDTO;
+use App\Dto\User\UserDTO;
 use App\Http\Services\UserService;
+use App\Models\User;
 use App\Models\User\LoginCredentials;
 use Illuminate\Http\JsonResponse;
 use JsonMapper\JsonMapper;
 use Laravel\Lumen\Routing\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
+use App\Models\Team;
+
 
 class UserController extends Controller
 {
@@ -63,10 +68,45 @@ class UserController extends Controller
         return $this->respondWithToken($r, $token, 0);
     }
 
+    //TODO :: dorobit do UserDTO pole teamov a vypisat timy takymto stylom
     public function detail(): JsonResponse
     {
+        $result = [];
         $user = $this->userService->detail();
-        return response()->json($user);
+        $user->toJson();
+        $userDTO = new UserDTO();
+
+        $this->mapper->mapObjectFromString($user, $userDTO);
+        // TODO:: otazka na matusa, vraca to vsetky timy kde je user prihlaseny alebo len kde je owner?
+        $teams = Team::whereUserId($user->id)->get();
+
+        array_push($result, $userDTO);
+
+        foreach ($teams as $team) {
+            $teamDTO = new TeamDTO();
+            $this->mapper->mapObjectFromString($team->toJson(), $teamDTO);
+            $team_owner = $team->owner()->get();
+            $team_owner->toJson();
+
+            $it_1 = json_decode($user, TRUE);
+            $it_2 = json_decode($team_owner, TRUE);
+            $result_array = array_diff($it_1,$it_2);
+
+            if(empty($result_array[0])){
+                $teamDTO->owner = $userDTO;
+            }
+
+            else{
+                $ownerDTO = new UserDTO();
+                $this->mapper->mapObjectFromString($team_owner, $ownerDTO);
+                $teamDTO->owner = $ownerDTO;
+            }
+
+            array_push($result, $teamDTO);
+        }
+
+
+        return response()->json($result);
     }
 
     protected function respondWithToken($data, string $token, int $overrideTTLMinutes = -1): JsonResponse

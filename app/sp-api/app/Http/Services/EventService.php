@@ -15,6 +15,7 @@ use App\Models\Netgrif\MessageResource;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use JsonMapper\JsonMapper;
+use function MongoDB\BSON\toJSON;
 
 class EventService
 {
@@ -85,14 +86,14 @@ class EventService
     {
         $user_id = auth()->id();
         $user = User::findOrFail($user_id);
-        $events = $user->ownEvents();
+        $events = $user->ownEvents()->get();
 
         if ($onlyActive) {
             $todayDate = date('Y/m/d H:m:i');
             $events->where('event_end', '>=', $todayDate);
         }
 
-        return $this->mapEventsWithOwner($events->get());
+        return $this->mapEventsWithOwner($events);
     }
 
     /**
@@ -103,18 +104,25 @@ class EventService
     {
         $result = [];
 
-        foreach ($events as $e) {
-            $eDto = new EventDTO();
-            $this->mapper->mapObjectFromString($e->toJson(), $eDto);
+        foreach ($events as $event) {
 
+            $eventDTO = new EventDTO();
+            $this->mapper->mapObjectFromString($event->toJson(), $eventDTO);
 
             $user = new UserDTO();
-            $userModel = User::whereId($e->user_id)->first()->toJson();
+            $userModel = User::whereId($event->user_id)->first()->toJson();
             $this->mapper->mapObjectFromString($userModel, $user);
 
-            $eDto->owner = $user;
+//            $eDto = new EventDTO();
+//            foreach ($event as $keyname=>$val){
+//              $eDto->{$keyname}=$val;
+//            }
 
-            array_push($result, $eDto);
+            $eventDTO->owner = $user;
+
+          //  dd($eventDTO);
+
+            array_push($result, $eventDTO);
         }
 
         return $result;

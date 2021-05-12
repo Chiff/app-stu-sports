@@ -11,7 +11,6 @@ use DateTime;
 /** @typescript */
 class EventDTO extends AppSerializable
 {
-
     public ?string $id;
     public ?string $user_id;
     public ?string $name;
