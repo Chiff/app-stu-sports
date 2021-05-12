@@ -1,6 +1,5 @@
+// TODO - 12/05/2021 - permissions
 export interface AccountModel extends UserDTO {
-  id: number;
-  updated_at: DateTimeAsString; // yyyy-MM-ddTHH:mm:ss
   permissions: AccountPermissionEnum[];
 }
 
@@ -38,10 +37,12 @@ export interface TeamDTO {
 }
 
 export interface UserDTO {
+  id: string;
   firstname: string;
   surname: string;
   email: string;
   created_at: DateTimeAsString;
+  teams: TeamDTO[];
 }
 
 export type DateTimeAsString = string;

@@ -3,21 +3,33 @@
 
 namespace App\Http\Services;
 
+use App\Dto\User\UserDTO;
+use App\Http\Services\AS\UserTeamAS;
 use App\Http\Services\Netgrif\AuthenticationService;
 use App\Models\Netgrif\EmbeddedUsers;
 use App\Models\User;
 use App\Models\User\LoginCredentials;
-use Illuminate\Contracts\Auth\Authenticatable;
+use JsonMapper\JsonMapper;
 
 class UserService
 {
     private AuthenticationService $netgrigfAuth;
     private Netgrif\UserService $netgrifUser;
+    private JsonMapper $mapper;
+    private UserTeamAS $userTeamAS;
 
-    public function __construct(AuthenticationService $authService, Netgrif\UserService $netgrifUserService)
+    public function __construct(
+        AuthenticationService $authService,
+        Netgrif\UserService $netgrifUserService,
+        UserTeamAS $userTeamAS,
+        JsonMapper $mapper
+    )
     {
         $this->netgrigfAuth = $authService;
         $this->netgrifUser = $netgrifUserService;
+        $this->userTeamAS = $userTeamAS;
+
+        $this->mapper = $mapper;
     }
 
     public function login(LoginCredentials $credentials): User|null
@@ -45,9 +57,14 @@ class UserService
         return $user;
     }
 
-    public function detail(): Authenticatable|null // User|null
+    public function detail(): UserDTO|null
     {
-        return auth()->user();
+        $user = User::whereId(auth()->id())->get()->first();
+        $userDTO = new UserDTO();
+        $this->mapper->mapObjectFromString($user->toJson(), $userDTO);
+        $userDTO->teams = $this->userTeamAS->appendTeamsToUser($user);
+
+        return $userDTO;
     }
 
     public function getAllUsers(): EmbeddedUsers
@@ -96,7 +113,7 @@ class UserService
         $tag = substr($encrypted, -$tag_length);
 
         $decrypted = openssl_decrypt($ciphertext, self::$cipher, $token, OPENSSL_RAW_DATA, $iv, $tag);
-        $data = preg_split("/". self::$credentialsSeparator."/", $decrypted);
+        $data = preg_split("/" . self::$credentialsSeparator . "/", $decrypted);
 
         $credentials->email = $data[0];
         $credentials->password = $data[1];

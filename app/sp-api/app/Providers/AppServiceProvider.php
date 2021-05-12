@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Services\AS\UserTeamAS;
 use App\Http\Services\EventService;
 use App\Http\Services\Netgrif\AuthenticationService;
 use App\Http\Services\Netgrif\DashboardService;
@@ -68,5 +69,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(EventService::class);
         $this->app->singleton(UserService::class);
         $this->app->singleton(TeamService::class);
+
+        // application service
+        $this->app->singleton(UserTeamAS::class);
     }
 }
