@@ -43,11 +43,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->group(['prefix' => 'team'], function () use ($router) {
         $router->get('', ['uses' => 'TeamController@showAllTeams']);
-        $router->get('{id}', ['uses' => 'TeamController@getTeamById']);
         $router->get('my', ['uses' => 'TeamController@showAllUserTeams']);
+        $router->get('{id}', ['uses' => 'TeamController@getTeamById']);
         $router->post('create', ['uses' => 'TeamController@createTeam']);
         $router->put('update', ['uses' => 'TeamController@updateTeam']);
-        $router->post('add', ['uses' => 'TeamController@addOneMemberToTeamByEmail']);
+        $router->post('{id}/add', ['uses' => 'TeamController@addOneMemberToTeamByEmail']);
     });
 
 });

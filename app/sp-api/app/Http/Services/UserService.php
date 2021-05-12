@@ -41,7 +41,7 @@ class UserService
             return null;
         }
 
-        $user = User::where('ext_id', $userResource->id)->first();
+        $user = User::whereExtId($userResource->id)->first();
 
         // prve prihlasenie ("registracia")
         if (!$user) {
@@ -51,7 +51,9 @@ class UserService
             $user->surname = $userResource->surname;
             $user->ext_id = $userResource->id;
 
-            $user = $user->save();
+            if (!$user->save()) {
+                return null;
+            }
         }
 
         return $user;
