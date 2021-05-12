@@ -8,6 +8,8 @@ use App\Http\Services\TeamService;
 use App\Models\Event;
 use App\Models\Team;
 use App\Models\User;
+use App\Models\UserTeam;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller;
@@ -39,10 +41,12 @@ class TeamController extends Controller
 
         $team_name = $request->get('teamName');
 
+
         $exist = $user->ownTeams()->where('team_name', $team_name)->get();
         if (count($exist) < 1) {
             $team = new Team(array('team_name' => $team_name));
             $user->ownTeams()->save($team);
+            $team->team_members()->save($user);
             return response()->json($team, 200);
         }
 
@@ -80,8 +84,7 @@ class TeamController extends Controller
     }
 
 
-    //TODO :: asi problem so vztahmi, dorobit... nefunguje
-    // "message": "Method Illuminate\\Database\\Eloquent\\Collection::teamMembers does not exist."
+    //TODO :: done
     public function addOneMemberToTeamByEmail(Request $request)
     {
         $this->validate($request, [
@@ -92,13 +95,60 @@ class TeamController extends Controller
         $team_name = $request->get('team_name');
         $usermail = $request->get('user_mail');
 
-        $user = User::where('email', $usermail)->get();
+        $all_teams = Team::all();
+        $all_users = User::all();
 
-        $team = Team::where('team_name', $team_name)->get();
+        $team_in_db = false;
+        $user_in_db = false;
 
-        $team->teamMembers()->get->attach($user);
-        $team->save();
 
+        foreach ($all_teams as $t) {
+            $t->toJson();
+
+            if ($team_name == $t->team_name){
+                $team_in_db = true;
+            }
+
+        }
+
+        foreach ($all_users as $u) {
+            $u->toJson();
+
+            if ($usermail == $u->email){
+                $user_in_db = true;
+            }
+
+        }
+
+        if (!$team_in_db){
+            echo "err";
+            return response()->json('Team sa nenachádza v DB', 200);
+        }
+
+        if (!$user_in_db){
+            echo "err";
+            return response()->json('User sa nenachádza v DB', 200);
+        }
+
+        $user = User::where('email', $usermail)->first();
+        $team_vstup = Team::where('team_name', $team_name)->first();
+
+        $already_in_team = false;
+        $teams = $user->teams()->get();
+
+        foreach ($teams as $team) {
+            $team->toJson();
+            $team_vstup->toJson();
+
+            if($team_vstup->id == $team->id){
+                $already_in_team = true;
+            }
+
+        }
+
+        if (!$already_in_team){
+            $user->teams()->save($team_vstup);
+        }
 
         return response()->json('', 200);
     }

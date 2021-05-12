@@ -44,24 +44,20 @@ class TeamService
     public function getOwnTeams(): array
     {
         $user_id = auth()->id();
-        $user = User::whereId($user_id);
+        $user = User::whereId($user_id)->first();
         $teams = $user->ownTeams()->get();
 
         return $this->userTeamAS->mapTeamsWithOwner($teams);
     }
 
-    // TODO:: otazka na matusa, vraca to vsetky timy kde je user prihlaseny alebo len kde je owner?
-    // TODO:: DTO spravit..
-    // TODO:: zatial nefunkcne
-//    public function getAllteamsWhereIsUser(): array
-//    {
-//        $result = [];
-//
-//        $user_id = auth()->id();
-//        $user = User::findOrFail($user_id);
-//        $teams = Team::whereUserId($user->id)->get();
-//
-//        return $teams;
-//    }
+
+    public function getAllteamsWhereIsUser(): array
+    {
+        $user_id = auth()->id();
+        $user = User::whereId($user_id)->first();
+        $teams = $user->teams()->get();
+
+        return $this->userTeamAS->mapTeamsWithOwner($teams);
+    }
 
 }

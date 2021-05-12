@@ -44,9 +44,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'team'], function () use ($router) {
         $router->get('', ['uses' => 'TeamController@showAllTeams']);
         $router->get('my', ['uses' => 'TeamController@showUserTeams']);
+        $router->get('myall', ['uses' => 'TeamController@showAllUserTeams']);
         $router->post('create', ['uses' => 'TeamController@createTeam']);
         $router->put('update', ['uses' => 'TeamController@updateTeam']);
-        // nefunguje
         $router->post('add', ['uses' => 'TeamController@addOneMemberToTeamByEmail']);
     });
 
