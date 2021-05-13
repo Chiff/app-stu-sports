@@ -55,6 +55,14 @@ class Event extends Model
         return $this->belongsToMany(Team::class, 'event_team');
     }
 
+    /**
+     * Get teams signed to event
+     */
+    public function type()
+    {
+        return $this->belongsTo(Ciselnik::class);
+    }
+
     protected $fillable = [
         'ext_id',
         'user_id',
@@ -68,7 +76,9 @@ class Event extends Model
         'min_teams',
         'max_teams',
         'min_team_members',
-        'max_team_members'
+        'max_team_members',
+        'description',
+        'type'
     ];
 
     /**

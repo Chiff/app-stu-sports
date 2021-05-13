@@ -1,6 +1,6 @@
-// TODO - 12/05/2021 - permissions
 import { HttpErrorResponse } from '@angular/common/http';
 
+// TODO - 12/05/2021 - permissions
 export interface AccountModel extends UserDTO {
   permissions: AccountPermissionEnum[];
 }
@@ -19,7 +19,7 @@ export interface EventDTO {
   min_teams: number;
   max_teams: number;
   min_team_members: number;
-  max_team_member: number;
+  max_team_members: number;
   created_at: DateTimeAsString;
   updated_at: DateTimeAsString;
   registration_start: DateTimeAsString;
@@ -27,6 +27,8 @@ export interface EventDTO {
   event_start: DateTimeAsString;
   event_end: DateTimeAsString;
   owner: UserDTO;
+  type: CiselnikDTO;
+  description: string;
 }
 
 export interface TeamDTO {
@@ -37,7 +39,6 @@ export interface TeamDTO {
   registration_start: DateTimeAsString;
   owner: UserDTO;
   users: UserDTO[];
-
 }
 
 export interface UserDTO {
@@ -51,7 +52,7 @@ export interface UserDTO {
 
 export type DateTimeAsString = string;
 
-interface CustomHttpError<T> extends HttpErrorResponse {
+export interface CustomHttpError<T> extends HttpErrorResponse {
   error: T;
 }
 
@@ -60,4 +61,16 @@ export interface ErrorResponse {
     code: number;
     message: string;
   };
+}
+
+export interface CiselnikDTO {
+  id: number;
+  label: string;
+  group: string;
+  type: CiselnikTypeEnum;
+}
+
+// TODO - 13/05/2021 - tu treba doplnat vsetky existujuce typy
+export enum CiselnikTypeEnum {
+  EVENT_TYPE = 'EVENT_TYPE',
 }

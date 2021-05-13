@@ -3,15 +3,166 @@
   <div class="card-body">
     <form #ngForm="ngForm">
       <div class="form-group form-group-spaced">
-        <label class="form-control-required" for="event.event_name">Názov podujatia</label>
-        <input
-          type="text"
+        <div class="row">
+          <div class="col-sm-12 col-md-8">
+            <label class="form-control-required" for="event.name">Názov podujatia</label>
+            <input
+              type="text"
+              class="form-control"
+              id="event.name"
+              name="event.name"
+              [required]="true"
+              [(ngModel)]="event.name"
+            />
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <label class="form-control-required" for="event.type">Typ podujatia</label>
+            <ng-select
+              id="event.type"
+              name="event.type"
+              [required]="true"
+              [items]="eventType"
+              bindLabel="label"
+              [(ngModel)]="event.type"
+              [addTag]="true"
+            ></ng-select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group form-group-spaced">
+        <label class="" for="event.description">Popis podujatia</label>
+        <textarea
+          rows="3"
           class="form-control"
-          id="event.event_name"
-          name="event.event_name"
-          [required]="true"
-          [(ngModel)]="event.name"
-        />
+          id="event.description"
+          name="event.description"
+          [required]="false"
+          [(ngModel)]="event.description"
+        ></textarea>
+      </div>
+
+      <div class="c-separator my-4"></div>
+
+      <div class="form-group form-group-spaced">
+        <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <label class="form-control-required" for="event.event_start">Začiatok registrácie</label>
+            <input
+              ngDate="short"
+              timeStep="5"
+              type="text"
+              class="form-control"
+              id="event.registration_start"
+              name="event.registration_start"
+              [required]="true"
+              [(ngModel)]="event.registration_start"
+            />
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <label class="form-control-required" for="event.registration_end">Koniec registrácie</label>
+            <input
+              ngDate="short"
+              timeStep="5"
+              type="text"
+              class="form-control"
+              id="event.registration_end"
+              name="event.registration_end"
+              [required]="true"
+              [(ngModel)]="event.registration_end"
+              [minDate]="event.registration_start"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group form-group-spaced">
+        <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <label class="form-control-required" for="event.event_start">Začiatok podujatia</label>
+            <input
+              ngDate="short"
+              timeStep="5"
+              type="text"
+              class="form-control"
+              id="event.event_start"
+              name="event.event_start"
+              [required]="true"
+              [(ngModel)]="event.event_start"
+              [minDate]="event.registration_end"
+              [disablePopup]="false"
+            />
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <label class="form-control-required" for="event.event_end">Koniec podujatia</label>
+            <input
+              ngDate="short"
+              timeStep="5"
+              type="text"
+              class="form-control"
+              id="event.event_end"
+              name="event.event_end"
+              [required]="true"
+              [(ngModel)]="event.event_end"
+              [minDate]="event.event_start"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="c-separator my-4"></div>
+
+      <div class="form-group form-group-spaced">
+        <div class="row">
+          <div class="col-sm-12 col-md-6 col-lg-3">
+            <label class="form-control-required" for="event.min_teams">Min. počet tímov</label>
+            <input
+              type="number"
+              class="form-control"
+              id="event.min_teams"
+              name="event.min_teams"
+              [required]="true"
+              [(ngModel)]="event.min_teams"
+              [min]="1"
+            />
+          </div>
+          <div class="col-sm-12 col-md-6 col-lg-3">
+            <label class="form-control-required" for="event.max_teams">Max. počet tímov</label>
+            <input
+              type="number"
+              class="form-control"
+              id="event.max_teams"
+              name="event.max_teams"
+              [required]="true"
+              [(ngModel)]="event.max_teams"
+              [min]="event.min_teams"
+            />
+          </div>
+          <div class="col-sm-12 col-md-6 col-lg-3">
+            <label class="form-control-required" for="event.min_team_members">Min. veľkosť tímu</label>
+            <input
+              type="number"
+              class="form-control"
+              id="event.min_team_members"
+              name="event.min_team_members"
+              [required]="true"
+              [(ngModel)]="event.min_team_members"
+              [min]="1"
+            />
+          </div>
+          <div class="col-sm-12 col-md-6 col-lg-3">
+            <label class="form-control-required" for="event.max_team_members">Max. veľkosť tímu</label>
+            <input
+              type="number"
+              class="form-control"
+              id="event.max_team_members"
+              name="event.max_team_members"
+              [required]="true"
+              [(ngModel)]="event.max_team_members"
+              [min]="event.min_team_members"
+            />
+          </div>
+        </div>
       </div>
 
       <div class="form-group form-group-spaced" *ngIf="error">
@@ -26,35 +177,3 @@
     </form>
   </div>
 </div>
-<!--
-<div class="container">
-  <form (submit)="addEvent()">
-    <input
-      type="text"
-      name="addEventName"
-      placeholder="Názov podujatia"
-      class="event-name-input"
-      [(ngModel)]="eventNew"
-    />
-    <input
-      type="date"
-      name="addEventRegStart"
-      placeholder="Začiatok registrácie"
-      class="event-reg-start"
-    />
-    <input
-      type="date"
-      name="addEventRegEnd"
-      placeholder="Koniec registrácie"
-      class="event-reg-end"
-    />
-    <input
-      type="text"
-      name="eventCreatedBy"
-      placeholder="Vytvoril"
-      class="event-created-by"
-    />
-    <input type="submit" value="Pridať podujatie" class="event-add-submit"/>
-  </form>
-</div>
--->

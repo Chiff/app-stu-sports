@@ -1,7 +1,5 @@
 import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
-import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { registerLocaleData } from '@angular/common';
 import localeSk from '@angular/common/locales/sk';

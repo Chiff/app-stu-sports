@@ -43,3 +43,13 @@ input[ngDate=shortDate] {
 
   }
 }
+
+.ng-date-popup--next, .ng-date-popup--prev {
+  color: $primary !important;
+}
+
+.ng-date-popup--date-active {
+  background: $primary !important;
+}
+
+

@@ -3,14 +3,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Dto\Event\EventDTO;
 use App\Http\Services\EventService;
-
 use App\Models\Event;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use JsonMapper\JsonMapper;
 use Laravel\Lumen\Routing\Controller;
 
 
@@ -19,11 +20,14 @@ class EventsController extends Controller
     private EventService $eventService;
 
     // tento kod zaruci ze auth middleware nebude obmedzovat showAllEvents
-    public function __construct(EventService $event, array $attributes = [])
+    private JsonMapper $jsonMapper;
+
+    public function __construct(EventService $event, JsonMapper $jsonMapper, array $attributes = [])
     {
         $this->eventService = $event;
 
         $this->middleware('auth', ['except' => ['showAllEvents']]);
+        $this->jsonMapper = $jsonMapper;
     }
 
     /**
@@ -86,37 +90,9 @@ class EventsController extends Controller
      */
     public function createOneEvent(Request $request): JsonResponse
     {
-
-        $netgrifEvent = $this->eventService->createOneEvent();
-        $ownerId = auth()->id();
-        $ext_id = $netgrifEvent->stringId;
-
-        $this->validate($request, [
-            'eventName' => 'required',
-            'registration_start' => 'required|date|date_format:Y-m-d',
-            'registration_end' => 'required|date|date_format:Y-m-d|',
-            'event_start' => 'required|date|date_format:Y-m-d|',
-            'min_teams' => 'required|integer|min:1',
-            'max_teams' => 'required|integer|min:1',
-            'min_team_members' => 'required|integer|min:1',
-            'max_team_members' => 'required|integer|min:1'
-        ]);
-
-        $eventName = $request->get('eventName');
-        $registration_start = $request->get('registration_start');
-        $registration_end = $request->get('registration_end');
-        $event_start = $request->get('event_start');
-        $min_teams = $request->get('min_teams');
-        $max_teams = $request->get('max_teams');
-        $min_team_members = $request->get('min_team_members');
-        $max_team_members = $request->get('max_team_members');
-
-        $event = new Event(array('user_id' => $ownerId, 'ext_id' => $ext_id, 'name' => $eventName,
-            'registration_start' => $registration_start, 'registration_end' => $registration_end,
-            'event_start' => $event_start, 'min_teams' => $min_teams, 'max_teams' => $max_teams,
-            'min_team_members' => $min_team_members, 'max_team_members' => $max_team_members));
-        $event->save();
-        return response()->json($event, 200);
+        $this->validate($request, EventDTO::$validationRules);
+        $this->eventService->createOneEvent($request);
+        return response()->json();
     }
 
     /**
@@ -134,7 +110,7 @@ class EventsController extends Controller
 
         $event = Event::findOrFail($event_id);
 
-        if($event->max_team_members == 1) {
+        if ($event->max_team_members == 1) {
             $user_id = auth()->id();
             $user = User::findOrFail($user_id);
             $user_name = $user->firstname . ' ' . $user->surname;
@@ -143,7 +119,7 @@ class EventsController extends Controller
              * Check if user already have team of himself
              */
             $exists = $user->ownTeams()->where('team_name', $user_name)->get();
-            if(sizeof($exists) == 0) {
+            if (sizeof($exists) == 0) {
                 $team = new Team(array('team_name' => $user_name));
                 $user->ownTeams()->save($team);
                 $team->save();

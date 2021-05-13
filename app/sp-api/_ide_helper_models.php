@@ -12,6 +12,26 @@
 
 namespace App\Models{
 /**
+ * App\Models\Ciselnik
+ *
+ * @mixin IdeHelperCiselnik
+ * @property int $id
+ * @property string $label
+ * @property string|null $group
+ * @property string $type
+ * @method static \Illuminate\Database\Eloquent\Builder|Ciselnik newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Ciselnik newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Ciselnik query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Ciselnik whereGroup($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ciselnik whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ciselnik whereLabel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ciselnik whereType($value)
+ */
+	class IdeHelperCiselnik extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Event
  *
  * @mixin IdeHelperEvent
@@ -29,6 +49,8 @@ namespace App\Models{
  * @property int $min_team_members
  * @property int $max_team_members
  * @property int $user_id
+ * @property string|null $description
+ * @property \App\Models\Ciselnik $type
  * @property-read \App\Models\User $owner
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $participants
  * @property-read int|null $participants_count
@@ -38,6 +60,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Event newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Event query()
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereEventEnd($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereEventStart($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereExtId($value)
@@ -49,6 +72,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereRegistrationEnd($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereRegistrationStart($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereUserId($value)
  */

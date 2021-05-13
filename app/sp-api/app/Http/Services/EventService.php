@@ -5,6 +5,7 @@ namespace App\Http\Services;
 
 use App\Dto\Event\EventDTO;
 use App\Dto\User\UserDTO;
+use App\Http\Services\AS\EventAS;
 use App\Http\Services\Netgrif\AuthenticationService;
 use App\Http\Services\Netgrif\UserService;
 use App\Http\Services\Netgrif\WorkflowService;
@@ -13,6 +14,8 @@ use App\Models\Netgrif\CaseResource;
 use App\Models\Netgrif\EmbededCases;
 use App\Models\Netgrif\MessageResource;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use JsonMapper\JsonMapper;
 use function MongoDB\BSON\toJSON;
@@ -20,21 +23,24 @@ use function MongoDB\BSON\toJSON;
 class EventService
 {
     private AuthenticationService $auth;
-    private JsonMapper $mapper;
+    private JsonMapper $jsonMapper;
     private WorkflowService $workflowService;
     private UserService $userService;
+    private EventAS $eventAS;
 
     public function __construct(
         AuthenticationService $authService,
         WorkflowService $workflowService,
         UserService $userService,
         JsonMapper $mapper,
+        EventAS $eventAS,
     )
     {
-        $this->mapper = $mapper;
+        $this->jsonMapper = $mapper;
         $this->workflowService = $workflowService;
         $this->auth = $authService;
         $this->userService = $userService;
+        $this->eventAS = $eventAS;
     }
 
     public function deleteEvent($id): MessageResource
@@ -59,12 +65,26 @@ class EventService
         return $this->workflowService->getOneUsingGET($id);
     }
 
-    public function createOneEvent(): CaseResource
+    public function createOneEvent(Request $request): void
     {
+        $dto = new EventDTO();
+        $dto->user_id = auth()->id();
+        $this->jsonMapper->mapObjectFromString(json_encode($request->toArray()), $dto);
+
+        // TODO - 13/05/2021 - @mrybar - doplnit spravne data do netgrifu (vid $dto)
         $netId = env('API_INTERES_EVENT_NET_ID');
         $title = "event";
-        //TODO mozno dorobit, nech sa caseu nastavuje ako title nazov podujatia
-        return $this->workflowService->createCaseUsingPOST($netId, $title);
+        $netgrifEvent = $this->workflowService->createCaseUsingPOST($netId, $title);
+
+        // TODO - 13/05/2021 - NA TOTO POZOR!
+        app('db')->transaction(function() use ($dto, $netgrifEvent) {
+            $saved = $this->eventAS->save($dto, $netgrifEvent);
+
+            if (!$saved) {
+                throw new \Exception("could not save", 500);
+            }
+        });
+
     }
 
     /**
@@ -107,11 +127,11 @@ class EventService
         foreach ($events as $event) {
 
             $eventDTO = new EventDTO();
-            $this->mapper->mapObjectFromString($event->toJson(), $eventDTO);
+            $this->jsonMapper->mapObjectFromString($event->toJson(), $eventDTO);
 
             $user = new UserDTO();
             $userModel = User::whereId($event->user_id)->first()->toJson();
-            $this->mapper->mapObjectFromString($userModel, $user);
+            $this->jsonMapper->mapObjectFromString($userModel, $user);
 
 //            $eDto = new EventDTO();
 //            foreach ($event as $keyname=>$val){

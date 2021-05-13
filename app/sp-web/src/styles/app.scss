@@ -1,6 +1,7 @@
 @import "variables";
 @import "style-components/date-picker";
 @import "style-components/table";
+@import "style-components/ng-select";
 
 html, body {
   height: 100%;
@@ -55,11 +56,21 @@ label {
 }
 
 .form-control-required::after {
-    content: '*';
-    color: $danger;
-    font-size: 80%;
+  content: '*';
+  color: $danger;
+  font-size: 80%;
 }
 
 .form-group-spaced + .form-group-spaced {
   margin-top: 0.5em;
+}
+
+
+input.ng-invalid.ng-touched {
+  border-color: $danger;
+
+  &:focus {
+    box-shadow: 0 0 0 0.25rem rgba($danger, 25%);
+
+  }
 }

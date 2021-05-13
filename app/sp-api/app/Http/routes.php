@@ -51,4 +51,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->post('{id}/add', ['uses' => 'TeamController@addOneMemberToTeamByEmail']);
     });
 
+    $router->group(['prefix' => 'ciselnik'], function () use ($router) {
+        $router->get('{type}', ['uses' => 'CiselnikController@getType']);
+    });
 });
