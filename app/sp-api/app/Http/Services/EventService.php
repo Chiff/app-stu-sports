@@ -130,8 +130,8 @@ class EventService
             $this->jsonMapper->mapObjectFromString($event->toJson(), $eventDTO);
 
             $user = new UserDTO();
-            $userModel = User::whereId($event->user_id)->first()->toJson();
-            $this->jsonMapper->mapObjectFromString($userModel, $user);
+            $userModel = User::whereId($event->user_id)->first();
+            $this->jsonMapper->mapObjectFromString($userModel->toJson(), $user);
 
 //            $eDto = new EventDTO();
 //            foreach ($event as $keyname=>$val){

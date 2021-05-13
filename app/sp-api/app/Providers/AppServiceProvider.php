@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Http\Middleware\EloquentMiddleware;
+use App\Dto\CiselnikDTO;
 use App\Http\Services\AS\CiselnikAS;
 use App\Http\Services\AS\EventAS;
 use App\Http\Services\AS\UserTeamAS;
@@ -26,6 +26,7 @@ use JsonMapper\Cache\ArrayCache;
 use JsonMapper\Handler\ClassFactoryRegistry;
 use JsonMapper\Handler\PropertyMapper;
 use JsonMapper\JsonMapper;
+use JsonMapper\JsonMapperFactory;
 use JsonMapper\Middleware\DocBlockAnnotations;
 use JsonMapper\Middleware\NamespaceResolver;
 use JsonMapper\Middleware\TypedProperties;
@@ -39,9 +40,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(JsonMapper::class, function (Application $app) {
             $classFactoryRegistry = new ClassFactoryRegistry();
 
+            $tmpMapper = (new JsonMapperFactory())->bestFit();
             // ked budes chciet customove parsovanie tak si pridaj novu factory
             $classFactoryRegistry->addFactory(DateTime::class, static function ($value) {
                 return DateUtil::customDateMapper($value);
+            });
+            $classFactoryRegistry->addFactory(CiselnikDTO::class, static function ($value) use ($tmpMapper) {
+                return CiselnikAS::idToDto($value, $tmpMapper);
             });
 
             $properyMapper = new PropertyMapper($classFactoryRegistry);

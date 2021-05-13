@@ -8,6 +8,7 @@ use App\Dto\CiselnikDTO;
 use App\Models\Ciselnik;
 use Illuminate\Support\Collection;
 use JsonMapper\JsonMapper;
+use JsonMapper\JsonMapperInterface;
 
 class CiselnikAS
 {
@@ -18,6 +19,19 @@ class CiselnikAS
     )
     {
         $this->mapper = $mapper;
+    }
+
+    public static function idToDto(int $value, JsonMapperInterface $mapper): CiselnikDTO
+    {
+        $c = Ciselnik::whereId($value)->get()->first();
+
+        $dto = new CiselnikDTO();
+
+        if ($c) {
+            $mapper->mapObjectFromString($c->toJson(), $dto);
+        }
+
+        return $dto;
     }
 
     /**

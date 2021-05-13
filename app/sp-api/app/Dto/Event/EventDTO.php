@@ -31,6 +31,7 @@ class EventDTO extends AppSerializable
         // 'updated_at' => '',
         // 'user_id' => '',
     ];
+
     public ?string $id = null;
     public ?string $user_id = null;
     public ?string $name = null;
