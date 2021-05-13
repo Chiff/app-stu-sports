@@ -44,6 +44,7 @@ class TeamService
     {
         $team = Team::whereId($id)->first();
 
+
         if (!$team) {
             throw new RequestErrorException("not found");
         }
@@ -51,8 +52,12 @@ class TeamService
         //TODO :: spravit vypisanie team memberov z timu - v Team classe je na to metoda, len neviem ci nemame napicu db model
         // napicu db model pojebava aj nieco na styl $teams = Team::whereUserId($user->id)->get();, kedze v db uchovavame len
         // ownera a nie ludi v time...
+
+
         return $this->userTeamAS->mapTeamDetail($team);
     }
+
+
 
     public function getAllteamsWhereIsUser(): array
     {

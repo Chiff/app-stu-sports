@@ -36,6 +36,8 @@ export interface TeamDTO {
   updated_at: DateTimeAsString;
   registration_start: DateTimeAsString;
   owner: UserDTO;
+  users: UserDTO[];
+
 }
 
 export interface UserDTO {

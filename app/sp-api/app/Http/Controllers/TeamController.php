@@ -37,7 +37,6 @@ class TeamController extends Controller
 
         $team_name = $request->get('team_name');
 
-
         $exist = $user->ownTeams()->where('team_name', $team_name)->get();
         if (count($exist) < 1) {
             $team = new Team(array('team_name' => $team_name));
@@ -54,6 +53,7 @@ class TeamController extends Controller
         $team = $this->teamService->getTeamById($id);
         return response()->json($team, 200);
     }
+
 
     public function updateTeam($team_id, Request $request): JsonResponse
     {

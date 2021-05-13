@@ -58,6 +58,18 @@ class UserTeamAS
         $teamDto = $this->mapTeamWithOwner($team);
 
         // TODO - 12/05/2021 - @msteklac/@mrybar - pridaj uzivatelov
+        $members = $team->team_members()->get();
+
+        $team_array = [];
+
+        foreach ($members as $member) {
+            $userDto = new UserDTO();
+            $this->mapper->mapObjectFromString($member->toJson(), $userDto);
+            array_push($team_array, $userDto);
+        }
+        $teamDto->users = $team_array;
+
+
         // TODO - 12/05/2021 - @msteklac/@mrybar - pridaj akitvne eventy teamu
         // TODO - 12/05/2021 - @msteklac/@mrybar - pridaj skoncene eventy teamu
         // TODO - 12/05/2021 - @mfilo - pridaj statistiku? - vyhry, clenovia, sporty...

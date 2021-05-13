@@ -18,4 +18,9 @@ class TeamDTO extends AppSerializable
     public ?DateTime $registration_start;
     public ?UserDTO $owner;
 
+    /**
+     * @var UserDTO[]|null
+     */
+    public ?array $users;
+
 }
