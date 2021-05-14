@@ -21,10 +21,20 @@ class CiselnikAS
         $this->mapper = $mapper;
     }
 
-    public static function idToDto(int $value, JsonMapperInterface $mapper): CiselnikDTO
+    public static function toDto(int|CiselnikDTO|\stdClass $value, JsonMapperInterface $mapper): CiselnikDTO
     {
-        $c = Ciselnik::whereId($value)->get()->first();
+        if (is_a($value, 'CiselnikDTO')) {
+            return $value;
+        }
 
+        if (is_a($value, 'stdClass')) {
+            $dto = new CiselnikDTO();
+            $mapper->mapObject($value, $dto);
+
+            return $dto;
+        }
+
+        $c = Ciselnik::whereId($value)->get()->first();
         $dto = new CiselnikDTO();
 
         if ($c) {
