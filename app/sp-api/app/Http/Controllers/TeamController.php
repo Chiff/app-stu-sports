@@ -54,7 +54,6 @@ class TeamController extends Controller
         return response()->json($team, 200);
     }
 
-
     public function updateTeam($team_id, Request $request): JsonResponse
     {
         $team = Event::findOrFail($team_id);

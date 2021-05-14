@@ -103,13 +103,26 @@ class EventsController extends Controller
     public function signTeamById(Request $request)
     {
         $this->validate($request, [
-            'event_id' => 'required'
+            'event_id' => 'required',
+            'team_id' => 'required'
         ]);
 
         $event_id = $request->get('event_id');
+        $team_id= $request->get('team_id');
 
-        $event = Event::findOrFail($event_id);
+        $event = Event::whereId($event_id)->first();
+        if (!$event) {
+            throw new \Exception("event not found");
+        }
 
+        $todayDate = date('Y-m-d H:m:i');
+
+        if ($event->registration_start > $todayDate) return response()->json('Registracia ma toto podujatie ešte nebola spustená', 400);
+        if ($event->registration_end < $todayDate) return response()->json('Registracia ma toto podujatie vypršala', 400);
+
+
+        // Ak sa jedna o nejaky public event, kde sa prihlasuju ludia samy za seba
+        // v takom pripade pocitame s tym, ze v evente je nastavene max_team_members 1
         if ($event->max_team_members == 1) {
             $user_id = auth()->id();
             $user = User::findOrFail($user_id);
@@ -124,7 +137,6 @@ class EventsController extends Controller
                 $user->ownTeams()->save($team);
                 $team->save();
 
-
                 $user->teams()->attach($team);
                 $user->save();
             }
@@ -136,22 +148,50 @@ class EventsController extends Controller
 
             $exist = $event->teams->contains($team[0]->id);
             if ($exist == null) {
-                $event->teams()->attach($team);
-                $event->save();
-                return response()->json('', 200);
+                if($event->max_teams > sizeof($event->teams()->get())){
+                    $event->teams()->attach($team);
+                    $event->save();
+                    return response()->json('Done', 200);
+                }
+                else return response()->json('Kapacita eventu je uz plna', 400);
+
             }
-            return response()->json('Already exists', 200);
+            return response()->json('Already signed!', 200);
 
         }
-        $team_id = $request->get('team_id');
-        $team = Team::findOrFail($team_id);
-        $exist = $event->teams->contains($team_id);
-        if ($exist == null) {
-            $event->teams()->attach($team);
-            $event->save();
+
+        $team = Team::whereId($team_id)->first();
+        if (!$team) {
+            throw new \Exception("team not found");
         }
-        //TODO skontrolovat, ci toto funguje
-        return response()->json('', 200);
+
+        $team_members_siźe = $team->team_members()->get();
+
+        if ($event->min_team_members > sizeof($team_members_siźe)){
+            return response()->json('Team má málo členov', 404);
+        }
+
+        if ($event->max_team_members < sizeof($team_members_siźe)){
+            return response()->json('Team má vela členov', 404);
+        }
+
+
+        if ($team->user_id != auth()->id()){
+            return response()->json('Nie si vlastníkom tímu!', 404);
+        }
+
+        if($event->teams()->find($team->id)){
+
+            return response()->json('Team sa uz nachadza na evente', 200);
+        }
+
+        else{
+            if($event->max_teams > sizeof($event->teams()->get())) $event->teams()->save($team);
+            else return response()->json('Kapacita eventu je uz plna', 400);
+
+        }
+
+        return response()->json('Done', 200);
     }
 
     /**
