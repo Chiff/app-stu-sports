@@ -145,29 +145,17 @@ class EventsController extends Controller
              * Check if team already signed in event
              */
             $team = $user->ownTeams()->where('team_name', $user_name)->first();
-
             if($event->teams()->find($team->id)){
-
                 return response()->json('Team sa uz nachadza na evente', 200);
             }
-
             else{
-                if($event->max_teams > sizeof($event->teams()->get())) $event->teams()->save($team);
-                else return response()->json('Kapacita eventu je uz plna', 400);
-
-            }
-
-            $exist = $event->teams->contains($team[0]->id);
-            if ($exist == null) {
-                if($event->max_teams > sizeof($event->teams()->get())){
-                    $event->teams()->attach($team);
-                    $event->save();
+                if($event->max_teams > sizeof($event->teams()->get())) {
+                    $event->teams()->save($team);
                     return response()->json('Done', 200);
                 }
                 else return response()->json('Kapacita eventu je uz plna', 400);
 
             }
-            return response()->json('Already signed!', 200);
 
         }
 
