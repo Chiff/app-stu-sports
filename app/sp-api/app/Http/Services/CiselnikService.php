@@ -59,7 +59,7 @@ class CiselnikService
 
     public function getOrCreateCiselnik(?CiselnikDTO $dto, string $newDtoType = null, string $newDtoGroup = null): Ciselnik
     {
-        if (!$dto || !$dto->label) {
+        if (!$dto || (!$dto->label && !$dto->id) ) {
             throw new Exception("must not be null", 500);
         }
 

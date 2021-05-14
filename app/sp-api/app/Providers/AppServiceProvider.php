@@ -46,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
                 return DateUtil::customDateMapper($value);
             });
             $classFactoryRegistry->addFactory(CiselnikDTO::class, static function ($value) use ($tmpMapper) {
-                return CiselnikAS::idToDto($value, $tmpMapper);
+                return CiselnikAS::toDto($value, $tmpMapper);
             });
 
             $properyMapper = new PropertyMapper($classFactoryRegistry);

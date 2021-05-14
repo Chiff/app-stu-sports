@@ -7,7 +7,7 @@ use DateTime;
 
 class DateUtil
 {
-    public static function customDateMapper($date)
+    public static function customDateMapper($date): DateTime
     {
         if (is_array($date)) {
             $date =
