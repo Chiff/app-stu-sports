@@ -3,11 +3,14 @@
 
 namespace App\Http\Services\AS;
 
-
+use App\Models\Event;
+use Faker\Provider\DateTime;
+use App\Dto\Event\EventDTO;
 use App\Dto\Team\TeamDTO;
 use App\Dto\User\UserDTO;
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use JsonMapper\JsonMapper;
 
@@ -58,6 +61,8 @@ class UserTeamAS
         $teamDto = $this->mapTeamWithOwner($team);
 
         // TODO - 12/05/2021 - @msteklac/@mrybar - pridaj uzivatelov
+        // TODO -> review, malo by to byt done
+
         $members = $team->team_members()->get();
 
         $team_array = [];
@@ -72,6 +77,45 @@ class UserTeamAS
 
         // TODO - 12/05/2021 - @msteklac/@mrybar - pridaj akitvne eventy teamu
         // TODO - 12/05/2021 - @msteklac/@mrybar - pridaj skoncene eventy teamu
+        // TODO - 12/05/2021 - @msteklac/@mrybar - pridaj buduce eventy teamu
+        // TODO -> review, malo by to byt done
+
+        $events = $team->getSignedEvents()->get();
+        $active = [];
+        $finished = [];
+        $future = [];
+
+        $todayDatee = date('Y-m-dTH:m:i');
+
+
+        foreach ($events as $event) {
+            $eventDto = new EventDTO();
+            $userDto = new UserDTO();
+
+            $dt = new \DateTime($todayDatee);
+            $todayDate = Carbon::instance($dt);
+
+            $this->mapper->mapObjectFromString($event->toJson(), $eventDto);
+
+            $user = User::whereId($eventDto->user_id)->first();
+            $this->mapper->mapObjectFromString($user->toJson(), $userDto);
+
+            $eventDto->owner = $userDto;
+
+            if (($todayDate < $eventDto->event_end) && ($todayDate > $eventDto->event_start)){
+                array_push($active, $eventDto);
+            }
+            elseif ($todayDate > $eventDto->event_end){
+                array_push($finished, $eventDto);
+            }
+            elseif($todayDate < $eventDto->event_start){
+                array_push($future, $eventDto);
+            }
+        }
+        $teamDto->active_events = $active;
+        $teamDto->ended_events = $finished;
+        $teamDto->future_events = $future;
+
         // TODO - 12/05/2021 - @mfilo - pridaj statistiku? - vyhry, clenovia, sporty...
 
         return $teamDto;

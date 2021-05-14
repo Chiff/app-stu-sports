@@ -59,6 +59,7 @@ class TeamService
 
 
 
+
     public function getAllteamsWhereIsUser(): array
     {
         $user_id = auth()->id();

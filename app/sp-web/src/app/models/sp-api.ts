@@ -39,6 +39,10 @@ export interface TeamDTO {
   registration_start: DateTimeAsString;
   owner: UserDTO;
   users: UserDTO[];
+  active_events: EventDTO[];
+  ended_events: EventDTO[];
+  future_events: EventDTO[];
+
 }
 
 export interface UserDTO {

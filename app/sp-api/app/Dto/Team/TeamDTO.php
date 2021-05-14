@@ -5,6 +5,7 @@ namespace App\Dto\Team;
 
 
 use App\Dto\User\UserDTO;
+use App\Dto\Event\EventDTO;
 use App\Models\AppSerializable;
 use DateTime;
 
@@ -22,5 +23,20 @@ class TeamDTO extends AppSerializable
      * @var UserDTO[]|null
      */
     public ?array $users;
+
+    /**
+     * @var EventDTO[]|null
+     */
+    public ?array $active_events;
+    /**
+     * @var EventDTO[]|null
+     */
+    public ?array $ended_events;
+    /**
+     * @var EventDTO[]|null
+     */
+    public ?array $future_events;
+
+
 
 }
