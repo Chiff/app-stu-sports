@@ -27,8 +27,8 @@
           </td>
           <td>{{ e.name }}</td>
           <td>{{ e.registration_start | date }} - {{ e.registration_end | date }}</td>
-          <td>{{ e.event_start | date }}</td>
-          <td>{{ e.event_end | date }}</td>
+          <td>{{ e.event_start | date: 'short' }}</td>
+          <td>{{ e.event_end | date: 'short' }}</td>
           <td class="text-capitalize">{{ e.owner?.firstname }} {{ e.owner.surname }}</td>
         </tr>
       </tbody>

@@ -31,6 +31,11 @@ export interface EventDTO {
   description: string;
 }
 
+export interface MyEventsDTO {
+  owned: EventDTO[];
+  upcoming: EventDTO[];
+}
+
 export interface TeamDTO {
   id: string;
   team_name: string;
@@ -42,7 +47,6 @@ export interface TeamDTO {
   active_events: EventDTO[];
   ended_events: EventDTO[];
   future_events: EventDTO[];
-
 }
 
 export interface UserDTO {

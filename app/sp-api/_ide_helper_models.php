@@ -84,9 +84,13 @@ namespace App\Models{
  * App\Models\EventTeam
  *
  * @mixin IdeHelperEventTeam
+ * @property int $event_id
+ * @property int $team_id
  * @method static \Illuminate\Database\Eloquent\Builder|EventTeam newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EventTeam newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EventTeam query()
+ * @method static \Illuminate\Database\Eloquent\Builder|EventTeam whereEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventTeam whereTeamId($value)
  */
 	class IdeHelperEventTeam extends \Eloquent {}
 }
@@ -169,9 +173,13 @@ namespace App\Models{
  * App\Models\UserTeam
  *
  * @mixin IdeHelperUserTeam
+ * @property int $user_id
+ * @property int $team_id
  * @method static \Illuminate\Database\Eloquent\Builder|UserTeam newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserTeam newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserTeam query()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserTeam whereTeamId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserTeam whereUserId($value)
  */
 	class IdeHelperUserTeam extends \Eloquent {}
 }

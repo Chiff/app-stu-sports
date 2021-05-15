@@ -6,7 +6,7 @@ info:
   contact:
     name: 'MASUS'
     url: 'https://uim.fei.stuba.sk/predmet/i-msus/'
-host: 'localhost:8080'
+host: 'https://engine.interes.group'
 basePath: /api
 tags:
   - name: Admin console

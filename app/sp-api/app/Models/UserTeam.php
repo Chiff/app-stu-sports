@@ -12,4 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 class UserTeam extends Model {
     protected $table = 'user_team';
 
+    protected $hidden = [
+        'team_id',
+        'user_id',
+    ];
 }
