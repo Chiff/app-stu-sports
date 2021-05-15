@@ -4,8 +4,10 @@
 namespace App\Http\Services;
 
 use App\Dto\User\UserDTO;
+use App\Http\Services\AS\SystemAS;
 use App\Http\Services\AS\UserTeamAS;
 use App\Http\Services\Netgrif\AuthenticationService;
+use App\Http\Services\Netgrif\WorkflowService;
 use App\Models\Netgrif\EmbeddedUsers;
 use App\Models\User;
 use App\Models\User\LoginCredentials;
@@ -17,12 +19,14 @@ class UserService
     private Netgrif\UserService $netgrifUser;
     private JsonMapper $mapper;
     private UserTeamAS $userTeamAS;
+    private SystemAS $systemAS;
 
     public function __construct(
         AuthenticationService $authService,
         Netgrif\UserService $netgrifUserService,
         UserTeamAS $userTeamAS,
-        JsonMapper $mapper
+        JsonMapper $mapper,
+        SystemAS $systemAS
     )
     {
         $this->netgrigfAuth = $authService;
@@ -30,6 +34,7 @@ class UserService
         $this->userTeamAS = $userTeamAS;
 
         $this->mapper = $mapper;
+        $this->systemAS = $systemAS;
     }
 
     public function login(LoginCredentials $credentials): User|null
@@ -125,6 +130,13 @@ class UserService
 
     private function getLoggedUserAsModel(): User
     {
-        return auth()->user();
+        // pokial nas user nema este system
+        if (!$user->system) {
+            $user->system = $this->systemAS->createSystemCase()->stringId;
+
+            return $user->save();
+        }
+
+        return true;
     }
 }

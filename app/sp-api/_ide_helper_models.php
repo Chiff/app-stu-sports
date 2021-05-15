@@ -134,6 +134,7 @@ namespace App\Models{
  * @property string $email
  * @property int $ext_id
  * @property string|null $encrypted_auth
+ * @property string $system
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $ownEvents
  * @property-read int|null $own_events_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $ownTeams
@@ -151,6 +152,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereFirstname($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereSurname($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereSystem($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  */
 	class IdeHelperUser extends \Eloquent implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Contracts\Auth\Access\Authorizable, \Tymon\JWTAuth\Contracts\JWTSubject {}

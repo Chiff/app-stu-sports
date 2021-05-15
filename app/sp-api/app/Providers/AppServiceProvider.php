@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Dto\CiselnikDTO;
 use App\Http\Services\AS\CiselnikAS;
 use App\Http\Services\AS\EventAS;
+use App\Http\Services\AS\SystemAS;
 use App\Http\Services\AS\UserTeamAS;
 use App\Http\Services\CiselnikService;
 use App\Http\Services\EventService;
@@ -17,6 +18,7 @@ use App\Http\Services\Netgrif\PetriNetService;
 use App\Http\Services\Netgrif\TaskService;
 use App\Http\Services\Netgrif\UserService as NetgrifUserService;
 use App\Http\Services\Netgrif\WorkflowService;
+use App\Http\Services\SystemService;
 use App\Http\Services\TeamService;
 use App\Http\Services\UserService;
 use App\Http\Utils\DateUtil;
@@ -79,10 +81,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(UserService::class);
         $this->app->singleton(TeamService::class);
         $this->app->singleton(CiselnikService::class);
+        $this->app->singleton(SystemService::class);
 
         // application service
         $this->app->singleton(UserTeamAS::class);
         $this->app->singleton(EventAS::class);
         $this->app->singleton(CiselnikAS::class);
+        $this->app->singleton(SystemAS::class);
     }
 }

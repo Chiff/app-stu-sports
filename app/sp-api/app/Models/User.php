@@ -37,7 +37,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     // The attributes excluded from the model's JSON form.
     protected $hidden = [
-        'ext_id', 'encrypted_auth'
+        'ext_id', 'encrypted_auth', 'system'
     ];
 
     //Get the identifier that will be stored in the subject claim of the JWT.
