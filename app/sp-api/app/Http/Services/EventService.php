@@ -17,11 +17,13 @@ use App\Models\Netgrif\CaseResource;
 use App\Models\Netgrif\EmbededCases;
 use App\Models\Netgrif\MessageResource;
 use App\Models\Netgrif\TasksReferences;
+use App\Models\Team;
 use App\Models\User;
 use App\Models\UserTeam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use JsonMapper\JsonMapper;
+
 
 class EventService
 {
@@ -31,6 +33,7 @@ class EventService
     private UserService $userService;
     private TaskService $taskService;
     private EventAS $eventAS;
+
 
     public function __construct(
         AuthenticationService $authService,
@@ -218,7 +221,62 @@ class EventService
 
     public function getEventActiveTasks($eventCaseId): TasksReferences
     {
-        return $this->taskService->getTasksOfCaseUsingGET($eventCaseId);
+        $tasks = $this->taskService->getTasksOfCaseUsingGET($eventCaseId);
+
+        $isOwner = $this->isEventOwner(auth()->id(), $eventCaseId);
+        $hasTeam = $this->hasTeamOnEvent(auth()->id(), $eventCaseId);
+
+        $adminTransIds = [5, 6, 7, 96, 57];
+        $teamOwner = [66, 59];
+        //($tasks);
+        $iterator = 0;
+        foreach($tasks->taskReference as $task) {
+
+            //ak uzivatel nie je vlastnikom podujatia
+            if($isOwner == false) {
+                if(in_array($task->transitionId, $adminTransIds)) {
+                    unset($tasks->taskReference[$iterator]);
+                    $iterator++;
+                    continue;
+                }
+            }
+            //ak uzivatel nevlastni ziadny z prihlasenych timov
+            if($hasTeam == false) {
+                if(in_array($task->transitionId, $teamOwner)) {
+                    unset($tasks->taskReference[$iterator]);
+                    $iterator++;
+                    continue;
+                }
+            }
+            $iterator++;
+        }
+        return $tasks;
+    }
+
+    public function hasTeamOnEvent($user_id, $eventCaseId):bool
+    {
+        $has_team = false;
+
+        $userTeams = Team::whereUserId($user_id)->select('id')->get()->toArray();
+        $eventTeams = Event::whereExtId($eventCaseId)->first()->teams;
+
+        foreach ($eventTeams as $eventTeam) {
+            if(in_array($eventTeam->id, $userTeams)) {
+                return true;
+            }
+        }
+
+        return $has_team;
+    }
+
+    public function isEventOwner($user_id, $eventCaseId): bool
+    {
+        $is_owner = false;
+
+        $event = Event::whereExtId($eventCaseId)->first();
+        if($event->user_id == $user_id) return true;
+
+        return $is_owner;
     }
 
 }
