@@ -11,6 +11,7 @@ use App\Http\Services\Netgrif\WorkflowService;
 use App\Models\Netgrif\EmbeddedUsers;
 use App\Models\User;
 use App\Models\User\LoginCredentials;
+use Auth;
 use JsonMapper\JsonMapper;
 
 class UserService
@@ -87,8 +88,8 @@ class UserService
     // save credentials as [login]_:_[password] string, encrypted with jwt token
     public function encodeCredentials(LoginCredentials $credentials)
     {
-        $user = $this->getLoggedUserAsModel();
-        $token = auth()->tokenById($user->getAuthIdentifier());
+        $user = Auth::user();
+        $token = Auth::tokenById($user->getAuthIdentifier());
 
         $data = $credentials->email . self::$credentialsSeparator . $credentials->password;
         $iv_len = openssl_cipher_iv_length(self::$cipher);
@@ -104,12 +105,12 @@ class UserService
     }
 
     // decrypt credentials to base64 string [login:password] from jwt token
-    public function decodeCredentials(): LoginCredentials
+    public static function decodeCredentials(): LoginCredentials
     {
         $credentials = new LoginCredentials();
 
-        $user = $this->getLoggedUserAsModel();
-        $token = auth()->tokenById($user->getAuthIdentifier());
+        $user = Auth::user();
+        $token = Auth::tokenById($user->getAuthIdentifier());
 
         $textToDecrypt = $user->encrypted_auth;
         $encrypted = base64_decode($textToDecrypt);
@@ -128,7 +129,7 @@ class UserService
         return $credentials;
     }
 
-    private function getLoggedUserAsModel(): User
+    public function createSystemIfNotExists(User $user): bool
     {
         // pokial nas user nema este system
         if (!$user->system) {

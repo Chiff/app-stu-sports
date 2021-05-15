@@ -8,17 +8,14 @@ use App\Models\Netgrif\CaseResource;
 use App\Models\Netgrif\EmbededCases;
 use App\Models\Netgrif\MessageResource;
 use JsonMapper\JsonMapper;
-use Symfony\Component\VarDumper\Cloner\Data;
 
 class WorkflowService extends AbstractNetgrifService
 {
     private JsonMapper $mapper;
-    private \App\Http\Services\UserService $userService;
 
-    public function __construct(JsonMapper $mapper, \App\Http\Services\UserService $userService)
+    public function __construct(JsonMapper $mapper)
     {
         $this->mapper = $mapper;
-        $this->userService = $userService;
 
         $this->apiPaths = [
             'getAllUsingGET' => 'api/workflow/all',
@@ -83,7 +80,7 @@ class WorkflowService extends AbstractNetgrifService
     {
         $url = self::getFullRequestUrl($this->apiPaths['createCaseUsingPOST']);
 
-        $credentials = $this->userService->decodeCredentials();
+        $credentials = \App\Http\Services\UserService::decodeCredentials();
 
         // $userId = auth()->user()->ext_id
 

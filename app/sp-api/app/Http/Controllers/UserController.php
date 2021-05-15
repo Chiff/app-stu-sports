@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Services\UserService;
 use App\Models\User\LoginCredentials;
+use Auth;
 use Illuminate\Http\JsonResponse;
 use JsonMapper\JsonMapper;
 use Laravel\Lumen\Routing\Controller;
@@ -38,7 +39,7 @@ class UserController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $token = auth()->login($user);
+        $token = Auth::login($user);
 
         if (!$token) {
             // todo as exception
@@ -46,6 +47,12 @@ class UserController extends Controller
         }
 
         $this->userService->encodeCredentials($credentials);
+        $succ = $this->userService->createSystemIfNotExists($user);
+
+        if (!$succ) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
         return $this->respondWithToken($this->userService->detail(), $token);
     }
 
