@@ -2,16 +2,16 @@
   <div class="flex-column col-lg-6 col-sm-12">
     <div class="col mt-4">
       <h2 class="text-primary d-flex justify-content-between">
-        Moje podujatia
+        Podujatia kde som prihlásený
 
-        <a routerLink="/event/new"><i class="fas fa-plus"></i></a>
+        <a routerLink="/event/list"><i class="fas fa-search"></i></a>
       </h2>
       <div class="card">
-        <div class="card-body" [ngClass]="{ 'p-0': myEvents?.length }">
-          <div class="alert alert-warning m-0" *ngIf="!myEvents?.length">
-            Momentálne nemáte žiadne aktívne podujatia, môžete <a routerLink="/event/new">vytvoriť nové</a>.
+        <div class="card-body" [ngClass]="{ 'p-0': myEvents?.upcoming?.length }">
+          <div class="alert alert-warning m-0" *ngIf="!myEvents?.upcoming?.length">
+            Momentálne nie ste prihlásený na žiadne podujatie. <a routerLink="/event/list">Hľadať podujatia</a>.
           </div>
-          <table class="table table-bordered m-0 table-border-none" *ngIf="myEvents?.length">
+          <table class="table table-bordered m-0 table-border-none" *ngIf="myEvents?.upcoming?.length">
             <thead>
               <tr>
                 <th width="1"></th>
@@ -21,7 +21,41 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let e of myEvents">
+              <tr *ngFor="let e of myEvents.upcoming">
+                <td>
+                  <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
+                </td>
+                <td>{{ e.name }}</td>
+                <td>{{ e.event_start | date }}</td>
+                <td>{{ e.event_end | date }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col mt-4">
+      <h2 class="text-primary d-flex justify-content-between">
+        Moje podujatia
+
+        <a routerLink="/event/new"><i class="fas fa-plus"></i></a>
+      </h2>
+      <div class="card">
+        <div class="card-body" [ngClass]="{ 'p-0': myEvents?.owned?.length }">
+          <div class="alert alert-warning m-0" *ngIf="!myEvents?.owned?.length">
+            Momentálne nemáte žiadne vlastné podujatia, môžete <a routerLink="/event/new">vytvoriť nové</a>.
+          </div>
+          <table class="table table-bordered m-0 table-border-none" *ngIf="myEvents?.owned?.length">
+            <thead>
+              <tr>
+                <th width="1"></th>
+                <th>Názov</th>
+                <th>Začiatok</th>
+                <th>Koniec</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let e of myEvents.owned">
                 <td>
                   <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
                 </td>

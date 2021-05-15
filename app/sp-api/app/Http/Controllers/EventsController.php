@@ -44,7 +44,7 @@ class EventsController extends Controller
      */
     public function showUserEvents(): JsonResponse
     {
-        $events = $this->eventService->getOwnEvents(true);
+        $events = $this->eventService->getMyEvents(true);
         return response()->json($events, 200);
     }
 

@@ -4,6 +4,7 @@
 namespace App\Http\Services;
 
 use App\Dto\Event\EventDTO;
+use App\Dto\Event\MyEventsDTO;
 use App\Dto\User\UserDTO;
 use App\Http\Services\AS\EventAS;
 use App\Http\Services\Netgrif\AuthenticationService;
@@ -16,14 +17,10 @@ use App\Models\Netgrif\CaseResource;
 use App\Models\Netgrif\EmbededCases;
 use App\Models\Netgrif\MessageResource;
 use App\Models\User;
-use App\Models\UserEvent;
 use App\Models\UserTeam;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use JsonMapper\JsonMapper;
-use stdClass;
-use function MongoDB\BSON\toJSON;
 
 class EventService
 {
@@ -82,7 +79,7 @@ class EventService
         $netgrifEvent = null;
 
         // TODO - 13/05/2021 - NA TOTO POZOR!
-        app('db')->transaction(function() use ($dto) {
+        app('db')->transaction(function () use ($dto) {
             $createdEvent = $this->eventAS->createEvent($dto);
 
             if (!$createdEvent) {
@@ -93,7 +90,7 @@ class EventService
             $title = "event";
             $netgrifEvent = $this->workflowService->createCaseUsingPOST($netId, $title);
 
-            if(!$netgrifEvent) {
+            if (!$netgrifEvent) {
                 throw new \Exception("could not create netgrif event", 500);
             }
 
@@ -113,15 +110,15 @@ class EventService
                 '{
                     "300": {
                         "type": "number",
-                        "value": '.$dto->max_teams.'
+                        "value": ' . $dto->max_teams . '
                     },
                     "400": {
                         "type": "number",
-                        "value": '.$dto->min_teams.'
+                        "value": ' . $dto->min_teams . '
                     },
                     "podujatie_nazov": {
                         "type": "text",
-                        "value": "'.$dto->name.'"
+                        "value": "' . $dto->name . '"
                     }
             }';
 
@@ -142,64 +139,53 @@ class EventService
         return $this->mapEventsWithOwner($events);
     }
 
-    /**
-     * @param bool $onlyActive
-     * @return EventDTO[]
-     */
-    public function getOwnEvents(bool $onlyActive = false): array
+    public function getMyEvents(bool $onlyActive = false): MyEventsDTO
     {
         $user_id = auth()->id();
         $user = User::findOrFail($user_id);
-        $events = $user->ownEvents()->get();
 
-        $events_array = [];
-        foreach ($events as $he){
-            array_push($events_array, $he);
-        }
+        $response = new MyEventsDTO();
 
+        $response->owned = $this->getOwnedEvents($user, $onlyActive);
+        $response->upcoming = $this->getUpcomingEvents($user, $onlyActive);
 
-        $myTeams = UserTeam::whereUserId($user->id)->get(); //vrati list
-        $pole = [];
-        foreach ($myTeams as $myTeam){
-            $teamEvents = EventTeam::where('team_id', $myTeam->team_id)->get();
+        return $response;
+    }
 
-            if (sizeof($teamEvents) != 0){
-                array_push($pole, $teamEvents);
-            }
-        }
-
-        $pole2 = [];
-
-        foreach ($pole as $pp){
-            foreach ($pp as $p){
-                $p->toJson();
-                if (!in_array($p->event_id, $pole2)) array_push($pole2, $p->event_id);
-
-            }
-        }
-
-        $eventss = [];
-        foreach ($pole2 as $pls_koniec){
-            $eventik = Event::findOrFail($pls_koniec);
-            array_push($eventss,$eventik);
-        }
-
-        $array = array_unique (array_merge ($events_array, $eventss));
-
-        foreach ($array as $a1){
-            $dto = new EventDTO();
-            $this->jsonMapper->mapObjectFromString(json_encode($a1->toArray()), $dto);
-            echo $a1;
-        }
-
-        $col= collect($array);
+    /**
+     * @param User $user
+     * @param bool $onlyActive
+     * @return EventDTO[]
+     */
+    private function getOwnedEvents(User $user, $onlyActive = true): array
+    {
+        $events = $user->ownEvents();
 
         if ($onlyActive) {
             $todayDate = date('Y/m/d H:m:i');
-            $col->where('event_end', '>=', $todayDate);
+            $events->where('event_end', '>=', $todayDate);
         }
 
-        return $this->mapEventsWithOwner($col);
+        return $this->mapEventsWithOwner($events->get());
+    }
+
+    /**
+     * @param User $user
+     * @param bool $onlyActive
+     * @return EventDTO[]
+     */
+    private function getUpcomingEvents(User $user, $onlyActive = true): array
+    {
+        $teams = UserTeam::whereUserId($user->id)->select('team_id');
+        $eventTeam = EventTeam::select('event_id')->whereIn('team_id', $teams);
+        $events = Event::select()->whereIn('id', $eventTeam->select('event_id'));
+
+        if ($onlyActive) {
+            $todayDate = date('Y/m/d H:m:i');
+            $events->where('event_end', '>=', $todayDate);
+        }
+
+        return $this->mapEventsWithOwner($events->get());
     }
 
     /**
