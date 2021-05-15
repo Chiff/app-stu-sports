@@ -85,7 +85,6 @@ class WorkflowService extends AbstractNetgrifService
 
         $credentials = $this->userService->decodeCredentials();
 
-        // TODO - 17/04/2021 - @mrybar - set id podla prihlaseneho usera do casu noveho podujatia
         // $userId = auth()->user()->ext_id
 
         $response = self::beginRequestAsUser($credentials)->post($url, array('color' => 'black', 'netId' => $netId, 'title' => $caseTitle));

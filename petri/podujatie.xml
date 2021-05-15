@@ -331,7 +331,6 @@
 				<id>podujatie_datum</id>
 				<logic>
 					<behavior>editable</behavior>
-					<behavior>required</behavior>
 				</logic>
 				<layout>
 					<x>0</x>
@@ -349,7 +348,8 @@
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
 					<action trigger="set">
-						max: f.300,
+						max
+						: f.300,
 						min: f.400;
 
 						if (min.value > max.value) {

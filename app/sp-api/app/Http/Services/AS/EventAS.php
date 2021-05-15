@@ -23,10 +23,9 @@ class EventAS
         $this->ciselnikService = $ciselnikService;
     }
 
-    public function save(EventDTO $dto, CaseResource $netgrifEvent): bool
+    public function createEvent(EventDTO $dto): Event
     {
         $event = new Event;
-        $event->ext_id = $netgrifEvent->stringId;
 
         $event->user_id = $dto->user_id;
         $event->name = $dto->name;
@@ -43,7 +42,8 @@ class EventAS
         $event->event_start = $dto->event_start;
         $event->event_end = $dto->event_end;
 
-        return $event->save();
+        return $event;
+
     }
 
 

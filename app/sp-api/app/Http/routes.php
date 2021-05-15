@@ -39,6 +39,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->post('/create', ['uses' => 'EventsController@createOneEvent']);
         $router->post('/addTeamById', ['uses' => 'EventsController@signTeamById']);
         $router->post('/addParticipantByMail', ['uses' => 'EventsController@addOneParticipantToEventByEmail']);
+        //$router->get('test', ['uses' => 'EventsController@test']);
     });
 
     $router->group(['prefix' => 'team'], function () use ($router) {

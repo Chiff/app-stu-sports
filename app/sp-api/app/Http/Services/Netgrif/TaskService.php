@@ -4,9 +4,14 @@
 namespace App\Http\Services\Netgrif;
 
 
+use App\Models\Netgrif\EmbeddedTasks;
 use App\Models\Netgrif\LocalisedTaskResource;
 use App\Models\Netgrif\MessageResource;
+use App\Models\Netgrif\TaskLayout;
 use App\Models\Netgrif\TaskReference;
+use App\Models\Netgrif\TaskSearchCaseRequest;
+use http\Message\Body;
+use Illuminate\Support\Facades\Http;
 use JsonMapper\JsonMapper;
 
 class TaskService extends AbstractNetgrifService
@@ -74,6 +79,9 @@ class TaskService extends AbstractNetgrifService
 
     public function finishUsingGET($task_id): MessageResource
     {
+       /* $userId = auth()->user()->getAuthIdentifier();
+        echo $userId;
+*/
         $url = self::getFullRequestUrl($this->apiPaths['finishUsingGET'], $task_id);
         $response = self::beginRequestAsSystem()->get($url);
 
@@ -111,6 +119,61 @@ class TaskService extends AbstractNetgrifService
         return $task;
     }
 
+    public function getAllTasksAssignedToUser(): LocalisedTaskResource
+    {
+        $url = self::getFullRequestUrl($this->apiPaths['getMyUsingGET']);
+        $response = self::beginRequestAsSystem()->get($url);
+
+        if ($response->failed()) {
+            $response->throw();
+        }
+
+        $tasks = new LocalisedTaskResource();
+        $this->mapper->mapObject($response->object(), $tasks);
+        return $tasks;
+    }
+
+    public function searchTask(array $parameters): EmbeddedTasks
+    {
+        $url = self::getFullRequestUrl($this->apiPaths['searchUsingPOST1']);
+        $response = self::beginRequestAsSystem()->post($url, $parameters);
+
+        if ($response->failed()) {
+            $response->throw();
+        }
+        $tasks = new EmbeddedTasks();
+        $this->mapper->mapObject($response->object(), $tasks);
+        return $tasks;
+    }
+
+    public function setTaskData(string $taskId, string $data): void
+    {
+        $url = "https://engine.interes.group/api/task/".$taskId."/data";
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        $headers = array(
+            "Authorization: Basic eHJ5YmFybUBzdHViYS5zazo4MDA4Nw==",
+            "Content-Type: application/json",
+        );
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
+        $data = <<<DATA
+$data
+DATA;
+
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $resp = curl_exec($curl);
+        curl_close($curl);
+
+    }
 
 }
 

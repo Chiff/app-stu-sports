@@ -59,9 +59,9 @@ class SystemService
      */
     public function createSystemCase(): CaseResource
     {
+        $userId = auth()->user()->ext_id;
         $netId = env('API_INTERES_SYSTEM_NET_ID');
-        $title = "system";
-        //TODO mozno nastavovat system v tvare system_username
+        $title = "system_" . $userId;
         return $this->workflowService->createCaseUsingPOST($netId, $title);
     }
 

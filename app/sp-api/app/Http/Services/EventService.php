@@ -7,6 +7,7 @@ use App\Dto\Event\EventDTO;
 use App\Dto\User\UserDTO;
 use App\Http\Services\AS\EventAS;
 use App\Http\Services\Netgrif\AuthenticationService;
+use App\Http\Services\Netgrif\TaskService;
 use App\Http\Services\Netgrif\UserService;
 use App\Http\Services\Netgrif\WorkflowService;
 use App\Models\Event;
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use JsonMapper\JsonMapper;
+use stdClass;
 use function MongoDB\BSON\toJSON;
 
 class EventService
@@ -29,12 +31,14 @@ class EventService
     private JsonMapper $jsonMapper;
     private WorkflowService $workflowService;
     private UserService $userService;
+    private TaskService $taskService;
     private EventAS $eventAS;
 
     public function __construct(
         AuthenticationService $authService,
         WorkflowService $workflowService,
         UserService $userService,
+        TaskService $taskService,
         JsonMapper $mapper,
         EventAS $eventAS,
     )
@@ -43,6 +47,7 @@ class EventService
         $this->workflowService = $workflowService;
         $this->auth = $authService;
         $this->userService = $userService;
+        $this->taskService = $taskService;
         $this->eventAS = $eventAS;
     }
 
@@ -74,20 +79,56 @@ class EventService
         $dto->user_id = auth()->id();
         $this->jsonMapper->mapObjectFromString(json_encode($request->toArray()), $dto);
 
-        // TODO - 13/05/2021 - @mrybar - doplnit spravne data do netgrifu (vid $dto)
-        $netId = env('API_INTERES_EVENT_NET_ID');
-        $title = "event";
-        $netgrifEvent = $this->workflowService->createCaseUsingPOST($netId, $title);
+        $netgrifEvent = null;
 
         // TODO - 13/05/2021 - NA TOTO POZOR!
-        app('db')->transaction(function() use ($dto, $netgrifEvent) {
-            $saved = $this->eventAS->save($dto, $netgrifEvent);
+        app('db')->transaction(function() use ($dto) {
+            $createdEvent = $this->eventAS->createEvent($dto);
 
-            if (!$saved) {
-                throw new \Exception("could not save", 500);
+            if (!$createdEvent) {
+                throw new \Exception("could not create", 500);
             }
-        });
 
+            $netId = env('API_INTERES_EVENT_NET_ID');
+            $title = "event";
+            $netgrifEvent = $this->workflowService->createCaseUsingPOST($netId, $title);
+
+            if(!$netgrifEvent) {
+                throw new \Exception("could not create netgrif event", 500);
+            }
+
+            $createdEvent->ext_id = $netgrifEvent->stringId;
+            $createdEvent->save();
+
+            $caseId = $netgrifEvent->stringId;
+            $tasks = $this->taskService->searchTask(array(
+                'case' => array('id' => $caseId),
+                'transitionId' => env('API_INTERES_EVENT_CREATE_EVENT_TRANSITION')
+            ));
+            $taskId = $tasks->_embedded->tasks[0]->stringId;
+
+            $this->taskService->assignUsingGET($taskId);
+
+            $taskData =
+                '{
+                    "300": {
+                        "type": "number",
+                        "value": '.$dto->max_teams.'
+                    },
+                    "400": {
+                        "type": "number",
+                        "value": '.$dto->min_teams.'
+                    },
+                    "podujatie_nazov": {
+                        "type": "text",
+                        "value": "'.$dto->name.'"
+                    }
+            }';
+
+            $this->taskService->setTaskData($taskId, $taskData);
+            $this->taskService->finishUsingGET($taskId);
+
+        });
     }
 
     /**
