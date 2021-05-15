@@ -16,6 +16,7 @@ use App\Models\EventTeam;
 use App\Models\Netgrif\CaseResource;
 use App\Models\Netgrif\EmbededCases;
 use App\Models\Netgrif\MessageResource;
+use App\Models\Netgrif\TasksReferences;
 use App\Models\User;
 use App\Models\UserTeam;
 use Illuminate\Http\Request;
@@ -213,6 +214,11 @@ class EventService
 
 
         return $result;
-
     }
+
+    public function getEventActiveTasks($eventCaseId): TasksReferences
+    {
+        return $this->taskService->getTasksOfCaseUsingGET($eventCaseId);
+    }
+
 }

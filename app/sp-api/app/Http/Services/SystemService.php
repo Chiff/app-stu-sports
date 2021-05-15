@@ -3,18 +3,24 @@
 
 namespace App\Http\Services;
 
+use App\Http\Services\Netgrif\TaskService;
 use App\Http\Services\Netgrif\WorkflowService;
 use App\Models\Netgrif\CaseResource;
 use App\Models\Netgrif\EmbededCases;
+use App\Models\Netgrif\TasksReferences;
+use App\Models\User;
 
 class SystemService
 {
     private WorkflowService $workflowService;
+    private TaskService $taskService;
 
     public function __construct(
         WorkflowService $workflowService,
+        TaskService $taskService,
     ) {
         $this->workflowService = $workflowService;
+        $this->taskService = $taskService;
     }
 
 
@@ -49,6 +55,18 @@ class SystemService
         $netId = env('API_INTERES_SYSTEM_NET_ID');
         $title = "system_" . auth()->id();
         return $this->workflowService->createCaseUsingPOST($netId, $title);
+    }
+
+    public function getActiveTasksOfSystem(): TasksReferences
+    {
+        $user = User::findOrFail(auth()->id());
+
+        if(!$user) {
+            throw new \Exception("User not found", 500);
+        }
+
+        $systemCaseId = $user->system;
+        return $this->taskService->getTasksOfCaseUsingGET($systemCaseId);
     }
 
 }

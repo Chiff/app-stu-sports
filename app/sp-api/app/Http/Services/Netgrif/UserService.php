@@ -7,7 +7,6 @@ namespace App\Http\Services\Netgrif;
 use App\Models\Netgrif\EmbeddedUsers;
 use App\Models\Netgrif\UserResource;
 use JsonMapper\JsonMapper;
-use phpDocumentor\Reflection\Types\Iterable_;
 
 class UserService extends AbstractNetgrifService
 {

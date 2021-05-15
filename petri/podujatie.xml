@@ -8,15 +8,6 @@
 	<!-- TRANSACTIONS -->
 	<!-- ROLES -->
 	<!-- DATA -->
-	<data type="enumeration">
-		<id>podujatie_typ</id>
-		<title>Typ podujatia</title>
-		<placeholder>placeholder</placeholder>
-		<values>A</values>
-		<values>B</values>
-		<values>C</values>
-		<init>option1</init>
-	</data>
 	<data type="boolean">
 		<id>is_podujatie_timove</id>
 		<title>Timove podujatie</title>
@@ -69,11 +60,6 @@
 		<desc>zobrazi sa len ak je podujatie timove</desc>
 		<init>value</init>
 	</data>
-	<data type="button">
-		<id>podujatie_event_start</id>
-		<title>Spusti podujatie</title>
-		<placeholder>(iba ak uz je po case startu podujatia)</placeholder>
-	</data>
 	<data type="text">
 		<id>podujatie_tim_body</id>
 		<title>Zadajte body</title>
@@ -87,36 +73,6 @@
 		<placeholder>placeholder</placeholder>
 		<desc>zobrazi sa len ak podujatie  nie je timove</desc>
 		<init>value</init>
-	</data>
-	<data type="enumeration">
-		<id>podujate_hrac_idk</id>
-		<title>vyberte hraca</title>
-		<placeholder>placeholder</placeholder>
-		<desc>zobrazi sa len ak podujatie  nie je timove</desc>
-		<values>option1</values>
-		<values>option2</values>
-		<values>option3</values>
-		<init>option1</init>
-	</data>
-	<data type="multichoice">
-		<id>multichoice_0</id>
-		<title>Vitaz(i)</title>
-		<placeholder>placeholder</placeholder>
-		<desc>(hraci)</desc>
-		<values>option1</values>
-		<values>option2</values>
-		<values>option3</values>
-		<init>option1, option2</init>
-	</data>
-	<data type="multichoice">
-		<id>multichoice_1</id>
-		<title>Vitaz(i)</title>
-		<placeholder>placeholder</placeholder>
-		<desc>(timy)</desc>
-		<values>option1</values>
-		<values>option2</values>
-		<values>option3</values>
-		<init>option1, option2</init>
 	</data>
 	<data type="number">
 		<id>400</id>
@@ -135,28 +91,9 @@
 		<id>podujatie_owner_id</id>
 		<title>Owner ID</title>
 	</data>
-	<data type="enumeration_map">
-		<id>enu_map_timy</id>
-		<title>Vyber svoj tim</title>
-	</data>
 	<data type="number">
 		<id>pocet_bodov</id>
 		<title>pocet_bodov</title>
-	</data>
-	<data type="taskRef">
-		<id>taskref_tim_podujatie_add</id>
-		<title>taskref_tim_podujatie_add</title>
-	</data>
-	<data type="taskRef">
-		<id>taskref_vitaz</id>
-		<title>vitazny tim</title>
-	</data>
-	<data type="text">
-		<id>testovanie</id>
-		<title>set label</title>
-		<placeholder>placeholder</placeholder>
-		<desc>description</desc>
-		<init>value</init>
 	</data>
 	<!-- I18NS -->
 	<!-- TRANSITIONS -->
@@ -169,113 +106,6 @@
 		</layout>
 		<label>prihlasenie timu \ user</label>
 		<icon>add_circle</icon>
-		<dataGroup>
-			<id>DataGroup_0</id>
-			<layout>grid</layout>
-			<dataRef>
-				<id>taskref_tim_podujatie_add</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>2</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>enu_map_timy</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-		<event type="assign">
-			<id>39_assign</id>
-			<actions phase="post">
-				<action>
-
-					timy_ref: f.taskref_tim_podujatie_add,
-					timy_map: f.enu_map_timy;
-					def map = [:]
-
-					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
-					def cases = findCases ({ it.processIdentifier.eq("${groupId}_tim" as String) });
-					cases.each {
-
-						def id = it.stringId
-						task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("16")) });
-						if(timy_ref.value != null) {
-							if(timy_ref.value[0] != null) {
-								if(timy_ref.value.contains(task.stringId)) {
-									return
-								}
-							}
-						}
-
-						nazov_timu = getData(task).get('nazov_timu');
-						map[id] = nazov_timu.value
-
-					}
-					change timy_map options {
-						return map;
-					}
-				</action>
-			</actions>
-		</event>
-		<event type="finish">
-			<id>39_finish</id>
-			<actions phase="pre">
-				<action>
-					timy_ref: f.taskref_tim_podujatie_add,
-					enumer: f.enu_map_timy;
-
-					def chosen_team = enumer.value
-
-
-					if(chosen_team == null || chosen_team?.isEmpty()) {
-						throw new IllegalArgumentException("Nebol zvoleny ziadny tim");
-					}
-
-					def novy_tim = findTask( { it.caseId.eq(chosen_team).and(it.transitionId.eq("16")) } )
-
-					if(novy_tim == null) {
-						throw new IllegalArgumentException("Nebol zvoleny ziadny tim");
-					}
-
-					if(timy_ref.value == null) {
-						change timy_ref value {
-							return []
-						}
-					}
-					if(timy_ref.value.contains(novy_tim.stringId)) {
-						cancelTask("1")
-					}
-					else {
-						timy_ref.value.add(novy_tim.stringId)
-						change timy_ref value {
-							return timy_ref.value
-						}
-					}
-					change enu_map_timy options {
-						return [:]
-					}
-				</action>
-			</actions>
-		</event>
 	</transition>
 	<transition>
 		<id>2</id>
@@ -347,17 +177,6 @@
 				<logic>
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
-					<action trigger="set">
-						max
-						: f.300,
-						min: f.400;
-
-						if (min.value > max.value) {
-							change max value {
-								return min.value
-							}
-						}
-					</action>
 				</logic>
 				<layout>
 					<x>2</x>
@@ -390,16 +209,6 @@
 				<logic>
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
-					<action trigger="set">
-						max: f.300,
-						min: f.400;
-
-						if (min.value > max.value) {
-							change min value {
-								return max.value;
-							}
-						}
-					</action>
 				</logic>
 				<layout>
 					<x>0</x>
@@ -507,64 +316,6 @@
 			<id>DataGroup_0</id>
 			<layout>grid</layout>
 			<dataRef>
-				<id>taskref_tim_podujatie_add</id>
-				<logic>
-					<behavior>hidden</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>3</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>taskref_vitaz</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>2</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>enu_map_timy</id>
-				<logic>
-					<behavior>editable</behavior>
-					<behavior>required</behavior>
-					<action trigger="set">
-						vitaz_ref: f.taskref_vitaz,
-						timy_map: f.enu_map_timy;
-
-						def vybrany_tim = timy_map.value
-						<!-- inicializuj taskref a pridaj tam vitaza -->
-						change vitaz_ref value {
-							return []
-						}
-						vitaz_ref.value.add(vybrany_tim)
-
-					</action>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
 				<id>pocet_bodov</id>
 				<logic>
 					<behavior>editable</behavior>
@@ -580,42 +331,6 @@
 				</layout>
 			</dataRef>
 		</dataGroup>
-		<event type="assign">
-			<id>78_assign</id>
-			<actions phase="pre">
-				<action>
-					prihlasene_timy: f.taskref_tim_podujatie_add,
-					timy_map: f.enu_map_timy;
-
-					def map = [:]
-					prihlasene_timy.value.each {
-						id = it
-						def tim_info_task = findTask({it._id.eq(id)})
-						nazov_timu = getData(tim_info_task).get('nazov_timu');
-						map[id] = nazov_timu.value
-					}
-					change timy_map options {
-						return map
-					}
-				</action>
-			</actions>
-		</event>
-		<event type="cancel">
-			<id>78_assign</id>
-			<actions phase="pre">
-				<action>
-					vitaz: f.taskref_vitaz,
-					timy_map: f.enu_map_timy;
-
-					change vitaz value {
-						return []
-					}
-					change timy_map options {
-						return [:]
-					}
-				</action>
-			</actions>
-		</event>
 	</transition>
 	<transition>
 		<id>56</id>
@@ -632,7 +347,6 @@
 				<id>podujatie_owner_id</id>
 				<logic>
 					<behavior>visible</behavior>
-					<behavior>required</behavior>
 				</logic>
 				<layout>
 					<x>2</x>
@@ -753,21 +467,6 @@
 			<id>DataGroup_0</id>
 			<layout>grid</layout>
 			<dataRef>
-				<id>taskref_vitaz</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>2</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
 				<id>pocet_bodov</id>
 				<logic>
 					<behavior>visible</behavior>
@@ -793,93 +492,6 @@
 		</layout>
 		<label>odhlasenie</label>
 		<icon>remove_circle</icon>
-		<dataGroup>
-			<id>DataGroup_0</id>
-			<layout>grid</layout>
-			<dataRef>
-				<id>taskref_tim_podujatie_add</id>
-				<logic>
-					<behavior>editable</behavior>
-					<behavior>hidden</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>2</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>enu_map_timy</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>2</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-		<event type="assign">
-			<id>339_assign</id>
-			<actions phase="pre">
-				<action>
-					timy_ref: f.taskref_tim_podujatie_add,
-					timy_map: f.enu_map_timy;
-					def map = [:]
-
-					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
-					def cases = findCases ({ it.processIdentifier.eq("${groupId}_tim" as String) });
-					cases.each {
-
-						def id = it.stringId
-						task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("16")) });
-						nazov_timu = getData(task).get('nazov_timu');
-
-						if(timy_ref.value?.contains(task.stringId)) {
-							map[id] = nazov_timu.value
-						}
-					}
-					change timy_map options {
-						return map
-					}
-				</action>
-			</actions>
-		</event>
-		<event type="finish">
-			<id>339_finish</id>
-			<actions phase="pre">
-				<action>
-					timy_ref: f.taskref_tim_podujatie_add,
-					timy_map: f.enu_map_timy;
-
-					def chosen_team = timy_map.value
-
-					if(chosen_team == null) {
-						throw new IllegalArgumentException("Nebol zvoleny ziadny tim");
-					}
-
-					def task = findTask( { it.caseId.eq(chosen_team).and(it.transitionId.eq("16")) } )
-					if(timy_ref.value?.contains(task.stringId)) {
-						timy_ref.value.remove(task.stringId)
-						change timy_ref value {
-							return timy_ref.value
-						}
-					}
-					change enu_map_timy options {
-						return [:]
-					}
-				</action>
-			</actions>
-		</event>
 	</transition>
 	<transition>
 		<id>96</id>
