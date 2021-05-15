@@ -55,7 +55,7 @@ class UserService
             $user->firstname = $userResource->name;
             $user->surname = $userResource->surname;
             $user->ext_id = $userResource->id;
-            
+
             if (!$user->save()) {
                 return null;
             }
@@ -130,6 +130,13 @@ class UserService
 
     private function getLoggedUserAsModel(): User
     {
-        return auth()->user();
+        // pokial nas user nema este system
+        if (!$user->system) {
+            $user->system = $this->systemAS->createSystemCase()->stringId;
+
+            return $user->save();
+        }
+
+        return true;
     }
 }
