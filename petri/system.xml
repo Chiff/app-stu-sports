@@ -1,1676 +1,387 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://modeler.netgrif.com/petriflow_schema.xsd">
-	<id>system</id>
-	<initials>SYSTEM</initials>
-	<title>system</title>
+	<id>final_system</id>
+	<initials>NEW</initials>
+	<title>final_system</title>
 	<defaultRole>true</defaultRole>
 	<transitionRole>false</transitionRole>
 	<!-- TRANSACTIONS -->
 	<!-- ROLES -->
 	<!-- DATA -->
-	<data type="enumeration">
-		<id>enumeration_0</id>
-		<title>Zvol tim</title>
-		<placeholder>placeholder</placeholder>
-		<desc>description</desc>
-		<init>option1</init>
-	</data>
-	<data type="taskRef">
-		<id>taskRef_zvolene_podujatie</id>
-		<title>Zvolene podujatie</title>
-		<placeholder>Zvolene podujatie</placeholder>
-		<desc>description</desc>
-		<init>value</init>
-	</data>
-	<data type="taskRef">
-		<id>taskRef_spravovane_podujatie</id>
-		<title>Vyber podujatie</title>
-		<placeholder>Vyber podujatie</placeholder>
-		<desc>description</desc>
-		<init>value</init>
-	</data>
-	<data type="taskRef">
-		<id>taskRef_spravovany_tim</id>
-		<title>Vyber tim</title>
-		<placeholder>Vyber tim</placeholder>
-		<desc>Vyber tim</desc>
-		<init>value</init>
-	</data>
-	<data type="taskRef">
-		<id>taskRef_pridat_clena</id>
-		<title>Pridat clena do timu</title>
-		<placeholder>Pridat clena do timu</placeholder>
-		<desc>Pridat clena do timu</desc>
-		<init>value</init>
-	</data>
-	<data type="taskRef">
-		<id>taskRef_osoba</id>
-		<title>taskref uzivatel</title>
-		<placeholder>Uzivatel</placeholder>
-		<desc>description</desc>
-		<init>value</init>
-	</data>
-	<data type="taskRef">
-		<id>taskRef_podujatie_vytvorenie</id>
-		<title>TakRef vytvorene podujatie</title>
-		<placeholder>placeholder</placeholder>
-		<desc>description</desc>
-		<init>value</init>
-	</data>
-	<data type="taskRef">
-		<id>taskRef_tim</id>
-		<title>TakRef vytvorenie timu</title>
-		<placeholder>placeholder</placeholder>
-		<desc>description</desc>
-		<init>value</init>
-	</data>
-	<data type="taskRef">
-		<id>taskRef_osoba_udaje</id>
-		<title>taskRef osoba udaje</title>
-		<placeholder>placeholder</placeholder>
-		<desc>description</desc>
-		<init>value</init>
-	</data>
-	<data type="enumeration_map">
-		<id>enum_podujatia</id>
-		<title>Vyber podujatie</title>
-	</data>
-	<data type="enumeration_map">
-		<id>enum_tim</id>
-		<title>Vyber tim</title>
-	</data>
 	<!-- I18NS -->
 	<!-- TRANSITIONS -->
 	<transition>
-		<id>35</id>
+		<id>1</id>
 		<x>740</x>
-		<y>660</y>
+		<y>580</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
-		<label>Domovska stranka</label>
-		<icon>settings</icon>
-		<trigger type="auto"/>
-		<dataGroup>
-			<id>DataGroup_11</id>
-			<dataRef>
-				<id>taskRef_osoba</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-		<event type="finish">
-			<id>42_finish</id>
-			<actions phase="post">
-				<action>
-					osoba_ref: f.taskRef_osoba;
-
-					change osoba_ref value {
-						return []
-					}
-
-					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
-
-					def mojaOsoba = findCase({it.processIdentifier.contains("osoba").and(it.author.id.eq(loggedUser().id))})
-					if(mojaOsoba == null) {
-					def novaOsoba = createCase("${groupId}_clen_osoba" as String, loggedUser().name)
-					def osobne_udaje = assignTask("2", novaOsoba)
-					setData(osobne_udaje, [
-					"name": [
-					"value": loggedUser().name,
-					"type" : "text"
-					],
-					"surname": [
-					"value": loggedUser().surname,
-					"type" : "text"
-					],
-					"mail": [
-					"value": loggedUser().email,
-					"type" : "text"
-					],
-					"user_id": [
-					"value": loggedUser().id,
-					"type" : "text"
-					],
-					])
-					finishTask(osobne_udaje)
-					def osoba_udaje = assignTask("8", novaOsoba)
-					osoba_ref.value.add(osoba_udaje.stringId)
-					change osoba_ref value{
-					return osoba_ref.value
-					}
-					}
-					else {
-					def osoba_udaje = assignTask("8", mojaOsoba)
-					osoba_ref.value.add(osoba_udaje.stringId)
-					change osoba_ref value {
-					return osoba_ref.value
-					}
-					}
-				</action>
-			</actions>
-		</event>
+		<label>zobrazit profil</label>
 	</transition>
 	<transition>
-		<id>39</id>
-		<x>180</x>
+		<id>2</id>
+		<x>740</x>
+		<y>460</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>moje podujatia</label>
+	</transition>
+	<transition>
+		<id>3</id>
+		<x>740</x>
+		<y>300</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>moje timy</label>
+	</transition>
+	<transition>
+		<id>4</id>
+		<x>980</x>
+		<y>460</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>domovska stranka</label>
+	</transition>
+	<transition>
+		<id>10</id>
+		<x>887</x>
+		<y>879</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>vytvorit podujatie</label>
+	</transition>
+	<transition>
+		<id>11</id>
+		<x>1300</x>
+		<y>740</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>detail podujatia</label>
+	</transition>
+	<transition>
+		<id>19</id>
+		<x>1180</x>
+		<y>1020</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>prihlasit na podujatie</label>
+	</transition>
+	<transition>
+		<id>20</id>
+		<x>1300</x>
+		<y>1020</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>zrusit podujatie</label>
+	</transition>
+	<transition>
+		<id>31</id>
+		<x>740</x>
+		<y>740</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>detail timu</label>
+	</transition>
+	<transition>
+		<id>35</id>
+		<x>620</x>
+		<y>980</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>rozpustit tim</label>
+	</transition>
+	<transition>
+		<id>36</id>
+		<x>780</x>
+		<y>980</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>pridat clena do timu</label>
+	</transition>
+	<transition>
+		<id>49</id>
+		<x>980</x>
+		<y>1260</y>
+		<layout>
+			<offset>0</offset>
+		</layout>
+		<label>spat na domovsku stranku</label>
+	</transition>
+	<transition>
+		<id>50</id>
+		<x>500</x>
 		<y>900</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
-		<label>Prihlasit na podujatie</label>
-		<icon>search</icon>
-		<assignPolicy>auto</assignPolicy>
-		<dataGroup>
-			<id>DataGroup_111</id>
-			<dataRef>
-				<id>taskRef_zvolene_podujatie</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>enum_podujatia</id>
-				<logic>
-					<behavior>editable</behavior>
-					<action trigger="set">
-						podujatie_ref: f.taskRef_zvolene_podujatie,
-						podujatie_map: f.enum_podujatia;
-
-						def vybrane_podujatie = podujatie_map.value
-
-						<!-- Ak je dataref prazdny, len ho inicializuj []
-						 	 ak nie je prazdny, cancelni predchadzajuci task prihlasenia a pridaj tam novu hodnotu -->
-						if(podujatie_ref.value != null) {
-
-							if( !(podujatie_ref.value.isEmpty()) ) {
-								t = findTask({it._id.eq(podujatie_ref.value[1])})
-								cancelTask(t)
-							}
-							change podujatie_ref value {
-								return []
-							}
-						}
-						change podujatie_ref value {
-							return []
-						}
-
-
-						def taskInfo = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("56")) } )
-						def taskPrihlasit = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("1")) } )
-
-						if(taskPrihlasit == null) {
-							throw new IllegalArgumentException("Ziadne dostupne podujatia na prihlasenie");
-						}
-						<!-- Pridaj taskref na info o podujati iba ak taky tak naslo -->
-						podujatie_ref.value.add(taskInfo.stringId)
-
-						<!-- Pridaj taskref na prihlasenie timu iba ak taky task naslo-->
-						assignTask(taskPrihlasit)
-						podujatie_ref.value.add(taskPrihlasit.stringId)
-						change podujatie_ref value {
-							return podujatie_ref.value
-						}
-
-					</action>
-				</logic>
-				<layout>
-					<x>1</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-		<event type="assign">
-			<id>421_assign</id>
-			<actions phase="post">
-				<action>
-
-					podujatie_ref: f.taskRef_zvolene_podujatie,
-					podujatia_map: f.enum_podujatia;
-
-					def map = [:]
-
-					if(podujatie_ref.value != null) {
-
-						if( !(podujatie_ref.value.isEmpty()) ) {
-							t = findTask({it._id.eq(podujatie_ref.value[1])})
-							cancelTask(t)
-						}
-					}
-
-					def cases = findCases ({ it.processIdentifier.contains("podujatie") });
-					cases.each {
-
-						def id = it.stringId
-						prihlasenie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("1")) });
-						<!-- ak je task prihlasenia nedostupny, tak ho nepridaj do zoznamu -->
-						if(prihlasenie != null) {
-							task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
-							nazov_podujatia = getData(task).get('podujatie_nazov');
-							if(nazov_podujatia?.value) {
-								map[id] = nazov_podujatia.value
-							}
-						}
-					}
-					change podujatia_map options {
-						return map
-					}
-					change podujatie_ref value {
-						return []
-					}
-
-				</action>
-			</actions>
-		</event>
-		<event type="cancel">
-			<id>422_cancel</id>
-			<actions phase="post">
-				<action>
-
-					podujatie_ref: f.taskRef_zvolene_podujatie,
-					podujatia_map: f.enum_podujatia;
-					<!-- na cancel tasku kontrola, ci nahodou nie su assignute nejake tasky prihlasenia -->
-					if(podujatie_ref.value != null) {
-						if(podujatie_ref.value[1] != null) {
-							if(!podujatie_ref.value[1].isEmpty()) {
-								t = findTask({it._id.eq(podujatie_ref.value[1])})
-								cancelTask(t)
-							}
-						}
-					}
-					change podujatie_ref value {
-						return []
-					}
-					change podujatia_map options {
-						return [:]
-					}
-
-				</action>
-			</actions>
-		</event>
-		<event type="finish">
-			<id>421_finish</id>
-			<actions phase="pre">
-				<action>
-					zvolene_podujatie_ref: f.taskRef_zvolene_podujatie,
-					podujatia_map: f.enum_podujatia;
-
-					if(podujatia_map == null) {
-						throw new IllegalArgumentException("Nebol vybrane ziadne podujatie");
-					}
-					if(podujatia_map.value == null) {
-						throw new IllegalArgumentException("Nebol vybrane ziadne podujatie");
-					}
-
-					if(zvolene_podujatie_ref.value != null) {
-						if(zvolene_podujatie_ref.value[1] != null) {
-							if( (!(zvolene_podujatie_ref.value[1].isEmpty())) ) {
-								def prihlasenieTask = findTask({it._id.eq(zvolene_podujatie_ref.value[1])})
-									finishTask(prihlasenieTask)
-
-							}
-						}
-					}
-
-					else {
-						throw new IllegalArgumentException("Nebolo zvolene ziadne podujatie");
-					}
-
-					change podujatia_map options {
-						return [:]
-					}
-					change zvolene_podujatie_ref value {
-						return []
-					}
-
-				</action>
-			</actions>
-		</event>
-	</transition>
-	<transition>
-		<id>40</id>
-		<x>460</x>
-		<y>900</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Zobrazit profil</label>
-		<icon>face</icon>
-		<assignPolicy>auto</assignPolicy>
-		<dataGroup>
-			<id>DataGroup_1</id>
-			<dataRef>
-				<id>taskRef_osoba</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-	</transition>
-	<transition>
-		<id>42</id>
-		<x>660</x>
-		<y>1100</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Vytvorit podujatie</label>
-		<icon>event</icon>
-		<assignPolicy>auto</assignPolicy>
-		<dataGroup>
-			<id>DataGroup_1111</id>
-			<dataRef>
-				<id>taskRef_podujatie_vytvorenie</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-		<event type="finish">
-			<id>42_finish</id>
-			<actions phase="post">
-				<action>
-					podujatie_udaje_ref: f.taskRef_podujatie_vytvorenie;
-					def konstruktor = findTask(podujatie_udaje_ref.value[0])
-
-					finishTask(konstruktor)
-
-				</action>
-			</actions>
-		</event>
-		<event type="assign">
-			<id>42_assign</id>
-			<actions phase="pre">
-				<action>
-
-					vytvorenie_podujatia_ref: f.taskRef_podujatie_vytvorenie;
-
-					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
-					def podujatie = createCase("${groupId}_podujatie" as String, "Nové podujatie")
-					def konstruktor = assignTask("2", podujatie)
-					change vytvorenie_podujatia_ref value {
-						return [konstruktor.stringId]
-					}
-				</action>
-			</actions>
-		</event>
+		<label>spat na domovsku stranku</label>
 	</transition>
 	<transition>
 		<id>51</id>
-		<x>860</x>
+		<x>1500</x>
 		<y>900</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
-		<label>Moje podujatia</label>
-		<icon>book_online</icon>
-		<assignPolicy>auto</assignPolicy>
-		<finishPolicy>auto_no_data</finishPolicy>
+		<label>spat na domovsku stranku</label>
 	</transition>
 	<transition>
-		<id>77</id>
-		<x>980</x>
-		<y>1100</y>
+		<id>58</id>
+		<x>1064</x>
+		<y>882</y>
 		<layout>
 			<offset>0</offset>
 		</layout>
-		<label>Zrusit podujatie</label>
-		<icon>event_busy</icon>
-		<assignPolicy>auto</assignPolicy>
-		<dataGroup>
-			<id>DataGroup_771</id>
-			<dataRef>
-				<id>enum_podujatia</id>
-				<logic>
-					<behavior>editable</behavior>
-					<action trigger="set">
-						podujatia_map: f.enum_podujatia,
-						podujatie_ref: f.taskRef_spravovane_podujatie;
-
-						def vybrane_podujatie = podujatia_map.value
-
-						def taskInfo = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("56")) } )
-
-						<!-- vyprazdni taskref a pridaj tam  -->
-						change podujatie_ref value {
-							return []
-						}
-						podujatie_ref.value.add(taskInfo.stringId)
-
-					</action>
-				</logic>
-				<layout>
-					<x>1</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>taskRef_spravovane_podujatie</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-		<event type="assign">
-			<id>77_assign</id>
-			<actions phase="pre">
-				<action>
-					podujatie_ref: f.taskRef_spravovane_podujatie,
-					podujatia_map: f.enum_podujatia;
-
-					def map = [:]
-
-					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
-					def podujatia = findCases{it.processIdentifier.eq("${groupId}_podujatie" as String).and(it.author.id.eq(loggedUser().id))}
-
-					podujatia.each {
-
-						def id = it.stringId
-						zrusenie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("5")) });
-						<!-- ak je task zrusenie je nedostupny, tak ho nepridaj do zoznamu -->
-						if(zrusenie != null) {
-							pofujatie_info = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
-							nazov_podujatia = getData(pofujatie_info).get('podujatie_nazov');
-							map[id] = nazov_podujatia.value
-						}
-					}
-					change podujatia_map options {
-						return map
-					}
-					<!-- vynuluj taskref -->
-					change podujatie_ref value {
-						return []
-					}
-
-				</action>
-			</actions>
-		</event>
-		<event type="cancel">
-			<id>77_cancel</id>
-			<actions phase="pre">
-				<action>
-					podujatia_map: f.enum_podujatia,
-					podujatie_ref: f.taskRef_spravovane_podujatie;
-
-					change podujatie_ref value {
-						return []
-					}
-					change podujatia_map options {
-						return [:]
-					}
-
-				</action>
-			</actions>
-		</event>
-		<event type="finish">
-			<id>77_finish</id>
-			<actions phase="pre">
-				<action>
-					podujatie_ref: f.taskRef_spravovane_podujatie,
-					podujatia_map: f.enum_podujatia;
-
-					def vybrane_podujatie = podujatia_map.value
-					if(vybrane_podujatie == null) {
-						throw new IllegalArgumentException("Vyber podujatie");
-					}
-					def zrusit_podujatie = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("5")) } )
-					if(zrusit_podujatie == null) {
-						throw new IllegalArgumentException("Nebolo najdene podujatie");
-					}
-
-					assignTask(zrusit_podujatie)
-					finishTask(zrusit_podujatie)
-
-					change podujatie_ref value {
-						return []
-					}
-					change podujatia_map options {
-						return [:]
-					}
-
-				</action>
-			</actions>
-		</event>
-	</transition>
-	<transition>
-		<id>78</id>
-		<x>1140</x>
-		<y>1100</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Editovat podujatie</label>
-		<icon>edit</icon>
-		<assignPolicy>auto</assignPolicy>
-		<dataGroup>
-			<id>DataGroup_781</id>
-			<dataRef>
-				<id>enum_podujatia</id>
-				<logic>
-					<behavior>editable</behavior>
-					<action trigger="set">
-						podujatia_map: f.enum_podujatia,
-						podujatie_ref: f.taskRef_spravovane_podujatie;
-
-						def vybrane_podujatie = podujatia_map.value
-
-						def taskInfo = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("96")) } )
-
-						<!-- vyprazdni taskref a pridaj tam  -->
-						change podujatie_ref value {
-							return []
-						}
-						podujatie_ref.value.add(taskInfo.stringId)
-
-					</action>
-				</logic>
-				<layout>
-					<x>1</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>taskRef_spravovane_podujatie</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-		<event type="assign">
-			<id>78_assign</id>
-			<actions phase="pre">
-				<action>
-					podujatie_ref: f.taskRef_spravovane_podujatie,
-					podujatia_map: f.enum_podujatia;
-
-					def map = [:]
-
-					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
-					def podujatia = findCases{it.processIdentifier.eq("${groupId}_podujatie" as String).and(it.author.id.eq(loggedUser().id))}
-					podujatia.each {
-
-						def id = it.stringId
-						editovanie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("96")) });
-						<!-- ak je task zrusenie je nedostupny, tak ho nepridaj do zoznamu -->
-						if(editovanie != null) {
-							pofujatie_info = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
-							nazov_podujatia = getData(pofujatie_info).get('podujatie_nazov');
-							map[id] = nazov_podujatia.value
-						}
-					}
-					change podujatia_map options {
-						return map
-					}
-					<!-- vynuluj taskref -->
-					change podujatie_ref value {
-						return []
-					}
-
-				</action>
-			</actions>
-		</event>
-		<event type="cancel">
-			<id>78_cancel</id>
-			<actions phase="pre">
-				<action>
-					podujatie_ref: f.taskRef_spravovane_podujatie;
-
-					change podujatie_ref value {
-						return []
-					}
-
-				</action>
-			</actions>
-		</event>
-	</transition>
-	<transition>
-		<id>130</id>
-		<x>1540</x>
-		<y>1100</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Vytvorit tim</label>
-		<icon>group_add</icon>
-		<assignPolicy>auto</assignPolicy>
-		<dataGroup>
-			<id>DataGroup_11111</id>
-			<dataRef>
-				<id>taskRef_tim</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-		<event type="finish">
-			<id>42_finish</id>
-			<actions phase="post">
-				<action>
-					tim_ref: f.taskRef_tim;
-					def vyplnenie_udajov = findTask(tim_ref.value[0])
-
-					finishTask(vyplnenie_udajov)
-
-				</action>
-			</actions>
-		</event>
-		<event type="assign">
-			<id>42_assign</id>
-			<actions phase="pre">
-				<action>
-
-					tim_ref: f.taskRef_tim;
-
-					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
-					def tim = createCase("${groupId}_tim" as String, "Novy tim")
-					def vyplnenie_udajov = assignTask("1", tim)
-					change tim_ref value {
-						return [vyplnenie_udajov.stringId]
-					}
-				</action>
-			</actions>
-		</event>
-	</transition>
-	<transition>
-		<id>153</id>
-		<x>820</x>
-		<y>1100</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>vyhodnotenie podujatia</label>
-		<icon>event_note</icon>
-		<assignPolicy>auto</assignPolicy>
-		<dataGroup>
-			<id>DataGroup_1531</id>
-			<dataRef>
-				<id>enum_podujatia</id>
-				<logic>
-					<behavior>editable</behavior>
-					<action trigger="set">
-						podujatia_map: f.enum_podujatia,
-						podujatie_ref: f.taskRef_spravovane_podujatie;
-
-						def vybrane_podujatie = podujatia_map.value
-
-						def taskInfo = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("7")) } )
-
-						<!-- vyprazdni taskref a pridaj tam  -->
-						change podujatie_ref value {
-							return []
-						}
-						podujatie_ref.value.add(taskInfo.stringId)
-
-					</action>
-				</logic>
-				<layout>
-					<x>1</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>taskRef_spravovane_podujatie</id>
-				<logic>
-					<behavior>visible</behavior>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-		<event type="assign">
-			<id>78_assign</id>
-			<actions phase="pre">
-				<action>
-					podujatie_ref: f.taskRef_spravovane_podujatie,
-					podujatia_map: f.enum_podujatia;
-
-					def map = [:]
-
-					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
-					def podujatia = findCases{it.processIdentifier.eq("${groupId}_podujatie" as String).and(it.author.id.eq(loggedUser().id))}
-					podujatia.each {
-
-						def id = it.stringId
-						vyhodnotenie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("7")) });
-						<!-- ak je task vykonaie nedostupny, tak ho nepridaj do zoznamu -->
-						if(vyhodnotenie != null) {
-							pofujatie_info = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
-							nazov_podujatia = getData(pofujatie_info).get('podujatie_nazov');
-							map[id] = nazov_podujatia.value
-						}
-					}
-					change podujatia_map options {
-						return map
-					}
-					<!-- vynuluj taskref -->
-					change podujatie_ref value {
-						return []
-					}
-
-				</action>
-			</actions>
-		</event>
-		<event type="cancel">
-			<id>78_cancel</id>
-			<actions phase="pre">
-				<action>
-					podujatie_ref: f.taskRef_spravovane_podujatie,
-					podujatia_map: f.enum_podujatia;
-
-					change podujatie_ref value {
-						return []
-					}
-				</action>
-			</actions>
-		</event>
-		<event type="finish">
-			<id>78_finishl</id>
-			<actions phase="pre">
-				<action>
-					podujatie_ref: f.taskRef_spravovane_podujatie;
-
-
-					change podujatie_ref value {
-						return []
-					}
-
-				</action>
-			</actions>
-		</event>
-	</transition>
-	<transition>
-		<id>155</id>
-		<x>1420</x>
-		<y>900</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Moje timy</label>
-		<icon>group</icon>
-		<assignPolicy>auto</assignPolicy>
-		<finishPolicy>auto_no_data</finishPolicy>
-	</transition>
-	<transition>
-		<id>157</id>
-		<x>1300</x>
-		<y>1100</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Rozpustit tim</label>
-		<icon>delete_forever</icon>
-		<assignPolicy>auto</assignPolicy>
-		<dataGroup>
-			<id>DataGroup_781</id>
-			<dataRef>
-				<id>enum_tim</id>
-				<logic>
-					<behavior>editable</behavior>
-					<action trigger="set">
-						spravovany_tim_ref: f.taskRef_spravovany_tim,
-						tim_map: f.enum_tim;
-
-						def vybrany_tim = tim_map.value
-
-						def pridat_tim = findTask( { it.caseId.eq(vybrany_tim).and(it.transitionId.eq("16")) } )
-
-						<!-- vyprazdni taskref a pridaj tam  -->
-						change spravovany_tim_ref value {
-							return []
-						}
-						spravovany_tim_ref.value.add(pridat_tim.stringId)
-						change spravovany_tim_ref value {
-							return spravovany_tim_ref.value
-						}
-
-					</action>
-				</logic>
-				<layout>
-					<x>1</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>taskRef_pridat_clena</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-		<event type="assign">
-			<id>78_assign</id>
-			<actions phase="pre">
-				<action>
-					spravovany_tim_ref: f.taskRef_spravovany_tim,
-					tim_map: f.enum_tim;
-
-					def map = [:]
-
-					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
-					def timy = findCases{it.processIdentifier.eq("${groupId}_tim" as String).and(it.author.id.eq(loggedUser().id))}
-					timy.each {
-
-						def id = it.stringId
-						rozpustit_tim = findTask( { it.caseId.eq(id).and(it.transitionId.eq("7")) });
-						<!-- ak je task zrusenie je nedostupny, tak ho nepridaj do zoznamu -->
-						if(rozpustit_tim != null) {
-							info_o_time = findTask( { it.caseId.eq(id).and(it.transitionId.eq("16")) });
-							nazov_timu = getData(info_o_time).get('nazov_timu');
-							map[id] = nazov_timu.value
-						}
-					}
-					change tim_map options {
-						return map
-					}
-					<!-- vynuluj taskref -->
-					change spravovany_tim_ref value {
-						return []
-					}
-
-				</action>
-			</actions>
-		</event>
-		<event type="cancel">
-			<id>78_cancel</id>
-			<actions phase="pre">
-				<action>
-					tim_map: f.enum_tim,
-					spravovany_tim_ref: f.taskRef_spravovany_tim;
-
-					change tim_map options {
-						return [:]
-					}
-
-					change spravovany_tim_ref value {
-						return []
-					}
-
-				</action>
-			</actions>
-		</event>
-		<event type="finish">
-			<id>78_cancel</id>
-			<actions phase="pre">
-				<action>
-					spravovany_tim_ref: f.taskRef_spravovany_tim,
-					tim_map: f.enum_tim;
-
-					def vybrany_tim = tim_map.value
-
-					if(vybrany_tim == null) {
-						throw new IllegalArgumentException("Nebol vybrany ziaden tim");
-					}
-
-					def rozpustit_tim = findTask( { it.caseId.eq(vybrany_tim).and(it.transitionId.eq("7")) } )
-
-					if(rozpustit_tim == null) {
-						throw new IllegalArgumentException("Nenasiel sa tim");
-					}
-					else {
-						assignTask(rozpustit_tim)
-						finishTask(rozpustit_tim)
-					}
-
-					change tim_map options {
-						return [:]
-					}
-
-					change spravovany_tim_ref value {
-						return []
-					}
-
-				</action>
-			</actions>
-		</event>
-	</transition>
-	<transition>
-		<id>158</id>
-		<x>1420</x>
-		<y>1100</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Pridat clena</label>
-		<icon>person_add</icon>
-		<assignPolicy>auto</assignPolicy>
-		<dataGroup>
-			<id>DataGroup_781</id>
-			<dataRef>
-				<id>enum_tim</id>
-				<logic>
-					<behavior>editable</behavior>
-					<action trigger="set">
-						pridat_clena_ref: f.taskRef_pridat_clena,
-						tim_map: f.enum_tim;
-
-						def vybrany_tim = tim_map.value
-
-						if(pridat_clena_ref.value != null) {
-
-							if( !(pridat_clena_ref.value.isEmpty()) ) {
-								t = findTask({it._id.eq(pridat_clena_ref.value)})
-								cancelTask(t)
-							}
-						}
-						def pridat_clena = findTask( { it.caseId.eq(vybrany_tim).and(it.transitionId.eq("5")) } )
-						assignTask(pridat_clena)
-						<!-- vyprazdni taskref a pridaj tam  -->
-						change pridat_clena_ref value {
-							return []
-						}
-						pridat_clena_ref.value.add(pridat_clena.stringId)
-						change pridat_clena_ref value {
-							return pridat_clena_ref.value
-						}
-
-					</action>
-				</logic>
-				<layout>
-					<x>1</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>taskRef_pridat_clena</id>
-				<logic>
-					<behavior>visible</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-		<event type="assign">
-			<id>7888_assign</id>
-			<actions phase="pre">
-				<action>
-					pridat_clena_ref: f.taskRef_pridat_clena,
-					tim_map: f.enum_tim;
-
-					def map = [:]
-
-					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
-					def timy = findCases{it.processIdentifier.eq("${groupId}_tim" as String).and(it.author.id.eq(loggedUser().id))}
-					timy.each {
-
-						def id = it.stringId
-						pridanie_clena = findTask( { it.caseId.eq(id).and(it.transitionId.eq("16")) });
-						<!-- ak je task zrusenie je nedostupny, tak ho nepridaj do zoznamu -->
-						if(pridanie_clena != null) {
-							nazov_timu = getData(pridanie_clena).get('nazov_timu');
-							map[id] = nazov_timu.value
-							}
-						}
-					change tim_map options {
-						return map
-					}
-					<!-- vynuluj taskref -->
-					change pridat_clena_ref value {
-						return []
-					}
-
-				</action>
-			</actions>
-		</event>
-		<event type="cancel">
-			<id>7888_cancel</id>
-			<actions phase="pre">
-				<action>
-					tim_map: f.enum_tim,
-					pridat_clena_ref: f.taskRef_pridat_clena;
-
-					if(pridat_clena_ref.value != null) {
-
-						if( !(pridat_clena_ref.value.isEmpty()) ) {
-							t = findTask({it._id.eq(pridat_clena_ref.value[0])})
-							if(t) {
-								cancelTask(t)
-							}
-						}
-					}
-
-					change tim_map options {
-						return [:]
-					}
-
-					change pridat_clena_ref value {
-						return []
-					}
-
-				</action>
-			</actions>
-		</event>
-		<event type="finish">
-			<id>7888_finish</id>
-			<actions phase="pre">
-				<action>
-					tim_map: f.enum_tim,
-					pridat_clena_ref: f.taskRef_pridat_clena;
-
-					def vybrany_tim = tim_map.value
-
-					if(vybrany_tim == null) {
-						throw new IllegalArgumentException("Nebol vybrany ziaden tim");
-					}
-
-					if(pridat_clena_ref.value != null) {
-
-					if( !(pridat_clena_ref.value.isEmpty()) ) {
-						t = findTask({it._id.eq(pridat_clena_ref.value[0])})
-						finishTask(t)
-					}
-					}
-
-					change tim_map options {
-						return [:]
-					}
-
-					change pridat_clena_ref value {
-						return []
-					}
-
-				</action>
-			</actions>
-		</event>
-	</transition>
-	<transition>
-		<id>178</id>
-		<x>340</x>
-		<y>900</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Odhlasit z podujatia</label>
-		<icon>login</icon>
-		<assignPolicy>auto</assignPolicy>
-		<dataGroup>
-			<id>DataGroup_111</id>
-			<dataRef>
-				<id>taskRef_zvolene_podujatie</id>
-				<logic>
-					<behavior>editable</behavior>
-				</logic>
-				<layout>
-					<x>0</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-			<dataRef>
-				<id>enum_podujatia</id>
-				<logic>
-					<behavior>editable</behavior>
-					<action trigger="set">
-						podujatie_ref: f.taskRef_zvolene_podujatie,
-						podujatie_map: f.enum_podujatia;
-
-						def vybrane_podujatie = podujatie_map.value
-
-						def taskInfo = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("56")) } )
-
-						<!-- Ak je dataref prazdny, len ho inicializuj []
-						 	 ak nie je prazdny, cancelni predchadzajuci task prihlasenia a pridaj tam novu hodnotu -->
-						if(podujatie_ref.value != null) {
-
-							if( !(podujatie_ref.value.isEmpty()) ) {
-								t = findTask({it._id.eq(podujatie_ref.value[1])})
-								cancelTask(t)
-							}
-
-							change podujatie_ref value {
-								return []
-							}
-						}
-						change podujatie_ref value {
-							return []
-						}
-						<!-- Pridaj taskref na info o podujati iba ak taky tak naslo -->
-						if(taskInfo != null) {
-							podujatie_ref.value.add(taskInfo.stringId)
-							change podujatie_ref value {
-								return podujatie_ref.value
-							}
-						}
-						<!-- Pridaj taskref na prihlasenie timu iba ak taky task naslo-->
-						def taskOdhlasit = findTask( { it.caseId.eq(vybrane_podujatie).and(it.transitionId.eq("66")) } )
-						if(taskOdhlasit != null) {
-							assignTask(taskOdhlasit)
-							podujatie_ref.value.add(taskOdhlasit.stringId)
-							change podujatie_ref value {
-								return podujatie_ref.value
-							}
-						}
-
-					</action>
-				</logic>
-				<layout>
-					<x>1</x>
-					<y>0</y>
-					<rows>1</rows>
-					<cols>1</cols>
-					<offset>0</offset>
-					<template>material</template>
-					<appearance>outline</appearance>
-				</layout>
-			</dataRef>
-		</dataGroup>
-		<event type="assign">
-			<id>421_assign</id>
-			<actions phase="pre">
-				<action>
-
-					zvolene_podujatie_ref: f.taskRef_zvolene_podujatie,
-					podujatia_map: f.enum_podujatia;
-
-					def map = [:]
-
-					def groupId = findCase{it.processIdentifier.eq("org_group").and(it.author.id.eq(loggedUser().id))}?.stringId
-					def mojePodujatia = findCases({it.processIdentifier.contains("podujatie").and(it.author.id.eq(loggedUser().id))})
-
-					mojePodujatia.each {
-
-						def id = it.stringId
-						<!-- Vyhladaj task odhlasenia -->
-						odhlasenie = findTask( { it.caseId.eq(id).and(it.transitionId.eq("66")) });
-						<!-- ak je task odhlasenie nedostupny, tak ho nepridaj do zoznamu -->
-						if(odhlasenie != null) {
-							task = findTask( { it.caseId.eq(id).and(it.transitionId.eq("56")) });
-							nazov_podujatia = getData(task).get('podujatie_nazov');
-							map[id] = nazov_podujatia.value
-						}
-					}
-					change podujatia_map options {
-						return map
-					}
-
-				</action>
-			</actions>
-		</event>
-		<event type="cancel">
-			<id>422_cancel</id>
-			<actions phase="post">
-				<action>
-
-					podujatie_ref: f.taskRef_zvolene_podujatie,
-					podujatia_map: f.enum_podujatia;
-					<!-- na cancel tasku kontrola, ci nahodou nie su assignute nejake tasky odlhasenia -->
-					if(podujatie_ref.value != null) {
-						if(podujatie_ref.value[1] != null) {
-							if(!podujatie_ref.value[1].isEmpty()) {
-								t = findTask({it._id.eq(podujatie_ref.value[1])})
-								cancelTask(t)
-							}
-						}
-					}
-					change podujatie_ref value {
-						return []
-					}
-					change podujatia_map options {
-						return [:]
-					}
-
-				</action>
-			</actions>
-		</event>
-		<event type="finish">
-			<id>421_finish</id>
-			<actions phase="pre">
-				<action>
-					zvolene_podujatie_ref: f.taskRef_zvolene_podujatie,
-					podujatia_map: f.enum_podujatia;
-
-					if(podujatia_map == null) {
-						throw new IllegalArgumentException("Nebol vybrane ziadne podujatie");
-					}
-					if(podujatia_map.value == null) {
-						throw new IllegalArgumentException("Nebol vybrane ziadne podujatie");
-					}
-
-
-					if(zvolene_podujatie_ref.value != null) {
-						if(zvolene_podujatie_ref.value[1] != null) {
-							if( (!(zvolene_podujatie_ref.value[1].isEmpty()) ) ) {
-								def odhlasenieTask = findTask({it._id.eq(zvolene_podujatie_ref.value[1])})
-								finishTask(odhlasenieTask)
-							}
-						}
-					}
-
-					else {
-						throw new IllegalArgumentException("Nebolo zvolene ziadne podujatie");
-					}
-					change zvolene_podujatie_ref value {
-						return []
-					}
-					change podujatia_map options {
-						return [:]
-					}
-				</action>
-			</actions>
-		</event>
-	</transition>
-	<transition>
-		<id>165</id>
-		<x>1180</x>
-		<y>500</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Spat na domovsku stranku</label>
-		<icon>home</icon>
-		<trigger type="auto"/>
-	</transition>
-	<transition>
-		<id>181</id>
-		<x>1152</x>
-		<y>687</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Spat na domovsku stranku</label>
-		<icon>home</icon>
-		<assignPolicy>auto</assignPolicy>
-		<finishPolicy>auto_no_data</finishPolicy>
-	</transition>
-	<transition>
-		<id>182</id>
-		<x>1168</x>
-		<y>591</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>Spat na domovsku stranku</label>
-		<icon>home</icon>
-		<assignPolicy>auto</assignPolicy>
-		<finishPolicy>auto_no_data</finishPolicy>
+		<label>vytvorit tim</label>
 	</transition>
 	<!-- PLACES -->
 	<place>
-		<id>25</id>
-		<x>740</x>
-		<y>500</y>
+		<id>5</id>
+		<x>980</x>
+		<y>740</y>
+		<label></label>
+		<tokens>0</tokens>
+		<static>false</static>
+	</place>
+	<place>
+		<id>14</id>
+		<x>980</x>
+		<y>1140</y>
+		<label></label>
+		<tokens>0</tokens>
+		<static>false</static>
+	</place>
+	<place>
+		<id>16</id>
+		<x>1300</x>
+		<y>900</y>
+		<label></label>
+		<tokens>0</tokens>
+		<static>false</static>
+	</place>
+	<place>
+		<id>32</id>
+		<x>980</x>
+		<y>220</y>
 		<label></label>
 		<tokens>1</tokens>
 		<static>false</static>
 	</place>
 	<place>
-		<id>37</id>
-		<x>740</x>
-		<y>780</y>
-		<label></label>
-		<tokens>0</tokens>
-		<static>false</static>
-	</place>
-	<place>
-		<id>73</id>
-		<x>860</x>
-		<y>980</y>
-		<label></label>
-		<tokens>0</tokens>
-		<static>false</static>
-	</place>
-	<place>
-		<id>156</id>
-		<x>1420</x>
-		<y>980</y>
-		<label></label>
-		<tokens>0</tokens>
-		<static>false</static>
-	</place>
-	<place>
-		<id>166</id>
-		<x>820</x>
-		<y>1740</y>
+		<id>34</id>
+		<x>700</x>
+		<y>900</y>
 		<label></label>
 		<tokens>0</tokens>
 		<static>false</static>
 	</place>
 	<!-- ARCS -->
 	<arc>
-		<id>36</id>
+		<id>7</id>
+		<type>read</type>
+		<sourceId>5</sourceId>
+		<destinationId>1</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>8</id>
+		<type>read</type>
+		<sourceId>5</sourceId>
+		<destinationId>2</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>9</id>
+		<type>read</type>
+		<sourceId>5</sourceId>
+		<destinationId>3</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>12</id>
 		<type>regular</type>
-		<sourceId>25</sourceId>
-		<destinationId>35</destinationId>
+		<sourceId>5</sourceId>
+		<destinationId>10</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>13</id>
+		<type>regular</type>
+		<sourceId>5</sourceId>
+		<destinationId>11</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>15</id>
+		<type>regular</type>
+		<sourceId>10</sourceId>
+		<destinationId>14</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>17</id>
+		<type>regular</type>
+		<sourceId>11</sourceId>
+		<destinationId>16</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>23</id>
+		<type>regular</type>
+		<sourceId>16</sourceId>
+		<destinationId>19</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>24</id>
+		<type>regular</type>
+		<sourceId>16</sourceId>
+		<destinationId>20</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>27</id>
+		<type>regular</type>
+		<sourceId>19</sourceId>
+		<destinationId>14</destinationId>
+		<multiplicity>1</multiplicity>
+		<breakPoint><x>1180</x><y>1140</y></breakPoint>
+	</arc>
+	<arc>
+		<id>28</id>
+		<type>regular</type>
+		<sourceId>20</sourceId>
+		<destinationId>14</destinationId>
+		<multiplicity>1</multiplicity>
+		<breakPoint><x>1300</x><y>1140</y></breakPoint>
+	</arc>
+	<arc>
+		<id>33</id>
+		<type>regular</type>
+		<sourceId>5</sourceId>
+		<destinationId>31</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
 		<id>38</id>
 		<type>regular</type>
+		<sourceId>36</sourceId>
+		<destinationId>14</destinationId>
+		<multiplicity>1</multiplicity>
+		<breakPoint><x>780</x><y>1140</y></breakPoint>
+	</arc>
+	<arc>
+		<id>40</id>
+		<type>regular</type>
 		<sourceId>35</sourceId>
-		<destinationId>37</destinationId>
+		<destinationId>14</destinationId>
 		<multiplicity>1</multiplicity>
+		<breakPoint><x>620</x><y>1140</y></breakPoint>
 	</arc>
 	<arc>
-		<id>44</id>
+		<id>41</id>
 		<type>regular</type>
-		<sourceId>37</sourceId>
-		<destinationId>39</destinationId>
+		<sourceId>31</sourceId>
+		<destinationId>34</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>45</id>
+		<id>42</id>
 		<type>regular</type>
-		<sourceId>37</sourceId>
-		<destinationId>40</destinationId>
+		<sourceId>34</sourceId>
+		<destinationId>35</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>75</id>
+		<id>43</id>
+		<type>regular</type>
+		<sourceId>34</sourceId>
+		<destinationId>36</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>46</id>
+		<type>regular</type>
+		<sourceId>32</sourceId>
+		<destinationId>4</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>48</id>
+		<type>regular</type>
+		<sourceId>4</sourceId>
+		<destinationId>5</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>52</id>
+		<type>regular</type>
+		<sourceId>14</sourceId>
+		<destinationId>49</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>53</id>
+		<type>regular</type>
+		<sourceId>50</sourceId>
+		<destinationId>32</destinationId>
+		<multiplicity>1</multiplicity>
+		<breakPoint><x>500</x><y>220</y></breakPoint>
+	</arc>
+	<arc>
+		<id>54</id>
 		<type>regular</type>
 		<sourceId>51</sourceId>
-		<destinationId>73</destinationId>
+		<destinationId>32</destinationId>
 		<multiplicity>1</multiplicity>
+		<breakPoint><x>1500</x><y>220</y></breakPoint>
 	</arc>
 	<arc>
-		<id>79</id>
+		<id>55</id>
 		<type>regular</type>
-		<sourceId>73</sourceId>
-		<destinationId>77</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>150</id>
-		<type>regular</type>
-		<sourceId>37</sourceId>
+		<sourceId>16</sourceId>
 		<destinationId>51</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>152</id>
+		<id>56</id>
 		<type>regular</type>
-		<sourceId>73</sourceId>
-		<destinationId>78</destinationId>
+		<sourceId>49</sourceId>
+		<destinationId>32</destinationId>
+		<multiplicity>1</multiplicity>
+		<breakPoint><x>1740</x><y>1260</y></breakPoint>
+		<breakPoint><x>1740</x><y>220</y></breakPoint>
+	</arc>
+	<arc>
+		<id>57</id>
+		<type>regular</type>
+		<sourceId>34</sourceId>
+		<destinationId>50</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>154</id>
+		<id>59</id>
 		<type>regular</type>
-		<sourceId>73</sourceId>
-		<destinationId>153</destinationId>
+		<sourceId>5</sourceId>
+		<destinationId>58</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>159</id>
+		<id>60</id>
 		<type>regular</type>
-		<sourceId>37</sourceId>
-		<destinationId>155</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>160</id>
-		<type>regular</type>
-		<sourceId>155</sourceId>
-		<destinationId>156</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>161</id>
-		<type>regular</type>
-		<sourceId>156</sourceId>
-		<destinationId>157</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>162</id>
-		<type>regular</type>
-		<sourceId>156</sourceId>
-		<destinationId>130</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>163</id>
-		<type>regular</type>
-		<sourceId>156</sourceId>
-		<destinationId>158</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>164</id>
-		<type>regular</type>
-		<sourceId>73</sourceId>
-		<destinationId>42</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>167</id>
-		<type>regular</type>
-		<sourceId>39</sourceId>
-		<destinationId>166</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>168</id>
-		<type>regular</type>
-		<sourceId>40</sourceId>
-		<destinationId>166</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>169</id>
-		<type>regular</type>
-		<sourceId>42</sourceId>
-		<destinationId>166</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>170</id>
-		<type>regular</type>
-		<sourceId>153</sourceId>
-		<destinationId>166</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>171</id>
-		<type>regular</type>
-		<sourceId>77</sourceId>
-		<destinationId>166</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>172</id>
-		<type>regular</type>
-		<sourceId>78</sourceId>
-		<destinationId>166</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>173</id>
-		<type>regular</type>
-		<sourceId>157</sourceId>
-		<destinationId>166</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>174</id>
-		<type>regular</type>
-		<sourceId>158</sourceId>
-		<destinationId>166</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>175</id>
-		<type>regular</type>
-		<sourceId>130</sourceId>
-		<destinationId>166</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>176</id>
-		<type>regular</type>
-		<sourceId>166</sourceId>
-		<destinationId>165</destinationId>
-		<multiplicity>1</multiplicity>
-		<breakPoint><x>1780</x><y>1300</y></breakPoint>
-		<breakPoint><x>1780</x><y>860</y></breakPoint>
-	</arc>
-	<arc>
-		<id>177</id>
-		<type>regular</type>
-		<sourceId>165</sourceId>
-		<destinationId>25</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>179</id>
-		<type>regular</type>
-		<sourceId>37</sourceId>
-		<destinationId>178</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>180</id>
-		<type>regular</type>
-		<sourceId>178</sourceId>
-		<destinationId>166</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>183</id>
-		<type>regular</type>
-		<sourceId>73</sourceId>
-		<destinationId>181</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>184</id>
-		<type>regular</type>
-		<sourceId>156</sourceId>
-		<destinationId>182</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>185</id>
-		<type>regular</type>
-		<sourceId>181</sourceId>
-		<destinationId>25</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>186</id>
-		<type>regular</type>
-		<sourceId>182</sourceId>
-		<destinationId>25</destinationId>
+		<sourceId>58</sourceId>
+		<destinationId>14</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 </document>
