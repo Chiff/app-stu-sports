@@ -84,9 +84,13 @@ namespace App\Models{
  * App\Models\EventTeam
  *
  * @mixin IdeHelperEventTeam
+ * @property int $event_id
+ * @property int $team_id
  * @method static \Illuminate\Database\Eloquent\Builder|EventTeam newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EventTeam newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EventTeam query()
+ * @method static \Illuminate\Database\Eloquent\Builder|EventTeam whereEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventTeam whereTeamId($value)
  */
 	class IdeHelperEventTeam extends \Eloquent {}
 }
@@ -130,6 +134,7 @@ namespace App\Models{
  * @property string $email
  * @property int $ext_id
  * @property string|null $encrypted_auth
+ * @property string $system
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $ownEvents
  * @property-read int|null $own_events_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $ownTeams
@@ -147,6 +152,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereFirstname($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereSurname($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereSystem($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  */
 	class IdeHelperUser extends \Eloquent implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Contracts\Auth\Access\Authorizable, \Tymon\JWTAuth\Contracts\JWTSubject {}
@@ -169,9 +175,13 @@ namespace App\Models{
  * App\Models\UserTeam
  *
  * @mixin IdeHelperUserTeam
+ * @property int $user_id
+ * @property int $team_id
  * @method static \Illuminate\Database\Eloquent\Builder|UserTeam newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserTeam newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserTeam query()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserTeam whereTeamId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserTeam whereUserId($value)
  */
 	class IdeHelperUserTeam extends \Eloquent {}
 }
