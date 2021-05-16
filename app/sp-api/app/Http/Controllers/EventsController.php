@@ -237,13 +237,23 @@ class EventsController extends Controller
         return response()->json($event, 200);
     }
 
-    // TODO povolit aj adminovi eventu odhlasit team
     public function deleteTeamByIdFromEvent(int $event_id, int $team_id): JsonResponse
     {
         $user_id = auth()->id();
 
-        // event
+        // event & team
         $event = Event::whereId($event_id)->first();
+        $team = Team::whereId($team_id)->first();
+
+        if (!$team) throw new \Exception("team not found");
+        if (!$event) throw new \Exception("event not found");
+
+
+        // ak je prihlaseny user vlastnikom eventu, moze odhlasit team
+        if ($event->user_id == $user_id){
+            $event->teams()->detach($team_id);
+            return response()->json('Tim bol uspesne odhlaseny z podujatia vlastnikom eventu', 200);
+        }
 
         // teamy na evente, kde je used kapitan
         $teams_on_event_owned_by_user = $event->teams->where('user_id', $user_id);
@@ -253,7 +263,7 @@ class EventsController extends Controller
 
         if (sizeof($exists) > 0){
             $event->teams()->detach($team_id);
-            return response()->json('Tim bol uspesne odhlaseny z podujatia', 200);
+            return response()->json('Tim bol uspesne odhlaseny z podujatia kapitanom timu', 200);
         }
 
 
