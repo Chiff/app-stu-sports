@@ -189,7 +189,6 @@ class EventService
             $events->where('event_end', '>=', $todayDate);
         }
 
-
         return $this->mapEventsWithOwner($events->get());
     }
 
