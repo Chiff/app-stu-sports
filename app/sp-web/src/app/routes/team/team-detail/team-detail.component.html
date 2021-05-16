@@ -1,19 +1,109 @@
 <h1 class="text-primary my-4">Detail tímu</h1>
 <div class="card">
   <div class="card-body">
-    <pre>{{ team | json }}</pre>
+    <div class="row">
+      <div class="col-sm-12 col-md-3"><i class="fas fa-list fa-fw text-primary"></i>&nbsp;Názov</div>
+      <div class="col-sm-12 col-md-9 fw-bold">{{ team.team_name }}</div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-3"><i class="fas fa-crown fa-fw text-primary"></i>&nbsp;Zakladateľ</div>
+      <div class="col-sm-12 col-md-9 fw-bold">{{ team.owner.firstname }} {{ team.owner.surname }}</div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-3"><i class="fas fa-calendar fa-fw text-primary"></i>&nbsp;Vytvorený</div>
+      <div class="col-sm-12 col-md-9 fw-bold">{{ team.created_at | date: 'shortDate' }}</div>
+    </div>
+  </div>
+</div>
+
+<ng-container *ngIf="team?.active_events?.length">
+  <h3 class="text-primary mt-4">Prebiehajúce poduja</h3>
+  <div class="card">
+    <div class="card-body p-0">
+      <table class="table table-bordered table-border-none mb-0">
+        <thead>
+          <tr>
+            <th width="1"></th>
+            <th>Názov podujatia</th>
+            <th>Registrácia</th>
+            <th>Začiatok</th>
+            <th>Koniec</th>
+            <th>Vytvoril</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let e of team?.future_events">
+            <td>
+              <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
+            </td>
+            <td>{{ e.name }}</td>
+            <td>{{ e.registration_start | date }} - {{ e.registration_end | date }}</td>
+            <td>{{ e.event_start | date: 'short' }}</td>
+            <td>{{ e.event_end | date: 'short' }}</td>
+            <td class="text-capitalize">{{ e.owner?.firstname }} {{ e.owner.surname }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-container>
+
+<h3 class="text-primary mt-4">Štatistiky</h3>
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-sm-12 col-md-3"><i class="fas fa-check fa-fw text-primary"></i>&nbsp;Počet hier</div>
+      <div class="col-sm-12 col-md-9 fw-bold">-</div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-3"><i class="fas fa-trophy fa-fw text-primary"></i>&nbsp;Počet výhier</div>
+      <div class="col-sm-12 col-md-9 fw-bold">-</div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-3"><i class="fas fa-users fa-fw text-primary"></i>&nbsp;Počet členov</div>
+      <div class="col-sm-12 col-md-9 fw-bold">-</div>
+    </div>
   </div>
 </div>
 
 <h3 class="text-primary mt-4">Podujatia</h3>
 <div class="card">
-  <div class="card-body">test</div>
+  <div class="card-body" [ngClass]="{ 'p-0': team?.future_events?.length }">
+    <div class="alert alert-warning m-0" *ngIf="!team?.future_events?.length">
+      Váš tím momentálne nie je prihlásený na žiadne nadchádzajúce podujatie. <a routerLink="/event/list">Hľadať podujatia</a>.
+    </div>
+    <table class="table table-bordered table-border-none mb-0" *ngIf="team?.future_events?.length">
+      <thead>
+        <tr>
+          <th width="1"></th>
+          <th>Názov podujatia</th>
+          <th>Registrácia</th>
+          <th>Začiatok</th>
+          <th>Koniec</th>
+          <th>Vytvoril</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let e of team?.future_events">
+          <td>
+            <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
+          </td>
+          <td>{{ e.name }}</td>
+          <td>{{ e.registration_start | date }} - {{ e.registration_end | date }}</td>
+          <td>{{ e.event_start | date: 'short' }}</td>
+          <td>{{ e.event_end | date: 'short' }}</td>
+          <td class="text-capitalize">{{ e.owner?.firstname }} {{ e.owner.surname }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <h3 class="text-primary mt-4 d-flex justify-content-between">
   Členovia
 
-  <button class="btn btn-link" (click)="addTeammate = true">Pridať užívateľa</button>
+  <button class="btn btn-link" *ngIf="!addTeammate" (click)="addTeammate = true">Pridať užívateľa</button>
+  <button class="btn btn-link" *ngIf="addTeammate" (click)="addTeammate = false">Zrušiť</button>
 </h3>
 <div class="card mb-4" *ngIf="addTeammate">
   <div class="card-body">
@@ -36,5 +126,47 @@
   </div>
 </div>
 <div class="card">
-  <div class="card-body">test</div>
+  <div class="card-body">
+    <div *ngFor="let u of team?.users">
+      <i class="fas fa-fw fa-user text-primary" *ngIf="u.id != team.owner.id"></i>
+      <i class="fas fa-fw fa-crown text-primary" *ngIf="u.id == team.owner.id"></i>
+      &nbsp;
+      <span class="fw-bold">{{ u.firstname }} {{ u.surname }}</span
+      >, {{ u.email }}
+    </div>
+  </div>
 </div>
+
+<h3 class="text-primary mt-4">Skončené podujatia</h3>
+<div class="card">
+  <div class="card-body" [ngClass]="{ 'p-0': team?.ended_events?.length }">
+    <div class="alert alert-warning m-0" *ngIf="!team?.ended_events?.length">
+      Váš tím momentálne sa zatiaľ nezúčastnil žiadneho podujatia.
+    </div>
+    <table class="table table-bordered table-border-none mb-0" *ngIf="team?.ended_events?.length">
+      <thead>
+        <tr>
+          <th width="1"></th>
+          <th>Názov podujatia</th>
+          <th>Registrácia</th>
+          <th>Začiatok</th>
+          <th>Koniec</th>
+          <th>Vytvoril</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let e of team?.ended_events">
+          <td>
+            <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
+          </td>
+          <td>{{ e.name }}</td>
+          <td>{{ e.registration_start | date }} - {{ e.registration_end | date }}</td>
+          <td>{{ e.event_start | date: 'short' }}</td>
+          <td>{{ e.event_end | date: 'short' }}</td>
+          <td class="text-capitalize">{{ e.owner?.firstname }} {{ e.owner.surname }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="bottom-spacer mt-4">&nbsp;</div>
