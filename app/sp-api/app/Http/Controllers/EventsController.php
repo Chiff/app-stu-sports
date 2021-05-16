@@ -28,7 +28,7 @@ class EventsController extends Controller
     {
         $this->eventService = $event;
 
-        $this->middleware('auth', ['except' => ['showAllEvents']]);
+        $this->middleware('auth', ['except' => ['showAllEvents', 'showOneEventById']]);
         $this->jsonMapper = $jsonMapper;
     }
 
@@ -57,8 +57,8 @@ class EventsController extends Controller
      */
     public function showOneEventById($id): JsonResponse
     {
-        $event = Event::findOrFail($id);
-        return response()->json($event, 200);
+        $event = $this->eventService->getFullEventById($id);
+        return response()->json($event);
     }
 
     /**
@@ -93,8 +93,8 @@ class EventsController extends Controller
     public function createOneEvent(Request $request): JsonResponse
     {
         $this->validate($request, EventDTO::$validationRules);
-        $this->eventService->createOneEvent($request);
-        return response()->json();
+        $e = $this->eventService->createOneEvent($request);
+        return response()->json($e);
     }
 
     /**

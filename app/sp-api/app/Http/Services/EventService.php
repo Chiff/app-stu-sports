@@ -20,6 +20,7 @@ use App\Models\Netgrif\TasksReferences;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\UserTeam;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use JsonMapper\JsonMapper;
@@ -74,20 +75,18 @@ class EventService
         return $this->workflowService->getOneUsingGET($id);
     }
 
-    public function createOneEvent(Request $request): void
+    public function createOneEvent(Request $request): EventDTO
     {
         $dto = new EventDTO();
         $dto->user_id = auth()->id();
         $this->jsonMapper->mapObjectFromString(json_encode($request->toArray()), $dto);
-
-        $netgrifEvent = null;
 
         // TODO - 13/05/2021 - NA TOTO POZOR!
         app('db')->transaction(function () use ($dto) {
             $createdEvent = $this->eventAS->createEvent($dto);
 
             if (!$createdEvent) {
-                throw new \Exception("could not create", 500);
+                throw new Exception("could not create", 500);
             }
 
             $netId = env('API_INTERES_EVENT_NET_ID');
@@ -95,7 +94,7 @@ class EventService
             $netgrifEvent = $this->workflowService->createCaseUsingPOST($netId, $title);
 
             if (!$netgrifEvent) {
-                throw new \Exception("could not create netgrif event", 500);
+                throw new Exception("could not create netgrif event", 500);
             }
 
             $createdEvent->ext_id = $netgrifEvent->stringId;
@@ -129,7 +128,10 @@ class EventService
             $this->taskService->setTaskData($taskId, $taskData);
             $this->taskService->finishUsingGET($taskId);
 
+            $this->jsonMapper->mapObjectFromString($createdEvent, $dto);
         });
+
+        return $dto;
     }
 
     /**
@@ -192,6 +194,26 @@ class EventService
         return $this->mapEventsWithOwner($events->get());
     }
 
+    private function mapEventWithOwner(Event $model, EventDTO $dto = null): EventDTO
+    {
+        $eventDTO = new EventDTO();
+
+        // v pripade ze nechceme vytvorit novy ale len doplnit uz existujuci
+        if ($dto) {
+            $eventDTO = $dto;
+        }
+
+        $this->jsonMapper->mapObjectFromString($model->toJson(), $eventDTO);
+
+        $user = new UserDTO();
+        $userModel = User::whereId($model->user_id)->first();
+        $this->jsonMapper->mapObjectFromString($userModel->toJson(), $user);
+
+        $eventDTO->owner = $user;
+
+        return $eventDTO;
+    }
+
     /**
      * @param Collection $events
      * @return EventDTO[]
@@ -201,20 +223,9 @@ class EventService
         $result = [];
 
         foreach ($events as $event) {
-
-            $eventDTO = new EventDTO();
-            $this->jsonMapper->mapObjectFromString($event->toJson(), $eventDTO);
-
-            $user = new UserDTO();
-            $userModel = User::whereId($event->user_id)->first();
-            $this->jsonMapper->mapObjectFromString($userModel->toJson(), $user);
-
-            $eventDTO->owner = $user;
-
-
+            $eventDTO = $this->mapEventWithOwner($event);
             array_push($result, $eventDTO);
         }
-
 
         return $result;
     }
@@ -230,19 +241,19 @@ class EventService
         $teamOwner = [66, 59];
         //($tasks);
         $iterator = 0;
-        foreach($tasks->taskReference as $task) {
+        foreach ($tasks->taskReference as $task) {
 
             //ak uzivatel nie je vlastnikom podujatia
-            if($isOwner == false) {
-                if(in_array($task->transitionId, $adminTransIds)) {
+            if ($isOwner == false) {
+                if (in_array($task->transitionId, $adminTransIds)) {
                     unset($tasks->taskReference[$iterator]);
                     $iterator++;
                     continue;
                 }
             }
             //ak uzivatel nevlastni ziadny z prihlasenych timov
-            if($hasTeam == false) {
-                if(in_array($task->transitionId, $teamOwner)) {
+            if ($hasTeam == false) {
+                if (in_array($task->transitionId, $teamOwner)) {
                     unset($tasks->taskReference[$iterator]);
                     $iterator++;
                     continue;
@@ -253,7 +264,7 @@ class EventService
         return $tasks;
     }
 
-    public function hasTeamOnEvent($user_id, $eventCaseId):bool
+    public function hasTeamOnEvent($user_id, $eventCaseId): bool
     {
         $has_team = false;
 
@@ -261,7 +272,7 @@ class EventService
         $eventTeams = Event::whereExtId($eventCaseId)->first()->teams;
 
         foreach ($eventTeams as $eventTeam) {
-            if(in_array($eventTeam->id, $userTeams)) {
+            if (in_array($eventTeam->id, $userTeams)) {
                 return true;
             }
         }
@@ -274,11 +285,27 @@ class EventService
         $is_owner = false;
 
         $event = Event::whereExtId($eventCaseId)->first();
-        if($event->user_id == $user_id) return true;
+        if ($event->user_id == $user_id) return true;
 
         return $is_owner;
     }
 
 
+
+    public function getFullEventById($id): EventDTO
+    {
+        $model = Event::whereId($id)->first();
+
+        if (!$model || !$id) {
+            throw new Exception('not found', 404);
+        }
+
+        $dto = new EventDTO();
+        $dto = $this->mapEventWithOwner($model, $dto);
+        // TODO - 16. 5. 2021 - @msteklac/@mrybar
+        // $dto = $this->mapEventWithTeams($model, $dto);
+
+        return $dto;
+    }
 
 }
