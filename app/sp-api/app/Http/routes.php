@@ -39,6 +39,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->post('/create', ['uses' => 'EventsController@createOneEvent']);
         $router->post('/addTeamById', ['uses' => 'EventsController@signTeamById']);
         $router->post('/addParticipantByMail', ['uses' => 'EventsController@addOneParticipantToEventByEmail']);
+        $router->get('teams/{id}', ['uses' => 'EventsController@showTeamsOnEvent']);
+        $router->delete('/teams/delete/{id}{id}', ['uses' => 'EventsController@deleteTeamByIdFromEvent']);
+
+
         //$router->get('test', ['uses' => 'EventsController@test']);
     });
 

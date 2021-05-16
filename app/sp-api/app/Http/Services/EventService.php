@@ -279,4 +279,6 @@ class EventService
         return $is_owner;
     }
 
+
+
 }
