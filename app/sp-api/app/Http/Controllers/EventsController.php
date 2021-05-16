@@ -4,6 +4,8 @@
 namespace App\Http\Controllers;
 
 use App\Dto\Event\EventDTO;
+use App\Dto\Team\TeamDTO;
+use App\Dto\User\UserDTO;
 use App\Http\Services\EventService;
 use App\Models\Event;
 use App\Models\Team;
@@ -26,7 +28,7 @@ class EventsController extends Controller
     {
         $this->eventService = $event;
 
-        $this->middleware('auth', ['except' => ['showAllEvents']]);
+        $this->middleware('auth', ['except' => ['showAllEvents', 'showOneEventById']]);
         $this->jsonMapper = $jsonMapper;
     }
 
@@ -55,8 +57,8 @@ class EventsController extends Controller
      */
     public function showOneEventById($id): JsonResponse
     {
-        $event = Event::findOrFail($id);
-        return response()->json($event, 200);
+        $event = $this->eventService->getFullEventById($id);
+        return response()->json($event);
     }
 
     /**
@@ -91,8 +93,8 @@ class EventsController extends Controller
     public function createOneEvent(Request $request): JsonResponse
     {
         $this->validate($request, EventDTO::$validationRules);
-        $this->eventService->createOneEvent($request);
-        return response()->json();
+        $e = $this->eventService->createOneEvent($request);
+        return response()->json($e);
     }
 
     /**
@@ -233,6 +235,67 @@ class EventsController extends Controller
         $event = Event::findOrFail($id);
         $event->update($request->all());
         return response()->json($event, 200);
+    }
+
+    public function deleteTeamByIdFromEvent(int $event_id, int $team_id): JsonResponse
+    {
+        $user_id = auth()->id();
+
+        // event & team
+        $event = Event::whereId($event_id)->first();
+        $team = Team::whereId($team_id)->first();
+
+        if (!$team) throw new \Exception("team not found");
+        if (!$event) throw new \Exception("event not found");
+
+
+        // ak je prihlaseny user vlastnikom eventu, moze odhlasit team
+        if ($event->user_id == $user_id){
+            $event->teams()->detach($team_id);
+            return response()->json('Tim bol uspesne odhlaseny z podujatia vlastnikom eventu', 200);
+        }
+
+        // teamy na evente, kde je used kapitan
+        $teams_on_event_owned_by_user = $event->teams->where('user_id', $user_id);
+
+
+        $exists = $teams_on_event_owned_by_user->where('id', $team_id);
+
+        if (sizeof($exists) > 0){
+            $event->teams()->detach($team_id);
+            return response()->json('Tim bol uspesne odhlaseny z podujatia kapitanom timu', 200);
+        }
+
+
+        return response()->json('Something went wrong!', 301);
+    }
+    // TODO: hodit to na detail TeamDTO, nie takto
+    public function showTeamsOnEvent(int $event_id): JsonResponse
+    {
+
+        // event
+        $event = Event::whereId($event_id)->first();
+
+        if (!$event){
+            throw new \Exception("event not found");
+        }
+
+        $teams = [];
+        foreach ($event->teams as $team){
+
+            $teamDTO = new TeamDTO();
+            $this->jsonMapper->mapObjectFromString($team->toJson(), $teamDTO);
+
+            $user = new UserDTO();
+            $userModel = User::whereId($team->user_id)->first();
+            $this->jsonMapper->mapObjectFromString($userModel->toJson(), $user);
+
+            $teamDTO->owner = $user;
+            array_push($teams, $teamDTO);
+        }
+
+
+        return response()->json($teams, 301);
     }
 
 }

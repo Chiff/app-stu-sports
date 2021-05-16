@@ -1,1 +1,247 @@
-<p>event-detail works!</p>
+<div class="alert alert-info" *ngIf="fresh(event)">
+  <i class="fas fa-fw fa-info-circle"></i>&nbsp;Podujatie je naplánované. Svoj tím môžete zaregistrovať od
+  <span class="fw-bold">{{ event.registration_start | date: 'short' }}</span> .
+</div>
+<div class="alert alert-success" *ngIf="inReg(event)">
+  <i class="fas fa-fw fa-pencil-alt"></i>&nbsp;Prebieha registrácia na podujatie. Registrácia bude ukončená
+  <span class="fw-bold">{{ event.registration_end | date: 'short' }}</span> .
+</div>
+<div class="alert alert-warning" *ngIf="isActive(event)">
+  <i class="fas fa-fw fa-clock"></i>&nbsp;Podujatie práve prebieha. Predpokladaný koniec podujatia je
+  <span class="fw-bold">{{ event.event_end | date: 'short' }}</span> .
+</div>
+<div class="alert alert-danger" *ngIf="isFinished(event)">
+  <i class="fas fa-fw fa-exclamation-triangle"></i>&nbsp;Podujatie bolo ukončené.
+</div>
+
+<h1 class="text-primary my-4">Detail podujatia</h1>
+<div class="row" *ngIf="event">
+  <div class="col-sm-12 col-lg-6 mb-2">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-list fa-fw text-primary"></i>&nbsp;Názov</div>
+          <div class="col-sm-12 col-md-8">{{ event.name }}</div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-pencil-alt fa-fw text-primary"></i>&nbsp;Popis</div>
+          <div class="col-sm-12 col-md-8">{{ event.description }}</div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-gamepad fa-fw text-primary"></i>&nbsp;Typ</div>
+          <div class="col-sm-12 col-md-8">{{ event.type?.label }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mt-2">
+      <div class="card-body">
+        <h4 class="text-primary">Obmedzenia</h4>
+        <div class="row">
+          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-users fa-fw text-primary"></i>&nbsp;Počet tímov</div>
+          <div class="col-sm-12 col-md-8" *ngIf="event.min_teams != event.max_teams">
+            {{ event.min_teams }} - {{ event.max_teams }}
+          </div>
+          <div class="col-sm-12 col-md-8" *ngIf="event.min_teams == event.max_teams">{{ event.min_teams }}</div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-user fa-fw text-primary"></i>&nbsp;Počet hráčov v tíme</div>
+          <div class="col-sm-12 col-md-8" *ngIf="event.min_team_members != event.max_team_members">
+            {{ event.min_team_members }} - {{ event.max_team_members }}
+          </div>
+          <div class="col-sm-12 col-md-8" *ngIf="event.min_team_members == event.max_team_members">
+            {{ event.min_team_members }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-lg-6 mb-2">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-crown fa-fw text-primary"></i>&nbsp;Zakladateľ</div>
+          <div class="col-sm-12 col-md-8">{{ event.owner.firstname }} {{ event.owner.surname }}</div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-calendar fa-fw text-primary"></i>&nbsp;Vytvorený</div>
+          <div class="col-sm-12 col-md-8">{{ event.created_at | date: 'shortDate' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mt-2">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-clock fa-fw text-primary"></i>&nbsp;Registrácia</div>
+          <div class="col-sm-12 col-md-8">
+            {{ event.registration_start | date: 'short' }} - {{ event.registration_end | date: 'short' }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-play fa-fw text-primary"></i>&nbsp;Začiatok</div>
+          <div class="col-sm-12 col-md-8">{{ event.event_start | date: 'short' }}</div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-flag-checkered fa-fw text-primary"></i>&nbsp;Koniec</div>
+          <div class="col-sm-12 col-md-8">{{ event.event_end | date: 'short' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<ng-container *ngIf="team?.active_events?.length">-->
+<!--  <h3 class="text-primary mt-4">Prebiehajúce poduja</h3>-->
+<!--  <div class="card">-->
+<!--    <div class="card-body p-0">-->
+<!--      <table class="table table-bordered table-border-none mb-0">-->
+<!--        <thead>-->
+<!--          <tr>-->
+<!--            <th width="1"></th>-->
+<!--            <th>Názov podujatia</th>-->
+<!--            <th>Registrácia</th>-->
+<!--            <th>Začiatok</th>-->
+<!--            <th>Koniec</th>-->
+<!--            <th>Vytvoril</th>-->
+<!--          </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--          <tr *ngFor="let e of team?.future_events">-->
+<!--            <td>-->
+<!--              <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>-->
+<!--            </td>-->
+<!--            <td>{{ e.name }}</td>-->
+<!--            <td>{{ e.registration_start | date }} - {{ e.registration_end | date }}</td>-->
+<!--            <td>{{ e.event_start | date: 'short' }}</td>-->
+<!--            <td>{{ e.event_end | date: 'short' }}</td>-->
+<!--            <td class="text-capitalize">{{ e.owner?.firstname }} {{ e.owner.surname }}</td>-->
+<!--          </tr>-->
+<!--        </tbody>-->
+<!--      </table>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</ng-container>-->
+
+<!--<h3 class="text-primary mt-4">Štatistiky</h3>-->
+<!--<div class="card">-->
+<!--  <div class="card-body">-->
+<!--    <div class="row">-->
+<!--      <div class="col-sm-12 col-md-3"><i class="fas fa-check fa-fw text-primary"></i>&nbsp;Počet hier</div>-->
+<!--      <div class="col-sm-12 col-md-9 fw-bold">-</div>-->
+<!--    </div>-->
+<!--    <div class="row">-->
+<!--      <div class="col-sm-12 col-md-3"><i class="fas fa-trophy fa-fw text-primary"></i>&nbsp;Počet výhier</div>-->
+<!--      <div class="col-sm-12 col-md-9 fw-bold">-</div>-->
+<!--    </div>-->
+<!--    <div class="row">-->
+<!--      <div class="col-sm-12 col-md-3"><i class="fas fa-users fa-fw text-primary"></i>&nbsp;Počet členov</div>-->
+<!--      <div class="col-sm-12 col-md-9 fw-bold">-</div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<h3 class="text-primary mt-4">Podujatia</h3>-->
+<!--<div class="card">-->
+<!--  <div class="card-body" [ngClass]="{ 'p-0': team?.future_events?.length }">-->
+<!--    <div class="alert alert-warning m-0" *ngIf="!team?.future_events?.length">-->
+<!--      Váš tím momentálne nie je prihlásený na žiadne nadchádzajúce podujatie. <a routerLink="/event/list">Hľadať podujatia</a>.-->
+<!--    </div>-->
+<!--    <table class="table table-bordered table-border-none mb-0" *ngIf="team?.future_events?.length">-->
+<!--      <thead>-->
+<!--        <tr>-->
+<!--          <th width="1"></th>-->
+<!--          <th>Názov podujatia</th>-->
+<!--          <th>Registrácia</th>-->
+<!--          <th>Začiatok</th>-->
+<!--          <th>Koniec</th>-->
+<!--          <th>Vytvoril</th>-->
+<!--        </tr>-->
+<!--      </thead>-->
+<!--      <tbody>-->
+<!--        <tr *ngFor="let e of team?.future_events">-->
+<!--          <td>-->
+<!--            <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>-->
+<!--          </td>-->
+<!--          <td>{{ e.name }}</td>-->
+<!--          <td>{{ e.registration_start | date }} - {{ e.registration_end | date }}</td>-->
+<!--          <td>{{ e.event_start | date: 'short' }}</td>-->
+<!--          <td>{{ e.event_end | date: 'short' }}</td>-->
+<!--          <td class="text-capitalize">{{ e.owner?.firstname }} {{ e.owner.surname }}</td>-->
+<!--        </tr>-->
+<!--      </tbody>-->
+<!--    </table>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<h3 class="text-primary mt-4 d-flex justify-content-between align-items-end">-->
+<!--  Členovia-->
+
+<!--  <button class="btn py-0 btn-link" *ngIf="!addTeammate" (click)="addTeammate = true">Pridať užívateľa</button>-->
+<!--  <button class="btn py-0 btn-link" *ngIf="addTeammate" (click)="addTeammate = false">Zrušiť</button>-->
+<!--</h3>-->
+<!--<div class="card mb-4" *ngIf="addTeammate">-->
+<!--  <div class="card-body">-->
+<!--    <form #ngForm="ngForm">-->
+<!--      <div class="form-group form-group-spaced">-->
+<!--        <label class="form-control-required" for="teammate.email">Email</label>-->
+<!--        <input type="email" class="form-control" id="teammate.email" name="teammate.email" [(ngModel)]="newMail" />-->
+<!--      </div>-->
+
+<!--      <div class="form-group form-group-spaced" *ngIf="error">-->
+<!--        <div class="alert alert-danger m-0">-->
+<!--          {{ error }}-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      <div class="form-group form-group-spaced">-->
+<!--        <button class="btn btn-primary" type="button" (click)="add()">Pridať do tímu</button>-->
+<!--      </div>-->
+<!--    </form>-->
+<!--  </div>-->
+<!--</div>-->
+<!--<div class="card">-->
+<!--  <div class="card-body">-->
+<!--    <div *ngFor="let u of team?.users">-->
+<!--      <i class="fas fa-fw fa-user text-primary" *ngIf="u.id != team.owner.id"></i>-->
+<!--      <i class="fas fa-fw fa-crown text-primary" *ngIf="u.id == team.owner.id"></i>-->
+<!--      &nbsp;-->
+<!--      <span class="fw-bold">{{ u.firstname }} {{ u.surname }}</span-->
+<!--      >, {{ u.email }}-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<h3 class="text-primary mt-4">Skončené podujatia</h3>-->
+<!--<div class="card">-->
+<!--  <div class="card-body" [ngClass]="{ 'p-0': team?.ended_events?.length }">-->
+<!--    <div class="alert alert-warning m-0" *ngIf="!team?.ended_events?.length">-->
+<!--      Váš tím momentálne sa zatiaľ nezúčastnil žiadneho podujatia.-->
+<!--    </div>-->
+<!--    <table class="table table-bordered table-border-none mb-0" *ngIf="team?.ended_events?.length">-->
+<!--      <thead>-->
+<!--        <tr>-->
+<!--          <th width="1"></th>-->
+<!--          <th>Názov podujatia</th>-->
+<!--          <th>Registrácia</th>-->
+<!--          <th>Začiatok</th>-->
+<!--          <th>Koniec</th>-->
+<!--          <th>Vytvoril</th>-->
+<!--        </tr>-->
+<!--      </thead>-->
+<!--      <tbody>-->
+<!--        <tr *ngFor="let e of team?.ended_events">-->
+<!--          <td>-->
+<!--            <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>-->
+<!--          </td>-->
+<!--          <td>{{ e.name }}</td>-->
+<!--          <td>{{ e.registration_start | date }} - {{ e.registration_end | date }}</td>-->
+<!--          <td>{{ e.event_start | date: 'short' }}</td>-->
+<!--          <td>{{ e.event_end | date: 'short' }}</td>-->
+<!--          <td class="text-capitalize">{{ e.owner?.firstname }} {{ e.owner.surname }}</td>-->
+<!--        </tr>-->
+<!--      </tbody>-->
+<!--    </table>-->
+<!--  </div>-->
+<!--</div>-->
+<!--<div class="bottom-spacer mt-4">&nbsp;</div>-->

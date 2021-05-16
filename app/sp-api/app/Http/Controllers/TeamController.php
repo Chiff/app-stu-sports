@@ -104,4 +104,23 @@ class TeamController extends Controller
         $user->teams()->save($team);
         return response()->json();
     }
+
+
+    public function deleteTeamById(int $team_id): JsonResponse
+    {
+        $user_id = auth()->id();
+        $team = Team::whereId($team_id)->first();
+
+        if (!$team) {
+            throw new \Exception("Team doesnt exist");
+        }
+
+        if ($team->user_id == $user_id){
+            $team->delete();
+            return response()->json('Team deleted', 200);
+        }
+
+        return response()->json('You are not owner of the team:', 301);
+    }
+
 }

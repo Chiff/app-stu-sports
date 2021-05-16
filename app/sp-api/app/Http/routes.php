@@ -39,6 +39,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->post('/create', ['uses' => 'EventsController@createOneEvent']);
         $router->post('/addTeamById', ['uses' => 'EventsController@signTeamById']);
         $router->post('/addParticipantByMail', ['uses' => 'EventsController@addOneParticipantToEventByEmail']);
+        $router->get('teams/{id}', ['uses' => 'EventsController@showTeamsOnEvent']);
+        $router->delete('{event_id}/teams/delete/{team_id}', ['uses' => 'EventsController@deleteTeamByIdFromEvent']);
+
+
         //$router->get('test', ['uses' => 'EventsController@test']);
     });
 
@@ -50,6 +54,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->post('create', ['uses' => 'TeamController@createTeam']);
         $router->put('update', ['uses' => 'TeamController@updateTeam']);
         $router->post('{id}/add', ['uses' => 'TeamController@addOneMemberToTeamByEmail']);
+        $router->delete('/delete/{id}', ['uses' => 'TeamController@deleteTeamById']);
+
     });
 
     $router->group(['prefix' => 'ciselnik'], function () use ($router) {
