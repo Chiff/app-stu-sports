@@ -185,6 +185,11 @@ class EventService
         $eventTeam = EventTeam::select('event_id')->whereIn('team_id', $teams);
         $events = Event::select()->whereIn('id', $eventTeam->select('event_id'));
 
+        if ($onlyActive) {
+            $todayDate = date('Y/m/d H:m:i');
+            $events->where('event_end', '>=', $todayDate);
+        }
+
 
         return $this->mapEventsWithOwner($events->get());
     }
