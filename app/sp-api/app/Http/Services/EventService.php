@@ -21,6 +21,7 @@ use App\Models\Team;
 use App\Models\User;
 use App\Models\UserTeam;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use JsonMapper\JsonMapper;
 
@@ -184,10 +185,6 @@ class EventService
         $eventTeam = EventTeam::select('event_id')->whereIn('team_id', $teams);
         $events = Event::select()->whereIn('id', $eventTeam->select('event_id'));
 
-        if ($onlyActive) {
-            $todayDate = date('Y/m/d H:m:i');
-            $events->where('event_end', '>=', $todayDate);
-        }
 
         return $this->mapEventsWithOwner($events->get());
     }

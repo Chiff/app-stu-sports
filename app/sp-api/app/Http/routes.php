@@ -50,6 +50,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->post('create', ['uses' => 'TeamController@createTeam']);
         $router->put('update', ['uses' => 'TeamController@updateTeam']);
         $router->post('{id}/add', ['uses' => 'TeamController@addOneMemberToTeamByEmail']);
+        $router->delete('/delete/{id}', ['uses' => 'TeamController@deleteTeamById']);
+
     });
 
     $router->group(['prefix' => 'ciselnik'], function () use ($router) {
