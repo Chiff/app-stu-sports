@@ -237,6 +237,7 @@ class EventsController extends Controller
         return response()->json($event, 200);
     }
 
+    // TODO povolit aj adminovi eventu odhlasit team
     public function deleteTeamByIdFromEvent(int $event_id, int $team_id): JsonResponse
     {
         $user_id = auth()->id();
@@ -258,7 +259,7 @@ class EventsController extends Controller
 
         return response()->json('Something went wrong!', 301);
     }
-
+    // TODO: hodit to na detail TeamDTO, nie takto
     public function showTeamsOnEvent(int $event_id): JsonResponse
     {
 
