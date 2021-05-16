@@ -102,6 +102,7 @@ class EventService
             $createdEvent->save();
 
             $caseId = $netgrifEvent->stringId;
+            //TODO backend doplnit transitionId do databazy
             $tasks = $this->taskService->searchTask(array(
                 'case' => array('id' => $caseId),
                 'transitionId' => env('API_INTERES_EVENT_CREATE_EVENT_TRANSITION')
