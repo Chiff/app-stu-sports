@@ -88,9 +88,9 @@ class TaskService extends AbstractNetgrifService
         return $message;
     }
 
-    public function getOneUsingGET($task_id): LocalisedTaskResource
+    public function getOneUsingGET(string $stringId): LocalisedTaskResource
     {
-        $url = self::getFullRequestUrl($this->apiPaths['getOneUsingGET'], $task_id);
+        $url = self::getFullRequestUrl($this->apiPaths['getOneUsingGET'], $stringId);
         $response = self::beginRequestAsSystem()->get($url);
 
         if ($response->failed()) {
@@ -101,7 +101,7 @@ class TaskService extends AbstractNetgrifService
         return $task;
     }
 
-    public function getTasksOfCaseUsingGET($case_id): TasksReferences
+    public function getTasksOfCaseUsingGET(string $case_id): TasksReferences
     {
         $url = self::getFullRequestUrl($this->apiPaths['getTasksOfCaseUsingGET'], $case_id);
         $response = self::beginRequestAsSystem()->get($url);
@@ -146,7 +146,7 @@ class TaskService extends AbstractNetgrifService
         return $tasks;
     }
 
-    public function runTask($task_id): MessageResource
+    public function runTask(string $caseId, string $task_id): MessageResource
     {
 
         $url = self::getFullRequestUrl($this->apiPaths['assignUsingGET'], $task_id);

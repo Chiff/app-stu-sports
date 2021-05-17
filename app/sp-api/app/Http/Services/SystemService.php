@@ -7,6 +7,7 @@ use App\Http\Services\Netgrif\TaskService;
 use App\Http\Services\Netgrif\WorkflowService;
 use App\Models\Netgrif\CaseResource;
 use App\Models\Netgrif\EmbededCases;
+use App\Models\Netgrif\MessageResource;
 use App\Models\Netgrif\TasksReferences;
 use App\Models\User;
 
@@ -57,9 +58,9 @@ class SystemService
         return $this->workflowService->createCaseUsingPOST($netId, $title);
     }
 
-    public function getActiveTasksOfSystem(): TasksReferences
+    public function getRunnableTasksOfSystem(): TasksReferences
     {
-        $user = User::findOrFail(auth()->id());
+        $user = User::whereId(auth()->id())->first();
 
         if(!$user) {
             throw new \Exception("User not found", 500);
@@ -67,6 +68,17 @@ class SystemService
 
         $systemCaseId = $user->system;
         return $this->taskService->getTasksOfCaseUsingGET($systemCaseId);
+    }
+
+    public function runTask(string $stringId):MessageResource
+    {
+        $user = User::whereId(auth()->id())->first();
+
+        if(!$user) {
+            throw new \Exception("User not found", 500);
+        }
+        $systemCaseId = $user->system;
+        return $this->taskService->runTask($systemCaseId, $stringId);
     }
 
 }

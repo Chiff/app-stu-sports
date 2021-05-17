@@ -61,4 +61,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'ciselnik'], function () use ($router) {
         $router->get('{type}', ['uses' => 'CiselnikController@getType']);
     });
+
+    $router->group(['prefix' => 'system'], function () use ($router) {
+        $router->get('/tasks', ['uses' => 'SystemController@getActiveTasks']);
+        $router->post('/runtask/{stringId}', ['uses' => 'SystemController@runTask']);
+    });
+
 });

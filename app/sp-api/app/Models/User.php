@@ -22,7 +22,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     use Authenticatable, Authorizable, HasFactory;
 
     protected $table = 'user';
-
     protected $dates = ['created_at', 'updated_at'];
 
     protected function serializeDate(DateTimeInterface $date)
