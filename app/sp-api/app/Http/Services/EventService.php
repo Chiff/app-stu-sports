@@ -330,7 +330,7 @@ class EventService
         }
 
         $dto = new EventDTO();
-        // TODO - 16. 5. 2021 - @msteklac/@mrybar
+        // TODO - 16. 5. 2021 - @msteklac/@mrybar - done
         $dto = $this->mapEventWithTeams($event, $dto);
 
         return $dto;
