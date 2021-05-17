@@ -77,8 +77,7 @@ class SystemService
         if(!$user) {
             throw new \Exception("User not found", 500);
         }
-        $systemCaseId = $user->system;
-        return $this->taskService->runTask($systemCaseId, $stringId);
+        return $this->taskService->runTask($stringId);
     }
 
 }

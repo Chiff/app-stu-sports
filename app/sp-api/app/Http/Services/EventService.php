@@ -241,7 +241,6 @@ class EventService
 
         $adminTransIds = [5, 6, 7, 96, 57];
         $teamOwner = [66, 59];
-        //($tasks);
         $iterator = 0;
         foreach ($tasks->taskReference as $task) {
 
@@ -334,6 +333,11 @@ class EventService
         $dto = $this->mapEventWithTeams($event, $dto);
 
         return $dto;
+    }
+
+    public function runTask($taskId): MessageResource
+    {
+        return $this->taskService->runTask($taskId);
     }
 
 }

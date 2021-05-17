@@ -146,7 +146,7 @@ class TaskService extends AbstractNetgrifService
         return $tasks;
     }
 
-    public function runTask(string $caseId, string $task_id): MessageResource
+    public function runTask(string $task_id): MessageResource
     {
 
         $url = self::getFullRequestUrl($this->apiPaths['assignUsingGET'], $task_id);

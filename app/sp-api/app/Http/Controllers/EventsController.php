@@ -266,6 +266,13 @@ class EventsController extends Controller
 
         return response()->json('Something went wrong!', 301);
     }
+
+    public function runTask(string $stringId): JsonResponse
+    {
+        $result = $this->eventService->runTask($stringId);
+        return response()->json($result, 200);
+    }
+
     // TODO: hodit to na detail EventDTO, nie takto -> kuk mapEventWithTeams
 //    public function showTeamsOnEvent(int $event_id): JsonResponse
 //    {
