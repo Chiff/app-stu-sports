@@ -21,7 +21,7 @@
 <img class="cover team" [ngClass]="{ disabled: !pageActive('team') }" src="/assets/roller-skating.svg" alt="cover" />
 <img
   class="cover dashboard"
-  [ngClass]="{ disabled: !pageActive('dashboard'), swing: pageActive('dashboard') && isTick }"
+  [ngClass]="{ disabled: !pageActive('dashboard'), active: ready, swing: pageActive('dashboard') && isTick }"
   src="/assets/swinging.svg"
   alt="cover"
 />
