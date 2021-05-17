@@ -35,7 +35,7 @@ class UserTeamAS
         $result = [];
 
         foreach ($teams as $team) {
-            $teamDTO = $this->mapTeamWithOwner($team);
+            $teamDTO = $this->mapTeamDetail($team);
             array_push($result, $teamDTO);
         }
 
@@ -59,10 +59,6 @@ class UserTeamAS
     public function mapTeamDetail(Team $team): TeamDTO
     {
         $teamDto = $this->mapTeamWithOwner($team);
-
-        // TODO - 12/05/2021 - @msteklac/@mrybar - pridaj uzivatelov
-        // TODO -> review, malo by to byt done
-
         $members = $team->team_members()->get();
 
         $team_array = [];
@@ -73,12 +69,6 @@ class UserTeamAS
             array_push($team_array, $userDto);
         }
         $teamDto->users = $team_array;
-
-
-        // TODO - 12/05/2021 - @msteklac/@mrybar - pridaj akitvne eventy teamu
-        // TODO - 12/05/2021 - @msteklac/@mrybar - pridaj skoncene eventy teamu
-        // TODO - 12/05/2021 - @msteklac/@mrybar - pridaj buduce eventy teamu
-        // TODO -> review, malo by to byt done
 
         $events = $team->getSignedEvents()->get();
         $active = [];

@@ -4,8 +4,6 @@
 namespace App\Http\Controllers;
 
 use App\Dto\Event\EventDTO;
-use App\Dto\Team\TeamDTO;
-use App\Dto\User\UserDTO;
 use App\Http\Services\EventService;
 use App\Models\Event;
 use App\Models\Team;
@@ -188,6 +186,7 @@ class EventsController extends Controller
             else return response()->json('Kapacita eventu je uz plna', 400);
 
         }
+
 
         return response()->json('Done', 200);
     }

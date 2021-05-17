@@ -5,9 +5,9 @@ namespace App\Http\Services;
 
 use App\Dto\Event\EventDTO;
 use App\Dto\Event\MyEventsDTO;
-use App\Dto\Team\TeamDTO;
 use App\Dto\User\UserDTO;
 use App\Http\Services\AS\EventAS;
+use App\Http\Services\AS\UserTeamAS;
 use App\Http\Services\Netgrif\AuthenticationService;
 use App\Http\Services\Netgrif\TaskService;
 use App\Http\Services\Netgrif\UserService;
@@ -35,6 +35,7 @@ class EventService
     private UserService $userService;
     private TaskService $taskService;
     private EventAS $eventAS;
+    private UserTeamAS $userTeamAS;
 
 
     public function __construct(
@@ -44,6 +45,7 @@ class EventService
         TaskService $taskService,
         JsonMapper $mapper,
         EventAS $eventAS,
+        UserTeamAS $userTeamAS,
     )
     {
         $this->jsonMapper = $mapper;
@@ -52,6 +54,7 @@ class EventService
         $this->userService = $userService;
         $this->taskService = $taskService;
         $this->eventAS = $eventAS;
+        $this->userTeamAS = $userTeamAS;
     }
 
     public function deleteEvent($id): MessageResource
@@ -294,18 +297,10 @@ class EventService
     public function mapEventWithTeams($event, $dto): EventDTO
     {
 
-        $dto = $this->mapEventWithOwner($event , $dto);
+        $dto = $this->mapEventWithOwner($event, $dto);
         $teams = [];
-        foreach ($event->teams as $team){
-
-            $teamDTO = new TeamDTO();
-            $this->jsonMapper->mapObjectFromString($team->toJson(), $teamDTO);
-
-            $user = new UserDTO();
-            $userModel = User::whereId($team->user_id)->first();
-            $this->jsonMapper->mapObjectFromString($userModel->toJson(), $user);
-
-            $teamDTO->owner = $user;
+        foreach ($event->teams as $team) {
+            $teamDTO = $this->userTeamAS->mapTeamDetail($team);
             array_push($teams, $teamDTO);
         }
         $this->jsonMapper->mapObjectFromString($event->toJson(), $dto);
