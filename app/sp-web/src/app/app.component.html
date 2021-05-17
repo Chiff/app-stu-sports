@@ -1,6 +1,10 @@
 <!--https://editor.freelogodesign.org/?category=34&companyName=SP-->
 <header class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-body border-bottom shadow-sm">
-  <p class="h5 my-0 me-md-auto fw-normal">SP-system</p>
+  <p class="h5 my-0 me-md-auto fw-normal">
+    <img src="/assets/sports.svg" style="height: 50px" />
+    &nbsp;
+    <span class="text-primary fw-bold">SP</span>
+  </p>
   <nav class="my-2 my-md-0 me-md-3">
     <a class="p-2 text-dark" routerLink="dashboard" *ngIf="auth.isLogged()">Dashboard</a>
     <a class="p-2 text-dark" routerLink="event">Podujatia</a>
@@ -12,3 +16,7 @@
 <div class="container">
   <router-outlet></router-outlet>
 </div>
+
+<img class="cover event" [ngClass]="{ disabled: !pageActive('event') }" src="/assets/jumping.svg" alt="cover" />
+<img class="cover team" [ngClass]="{ disabled: !pageActive('team') }" src="/assets/roller-skating.svg" alt="cover" />
+<img class="cover dashboard" [ngClass]="{ disabled: !pageActive('dashboard') }" src="/assets/swinging.svg" alt="cover" />

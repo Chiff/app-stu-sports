@@ -102,8 +102,8 @@
 <h3 class="text-primary mt-4 d-flex justify-content-between align-items-end">
   Členovia
 
-  <button class="btn py-0 btn-link" *ngIf="!addTeammate" (click)="addTeammate = true">Pridať užívateľa</button>
-  <button class="btn py-0 btn-link" *ngIf="addTeammate" (click)="addTeammate = false">Zrušiť</button>
+  <button class="btn btn-primary" *ngIf="!addTeammate" (click)="addTeammate = true">Pridať užívateľa</button>
+  <button class="btn btn-outline-primary" *ngIf="addTeammate" (click)="addTeammate = false">Zrušiť</button>
 </h3>
 <div class="card mb-4" *ngIf="addTeammate">
   <div class="card-body">

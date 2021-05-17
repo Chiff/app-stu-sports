@@ -6,6 +6,7 @@
 html, body {
   height: 100%;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .btn + [role=button]:not(.dropdown-item),
@@ -72,5 +73,58 @@ input.ng-invalid.ng-touched {
   &:focus {
     box-shadow: 0 0 0 0.25rem rgba($danger, 25%);
 
+  }
+}
+
+.card {
+  box-shadow: 2px 2px 5px 0 rgba($secondary, 10%);
+}
+
+.cover {
+  opacity: 0.4;
+  z-index: -1;
+  position: fixed;
+
+  filter: hue-rotate(10deg);
+
+  transition: all 1s ease-in-out;
+
+  &.event {
+    bottom: 0;
+    right: 0;
+
+    &.disabled {
+      bottom: -1000px;
+      right: -1000px;
+    }
+  }
+
+  &.team {
+    bottom: 0;
+    left: 0;
+
+
+
+    &.disabled {
+      bottom: 0;
+      left: -1000px;
+    }
+  }
+
+  &.dashboard {
+    top: 100px;
+    left: 0;
+
+    &.disabled {
+      top: -1000px;
+      left: 0;
+    }
+  }
+}
+
+
+@media all and (max-width: 1024px){
+  .cover {
+    opacity: 0;
   }
 }
