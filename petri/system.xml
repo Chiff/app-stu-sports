@@ -45,6 +45,8 @@
 			<offset>0</offset>
 		</layout>
 		<label>domovska stranka</label>
+		<assignPolicy>auto</assignPolicy>
+		<finishPolicy>auto_no_data</finishPolicy>
 	</transition>
 	<transition>
 		<id>10</id>
