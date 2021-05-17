@@ -5,6 +5,7 @@ namespace App\Http\Services;
 
 use App\Dto\Event\EventDTO;
 use App\Dto\Event\MyEventsDTO;
+use App\Dto\Team\TeamDTO;
 use App\Dto\User\UserDTO;
 use App\Http\Services\AS\EventAS;
 use App\Http\Services\Netgrif\AuthenticationService;
@@ -291,20 +292,46 @@ class EventService
         return $is_owner;
     }
 
+    public function mapEventWithTeams($event, $dto): EventDTO
+    {
+
+        $dto = $this->mapEventWithOwner($event , $dto);
+        $teams = [];
+        foreach ($event->teams as $team){
+
+            $teamDTO = new TeamDTO();
+            $this->jsonMapper->mapObjectFromString($team->toJson(), $teamDTO);
+
+            $user = new UserDTO();
+            $userModel = User::whereId($team->user_id)->first();
+            $this->jsonMapper->mapObjectFromString($userModel->toJson(), $user);
+
+            $teamDTO->owner = $user;
+            array_push($teams, $teamDTO);
+        }
+        $this->jsonMapper->mapObjectFromString($event->toJson(), $dto);
+        $dto->teams_on_event = $teams;
+
+        $case_id = $event->ext_id;
+
+        $dto->available_transitions = $this->getEventActiveTasks($case_id);
+
+
+        return $dto;
+    }
 
 
     public function getFullEventById($id): EventDTO
     {
-        $model = Event::whereId($id)->first();
+        $event = Event::whereId($id)->first();
 
-        if (!$model || !$id) {
+        if (!$event || !$id) {
             throw new Exception('not found', 404);
         }
 
         $dto = new EventDTO();
-        $dto = $this->mapEventWithOwner($model, $dto);
         // TODO - 16. 5. 2021 - @msteklac/@mrybar
-        // $dto = $this->mapEventWithTeams($model, $dto);
+        $dto = $this->mapEventWithTeams($event, $dto);
 
         return $dto;
     }

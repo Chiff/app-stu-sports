@@ -269,33 +269,33 @@ class EventsController extends Controller
 
         return response()->json('Something went wrong!', 301);
     }
-    // TODO: hodit to na detail TeamDTO, nie takto
-    public function showTeamsOnEvent(int $event_id): JsonResponse
-    {
-
-        // event
-        $event = Event::whereId($event_id)->first();
-
-        if (!$event){
-            throw new \Exception("event not found");
-        }
-
-        $teams = [];
-        foreach ($event->teams as $team){
-
-            $teamDTO = new TeamDTO();
-            $this->jsonMapper->mapObjectFromString($team->toJson(), $teamDTO);
-
-            $user = new UserDTO();
-            $userModel = User::whereId($team->user_id)->first();
-            $this->jsonMapper->mapObjectFromString($userModel->toJson(), $user);
-
-            $teamDTO->owner = $user;
-            array_push($teams, $teamDTO);
-        }
-
-
-        return response()->json($teams, 301);
-    }
+    // TODO: hodit to na detail EventDTO, nie takto -> kuk mapEventWithTeams
+//    public function showTeamsOnEvent(int $event_id): JsonResponse
+//    {
+//
+//        // event
+//        $event = Event::whereId($event_id)->first();
+//
+//        if (!$event){
+//            throw new \Exception("event not found");
+//        }
+//
+//        $teams = [];
+//        foreach ($event->teams as $team){
+//
+//            $teamDTO = new TeamDTO();
+//            $this->jsonMapper->mapObjectFromString($team->toJson(), $teamDTO);
+//
+//            $user = new UserDTO();
+//            $userModel = User::whereId($team->user_id)->first();
+//            $this->jsonMapper->mapObjectFromString($userModel->toJson(), $user);
+//
+//            $teamDTO->owner = $user;
+//            array_push($teams, $teamDTO);
+//        }
+//
+//
+//        return response()->json($teams, 301);
+//    }
 
 }

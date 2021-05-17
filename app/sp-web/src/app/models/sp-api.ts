@@ -1,4 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { TaskReferenceModel } from './generated-swagger';
 
 // TODO - 12/05/2021 - permissions
 export interface AccountModel extends UserDTO {
@@ -29,6 +30,8 @@ export interface EventDTO {
   owner: UserDTO;
   type: CiselnikDTO;
   description: string;
+  teams_on_event: TeamDTO[];
+  available_transitions: { taskReference: TaskReferenceModel[] };
 }
 
 export interface MyEventsDTO {
