@@ -97,11 +97,7 @@ class EventsController extends Controller
         return response()->json($e);
     }
 
-    /**
-     * Add one participant to event, by participants id
-     * @param Request $request
-     * @throws ValidationException
-     */
+
     public function signTeamById(Request $request)
     {
         $this->validate($request, [
@@ -112,7 +108,9 @@ class EventsController extends Controller
         $event_id = $request->get('event_id');
         $team_id= $request->get('team_id');
 
+        $team = Team::whereId($team_id)->first();
         $event = Event::whereId($event_id)->first();
+
         if (!$event) {
             throw new \Exception("event not found");
         }
@@ -125,7 +123,7 @@ class EventsController extends Controller
 
         // Ak sa jedna o nejaky public event, kde sa prihlasuju ludia samy za seba
         // v takom pripade pocitame s tym, ze v evente je nastavene max_team_members 1
-        if ($event->max_team_members == 1) {
+        if ($event->max_team_members == 1 && !$team) {
             $user_id = auth()->id();
             $user = User::findOrFail($user_id);
             $user_name = $user->firstname . ' ' . $user->surname;
@@ -161,7 +159,6 @@ class EventsController extends Controller
 
         }
 
-        $team = Team::whereId($team_id)->first();
         if (!$team) {
             throw new \Exception("team not found");
         }
