@@ -105,7 +105,6 @@ input.ng-invalid.ng-touched {
     left: 0;
 
 
-
     &.disabled {
       bottom: 0;
       left: -1000px;
@@ -116,15 +115,23 @@ input.ng-invalid.ng-touched {
     top: 100px;
     left: 0;
 
+    transform-origin: top;
+    transition: transform 4s ease-in-out;
+
     &.disabled {
       top: -1000px;
       left: 0;
+      animation: unset;
     }
   }
 }
 
+.swing {
+  transform: matrix3d(1.068, 0, 0, -0.000031189, -0.066826, 1.14999, 0, 0.000268, 0, 0, 1, 0, 0, 0, 0, 1);
+}
 
-@media all and (max-width: 1024px){
+
+@media all and (max-width: 1024px) {
   .cover {
     opacity: 0;
   }

@@ -19,4 +19,9 @@
 
 <img class="cover event" [ngClass]="{ disabled: !pageActive('event') }" src="/assets/jumping.svg" alt="cover" />
 <img class="cover team" [ngClass]="{ disabled: !pageActive('team') }" src="/assets/roller-skating.svg" alt="cover" />
-<img class="cover dashboard" [ngClass]="{ disabled: !pageActive('dashboard') }" src="/assets/swinging.svg" alt="cover" />
+<img
+  class="cover dashboard"
+  [ngClass]="{ disabled: !pageActive('dashboard'), swing: pageActive('dashboard') && isTick }"
+  src="/assets/swinging.svg"
+  alt="cover"
+/>
