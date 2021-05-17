@@ -6,6 +6,7 @@ namespace App\Dto\User;
 
 use App\Dto\Team\TeamDTO;
 use App\Models\AppSerializable;
+use App\Models\Netgrif\TasksReferences;
 use DateTime;
 
 /** @typescript */
@@ -21,4 +22,6 @@ class UserDTO extends AppSerializable
      * @var TeamDTO[]|null
      */
     public ?array $teams;
+
+    public ?TasksReferences $available_transitions;
 }

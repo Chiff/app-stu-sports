@@ -71,6 +71,7 @@ class UserService
         $userDTO = new UserDTO();
         $this->mapper->mapObjectFromString($user->toJson(), $userDTO);
         $userDTO->teams = $this->userTeamAS->getTeamsByUser($user);
+        $userDTO->available_transitions = $this->systemAS->getAvaiableTasks();
 
         return $userDTO;
     }
