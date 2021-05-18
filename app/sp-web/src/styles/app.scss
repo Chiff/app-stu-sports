@@ -116,18 +116,32 @@ input.ng-invalid.ng-touched {
     left: 0;
 
     transform-origin: top;
-    transition: transform 4s ease-in-out;
+    transition: transform 1s ease-in-out;
+    transform: matrix3d(
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    );
+
+    &.active {
+      transition: transform 4s ease-in-out;
+    }
 
     &.disabled {
-      top: -1000px;
-      left: 0;
-      animation: unset;
+      transition: transform 1s ease-in-out;
+      transform: matrix3d(
+          1, 0, 0, 0,
+          0, 1, 0, 0,
+          0, 0, 1, 0,
+          0, -1000, 0, 1
+      );
     }
   }
 }
 
 .swing {
-  transform: matrix3d(1.068, 0, 0, -0.000031189, -0.066826, 1.14999, 0, 0.000268, 0, 0, 1, 0, 0, 0, 0, 1);
+  transform: matrix3d(1.068, 0, 0, -0.000031189, -0.066826, 1.14999, 0, 0.000268, 0, 0, 1, 0, 0, 0, 0, 1) !important;
 }
 
 
