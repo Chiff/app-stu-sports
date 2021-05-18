@@ -85,6 +85,12 @@ class EventService
         $dto->user_id = auth()->id();
         $this->jsonMapper->mapObjectFromString(json_encode($request->toArray()), $dto);
 
+        if ($dto->min_teams > $dto->max_teams) {
+            throw new Exception("Max pocet timov je mensi ako minimalny", 500);
+        }
+        if ($dto->min_team_members > $dto->max_team_members) {
+            throw new Exception("Max pocet hracov v time je mensi ako minimalny", 500);
+        }
         // TODO - 13/05/2021 - NA TOTO POZOR!
         app('db')->transaction(function () use ($dto) {
             $createdEvent = $this->eventAS->createEvent($dto);
