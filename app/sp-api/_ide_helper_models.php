@@ -51,6 +51,7 @@ namespace App\Models{
  * @property int $user_id
  * @property string|null $description
  * @property \App\Models\Ciselnik $type
+ * @property int|null $disabled
  * @property-read \App\Models\User $owner
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $participants
  * @property-read int|null $participants_count
@@ -61,6 +62,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Event query()
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereDisabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereEventEnd($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereEventStart($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereExtId($value)
@@ -86,10 +88,14 @@ namespace App\Models{
  * @mixin IdeHelperEventTeam
  * @property int $event_id
  * @property int $team_id
+ * @property int|null $points
+ * @property int|null $is_winner
  * @method static \Illuminate\Database\Eloquent\Builder|EventTeam newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EventTeam newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EventTeam query()
  * @method static \Illuminate\Database\Eloquent\Builder|EventTeam whereEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventTeam whereIsWinner($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventTeam wherePoints($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventTeam whereTeamId($value)
  */
 	class IdeHelperEventTeam extends \Eloquent {}
@@ -105,6 +111,9 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $user_id
  * @property string $team_name
+ * @property int|null $points
+ * @property int|null $wins
+ * @property int|null $events_total
  * @property-read \App\Models\User $owner
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $teamMembers
  * @property-read int|null $team_members_count
@@ -113,10 +122,13 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Team newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Team query()
  * @method static \Illuminate\Database\Eloquent\Builder|Team whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Team whereEventsTotal($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Team whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Team wherePoints($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Team whereTeamName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Team whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Team whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Team whereWins($value)
  */
 	class IdeHelperTeam extends \Eloquent {}
 }

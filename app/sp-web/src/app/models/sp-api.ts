@@ -32,6 +32,14 @@ export interface EventDTO {
   description: string;
   teams_on_event: TeamDTO[];
   available_transitions: { taskReference: TaskReferenceModel[] };
+  event_team_info: EventTeamDTO[];
+}
+
+export interface EventTeamDTO {
+  id_team: string;
+  id_event: string;
+  points: number;
+  is_winner: boolean;
 }
 
 export interface MyEventsDTO {
@@ -50,6 +58,9 @@ export interface TeamDTO {
   active_events: EventDTO[];
   ended_events: EventDTO[];
   future_events: EventDTO[];
+  points: number;
+  wins: number;
+  events_total: number;
 }
 
 export interface UserDTO {

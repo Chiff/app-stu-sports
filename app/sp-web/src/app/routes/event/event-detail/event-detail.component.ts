@@ -53,7 +53,7 @@ export class EventDetailComponent {
         this.user.teams?.filter((team) => {
           const members = team.users?.length || 0;
 
-          return event.min_team_members <= members && members >= event.max_team_members;
+          return event.min_team_members <= members && members <= event.max_team_members;
         }) || [];
 
       if (

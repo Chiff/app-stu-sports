@@ -21,6 +21,7 @@ use App\Models\Netgrif\TasksReferences;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\UserTeam;
+use DateTime;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -95,7 +96,7 @@ class EventService
 
         $todayDatee = date('Y-m-dTH:m:i');
 
-        $dt = new \DateTime($todayDatee);
+        $dt = new DateTime($todayDatee);
         $todayDate = Carbon::instance($dt);
 
         if (($todayDate > $dto->registration_end)){
