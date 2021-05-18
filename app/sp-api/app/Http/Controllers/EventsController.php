@@ -212,26 +212,27 @@ class EventsController extends Controller
      */
     public function addOneParticipantToEventByEmail(Request $request)
     {
-        $this->validate($request, [
-            'event_id' => 'required',
-            'user_mail' => 'required|email'
-        ]);
-
-        $event_id = $request->get('event_id');
-        $usermail = $request->get('user_mail');
-
-        $event = Event::findOrFail($event_id);
-        $user = User::where('email', $usermail);
-
-        $user_id = $user->id();
-
-        $exist = $event->participants->contains(auth()->id());
-        if ($exist == null) {
-            $event->participants()->attach($user_id);
-            $event->save();
-        }
-
-        return response()->json('', 200);
+        throw new \Exception('not implemented');
+        //  $this->validate($request, [
+        //      'event_id' => 'required',
+        //      'user_mail' => 'required|email'
+        //  ]);
+        //
+        //  $event_id = $request->get('event_id');
+        //  $usermail = $request->get('user_mail');
+        //
+        //  $event = Event::findOrFail($event_id);
+        //  $user = User::where('email', $usermail);
+        //
+        //  $user_id = $user->id();
+        //
+        //  $exist = $event->participants->contains(auth()->id());
+        //  if ($exist == null) {
+        //      $event->participants()->attach($user_id);
+        //      $event->save();
+        //  }
+        //
+        //  return response()->json('', 200);
     }
 
     /**
@@ -314,6 +315,7 @@ class EventsController extends Controller
             // ak je prihlaseny user vlastnikom eventu, moze odhlasit team
             if ($event->user_id == $user_id) {
                 $event->teams()->detach($team_id);
+                $this->eventService->runTask($taskId);
                 return response()->json('Tim bol uspesne odhlaseny z podujatia vlastnikom eventu', 200);
             }
 
@@ -324,6 +326,7 @@ class EventsController extends Controller
 
             if (sizeof($exists) > 0) {
                 $event->teams()->detach($team_id);
+                $this->eventService->runTask($taskId);
                 return response()->json('Tim bol uspesne odhlaseny z podujatia kapitanom timu', 200);
             }
 
