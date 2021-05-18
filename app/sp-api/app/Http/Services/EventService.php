@@ -23,6 +23,7 @@ use App\Models\User;
 use App\Models\UserTeam;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use JsonMapper\JsonMapper;
 
@@ -90,6 +91,21 @@ class EventService
         }
         if ($dto->min_team_members > $dto->max_team_members) {
             throw new Exception("Max pocet hracov v time je mensi ako minimalny", 500);
+        }
+
+        $todayDatee = date('Y-m-dTH:m:i');
+
+        $dt = new \DateTime($todayDatee);
+        $todayDate = Carbon::instance($dt);
+
+        if (($todayDate > $dto->registration_end)){
+            throw new Exception("Koniec registracie je pred sucastnym datumom", 500);
+        }
+        if (($todayDate > $dto->event_end)){
+            throw new Exception("Koniec udalosti je pred sucastnym datumom", 500);
+        }
+        if (($todayDate > $dto->event_start)){
+            throw new Exception("Zaciatok udalosti je pred sucastnym datumom", 500);
         }
         // TODO - 13/05/2021 - NA TOTO POZOR!
         app('db')->transaction(function () use ($dto) {
