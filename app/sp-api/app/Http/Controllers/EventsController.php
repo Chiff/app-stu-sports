@@ -311,8 +311,9 @@ class EventsController extends Controller
 
         $event_team = EventTeam::where('team_id', $team_id)->where('event_id', $id)->first();
         if ($event_team) {
-            $event_team->increment('points', $points);
-            $event_team->save();
+            EventTeam::where('team_id', $team_id)
+                ->where('event_id', $id)
+                ->update(array('points' => ($event_team->points + $points)));
             return response()->json('Body uspesne pridane', 200);
         }
 
