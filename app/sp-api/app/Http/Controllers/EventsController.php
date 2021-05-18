@@ -9,8 +9,10 @@ use App\Models\Event;
 use App\Models\EventTeam;
 use App\Models\Team;
 use App\Models\User;
+use DateTime;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
 use JsonMapper\JsonMapper;
 use Laravel\Lumen\Routing\Controller;
@@ -232,6 +234,41 @@ class EventsController extends Controller
         return response()->json($event, 200);
     }
 
+    public function disableEventById(int $event_id): JsonResponse
+    {
+        $user_id = auth()->id();
+        $event = Event::whereId($event_id)->first();
+
+        $dto = new EventDTO();
+
+        $todayDatee = date('Y-m-dTH:m:i');
+
+        $dt = new DateTime($todayDatee);
+        $todayDate = Carbon::instance($dt);
+
+        if (!$event) throw new \Exception("event not found");
+
+        $this->jsonMapper->mapObjectFromString($event->toJson(), $dto);
+
+        if (($todayDate < $dto->event_end) && ($todayDate > $dto->event_start)){
+            throw new \Exception("Podujatie aktuálne prebieha a nie je možné ho zrušiť", 500);
+        }
+
+        if (($todayDate > $dto->event_end)){
+            throw new \Exception("Podujatie už skončilo", 500);
+        }
+
+        if ($event->user_id == $user_id){
+            if ($event->disabled = true) return response()->json('Podujatie bolo neaktívne aj predtým..', 200);
+
+            $event->disabled = true;
+            $event->update();
+            return response()->json('Podujatie bolo zrušené', 200);
+        }
+
+        throw new \Exception("Nie si vlastníkom eventu");
+    }
+
     public function deleteTeamByIdFromEvent(int $event_id, int $team_id): JsonResponse
     {
         $user_id = auth()->id();
@@ -261,8 +298,7 @@ class EventsController extends Controller
             return response()->json('Tim bol uspesne odhlaseny z podujatia kapitanom timu', 200);
         }
 
-
-        return response()->json('Something went wrong!', 301);
+        throw new \Exception("Something went wrong!");
     }
 
     public function runTask(string $stringId): JsonResponse

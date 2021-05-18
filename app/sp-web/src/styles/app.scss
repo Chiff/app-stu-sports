@@ -84,10 +84,7 @@ input.ng-invalid.ng-touched {
   opacity: 0.4;
   z-index: -1;
   position: fixed;
-  height: 750px;
-
-  filter: hue-rotate(10deg);
-
+  height: 45vh;
   transition: all 1s ease-in-out;
 
   &.event {
@@ -115,7 +112,7 @@ input.ng-invalid.ng-touched {
     top: 100px;
     left: 0;
 
-    transform-origin: top;
+    transform-origin: top left;
     transition: transform 1s ease-in-out;
     transform: matrix3d(
         1, 0, 0, 0,
