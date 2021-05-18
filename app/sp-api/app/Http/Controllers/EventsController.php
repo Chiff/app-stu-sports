@@ -285,7 +285,7 @@ class EventsController extends Controller
         ]);
 
         $winner_id = $request->get('winner_id');
-        EventTeam::where('team_id', $winner_id)->update(array('is_winner' => true));
+        EventTeam::where('team_id', $winner_id)->where('event_id', $id)->update(array('is_winner' => true));
 
         foreach ($event_teams as $event_team) {
             $team = Team::findOrFail($event_team->team_id);
@@ -297,6 +297,26 @@ class EventsController extends Controller
             $team->save();
         }
         return response()->json('Podujatie bolo uspesne dokoncene', 200);
+    }
+
+    public function addPointsById($id, Request $request): JsonResponse
+    {
+        $this->validate($request, [
+            'team_id' => 'required',
+            'points' => 'required',
+        ]);
+
+        $team_id = $request->get('team_id');
+        $points = $request->get('points');
+
+        $event_team = EventTeam::where('team_id', $team_id)->where('event_id', $id)->first();
+        if ($event_team) {
+            $event_team->increment('points', $points);
+            $event_team->save();
+            return response()->json('Body uspesne pridane', 200);
+        }
+
+        throw new \Exception("Tim nie je prihlaseny na toto podujatie");
     }
     // TODO: hodit to na detail EventDTO, nie takto -> kuk mapEventWithTeams
 //    public function showTeamsOnEvent(int $event_id): JsonResponse
