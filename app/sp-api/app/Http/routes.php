@@ -43,6 +43,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->post('/addParticipantByMail', ['uses' => 'EventsController@addOneParticipantToEventByEmail']);
         $router->get('teams/{id}', ['uses' => 'EventsController@showTeamsOnEvent']);
         $router->delete('{event_id}/teams/delete/{team_id}', ['uses' => 'EventsController@deleteTeamByIdFromEvent']);
+        $router->put('/disable/{event_id}', ['uses' => 'EventsController@disableEventById']);
         $router->post('/runtask/{stringId}', ['uses' => 'EventsController@runTask']);
     });
 

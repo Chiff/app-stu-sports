@@ -232,6 +232,22 @@ class EventsController extends Controller
         return response()->json($event, 200);
     }
 
+    public function disableEventById(int $event_id): JsonResponse
+    {
+        $user_id = auth()->id();
+
+        $event = Event::whereId($event_id)->first();
+        if (!$event) throw new \Exception("event not found");
+
+        if ($event->user_id == $user_id){
+            $event->disabled = true;
+            $event->update();
+            return response()->json('Podujatie bolo zrušené', 200);
+        }
+
+        throw new \Exception("Nie si vlastníkom eventu");
+    }
+
     public function deleteTeamByIdFromEvent(int $event_id, int $team_id): JsonResponse
     {
         $user_id = auth()->id();
