@@ -16,7 +16,10 @@ class EventTeam extends Model
 
     protected $hidden = [
         'event_id',
-        'team_id',
+        'team_id'
     ];
-
+    protected $fillable = [
+        'points',
+        'is_winner'
+    ];
 }
