@@ -35,4 +35,20 @@ class DateUtil
     {
         return $value->format("Y-m-d\TH:i:s");
     }
+
+    // utc + gmt+1/2
+    public static function now()
+    {
+        $dt = new \DateTime();
+
+        if (!date('I')) {
+            $dti = new \DateInterval('PT2H');
+        } else {
+            $dti = new \DateInterval('PT1H');
+        }
+
+        $dt->add($dti);
+
+        return $dt;
+    }
 }

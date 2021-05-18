@@ -16,6 +16,10 @@ export class EventDetailComponent {
   public EVT_ACTIONS = {
     addTeam: '1',
     removeTeam: '66',
+    cancelEvent: '5',
+    startEvent: '6',
+    editEvent: '96',
+    addPoint: '999',
   };
 
   @ViewChild('ngForm')

@@ -13,11 +13,13 @@ use App\Http\Services\Netgrif\AuthenticationService;
 use App\Http\Services\Netgrif\TaskService;
 use App\Http\Services\Netgrif\UserService;
 use App\Http\Services\Netgrif\WorkflowService;
+use App\Http\Utils\DateUtil;
 use App\Models\Event;
 use App\Models\EventTeam;
 use App\Models\Netgrif\CaseResource;
 use App\Models\Netgrif\EmbededCases;
 use App\Models\Netgrif\MessageResource;
+use App\Models\Netgrif\TaskReference;
 use App\Models\Netgrif\TasksReferences;
 use App\Models\Team;
 use App\Models\User;
@@ -259,31 +261,58 @@ class EventService
         return $result;
     }
 
-    public function getEventActiveTasks($eventCaseId): TasksReferences
+    public function getEventActiveTasks($eventCaseId, EventDTO $dto): TasksReferences
     {
         $tasks = $this->taskService->getTasksOfCaseUsingGET($eventCaseId);
+
+        $tmp = new TaskReference();
+        $tmp->transitionId = "999";
+        $tmp->title = "pridaj bod";
+        $tmp->stringId = "-1";
+        array_push($tasks->taskReference, $tmp);
 
         $isOwner = $this->isEventOwner(auth()->id(), $eventCaseId);
         $hasTeamOnEvent = $this->hasTeamOnEvent(auth()->id(), $eventCaseId);
 
-        $allowForTeamOwner = ["66"];
-        $allowForUnknown = ["1"];
-        $adminTransIds = ["5", "6", "7", "96"];
+        $allowForTeamOwner = ["66"]; // odhlasenie timu
+        $allowForUnknown = ["1"]; // prihlasenie timu
+        $allowBeforeStart = ["5", "96"]; // zrusenie, editovanie
+        $allowBeforeEnd = ["6", "999"]; // start
+        $allowAfterEnd = ["7"]; // vyhodnotenie
 
 
         $result = new TasksReferences();
         $result->taskReference = [];
 
+        $dt = DateUtil::now();
+        $isBeforeStart = $dt < $dto->event_start;
+        $isBeforeEnd = $dto->event_start <= $dt && $dt <= $dto->event_end;
+        $isAfterEnd = $dto->event_end < $dt;
+
         foreach ($tasks->taskReference as $task) {
-            if ($isOwner && in_array($task->transitionId, $adminTransIds)) {
+
+            // event skoncil + $isOwner
+            if ($isOwner && $isAfterEnd && in_array($task->transitionId, $allowAfterEnd)) {
                 array_push($result->taskReference, $task);
             }
 
-            if ($hasTeamOnEvent == true && in_array($task->transitionId, $allowForTeamOwner)) {
+            // event nezacal + $isOwner
+            if ($isOwner && $isBeforeStart && in_array($task->transitionId, $allowBeforeStart)) {
                 array_push($result->taskReference, $task);
             }
 
-            if ($hasTeamOnEvent == false && in_array($task->transitionId, $allowForUnknown)) {
+            // event startuje
+            if ($isOwner && $isBeforeEnd && in_array($task->transitionId, $allowBeforeEnd)) {
+                array_push($result->taskReference, $task);
+            }
+
+            // mam tim na evente + event nezacal
+            if ($hasTeamOnEvent == true && $isBeforeStart && in_array($task->transitionId, $allowForTeamOwner)) {
+                array_push($result->taskReference, $task);
+            }
+
+            // nemam tim na evente + event nezacal
+            if ($hasTeamOnEvent == false && $isBeforeStart && in_array($task->transitionId, $allowForUnknown)) {
                 array_push($result->taskReference, $task);
             }
         }
@@ -363,7 +392,7 @@ class EventService
         $dto = new EventDTO();
         $dto = $this->mapEventWithTeams($event, $dto);
         $dto = $this->mapEventWithTeamOnEvent($event, $dto);
-        $dto->available_transitions = $this->getEventActiveTasks($event->ext_id);
+        $dto->available_transitions = $this->getEventActiveTasks($event->ext_id, $dto);
 
         return $dto;
     }
