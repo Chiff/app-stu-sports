@@ -280,6 +280,21 @@ class EventsController extends Controller
         if (!$team) throw new \Exception("team not found");
         if (!$event) throw new \Exception("event not found");
 
+        $dto = new EventDTO();
+        $this->jsonMapper->mapObjectFromString($event->toJson(), $dto);
+
+        $todayDatee = date('Y-m-dTH:m:i');
+
+        $dt = new DateTime($todayDatee);
+        $todayDate = Carbon::instance($dt);
+
+        if (($todayDate < $dto->event_end) && ($todayDate > $dto->event_start)){
+            throw new \Exception("Podujatie aktuálne prebieha a nie je možné odhlásiť tím");
+        }
+
+        if (($todayDate > $dto->event_end)){
+            throw new \Exception("Podujatie už skončilo");
+        }
 
         // ak je prihlaseny user vlastnikom eventu, moze odhlasit team
         if ($event->user_id == $user_id){
@@ -287,9 +302,8 @@ class EventsController extends Controller
             return response()->json('Tim bol uspesne odhlaseny z podujatia vlastnikom eventu', 200);
         }
 
-        // teamy na evente, kde je used kapitan
+        // teamy na evente, kde je user kapitan
         $teams_on_event_owned_by_user = $event->teams->where('user_id', $user_id);
-
 
         $exists = $teams_on_event_owned_by_user->where('id', $team_id);
 
