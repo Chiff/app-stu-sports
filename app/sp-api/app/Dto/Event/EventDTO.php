@@ -7,6 +7,7 @@ namespace App\Dto\Event;
 use App\Dto\CiselnikDTO;
 use App\Dto\Team\TeamDTO;
 use App\Dto\User\UserDTO;
+use App\Dto\EventTeam\EventTeamDTO;
 use App\Models\AppSerializable;
 use App\Models\Netgrif\TasksReferences;
 use DateTime;
@@ -58,5 +59,8 @@ class EventDTO extends AppSerializable
 
     public ?TasksReferences $available_transitions;
 
-
+    /**
+     * @var EventTeamDTO[]|null
+     */
+    public ?array $event_team_info;
 }
