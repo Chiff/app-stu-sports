@@ -298,8 +298,7 @@ class EventsController extends Controller
             return response()->json('Tim bol uspesne odhlaseny z podujatia kapitanom timu', 200);
         }
 
-
-        return response()->json('Something went wrong!', 301);
+        throw new \Exception("Something went wrong!");
     }
 
     public function runTask(string $stringId): JsonResponse
