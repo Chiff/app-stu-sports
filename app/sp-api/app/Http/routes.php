@@ -32,6 +32,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('', ['uses' => 'EventsController@showAllEvents']);
         $router->get('/my', ['uses' => 'EventsController@showUserEvents']);
         $router->get('/byid/{id}', ['uses' => 'EventsController@showOneEventById']);
+        $router->get('/byid/{id}/guest', ['uses' => 'EventsController@showOneEventByIdUnsecured']);
         $router->get('/byname/{name}', ['uses' => 'EventsController@showOneEventsByEventName']);
         $router->post('', ['uses' => 'EventsController@createOneEvent']);
         $router->delete('/{id}', ['uses' => 'EventsController@deleteOneEvent']);

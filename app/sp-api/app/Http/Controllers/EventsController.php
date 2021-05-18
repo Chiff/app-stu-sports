@@ -28,9 +28,9 @@ class EventsController extends Controller
     public function __construct(EventService $event, JsonMapper $jsonMapper, array $attributes = [])
     {
         $this->eventService = $event;
-
-        $this->middleware('auth', ['except' => ['showAllEvents', 'showOneEventById']]);
         $this->jsonMapper = $jsonMapper;
+
+        $this->middleware('auth', ['except' => ['showAllEvents', 'showOneEventByIdUnsecured']]);
     }
 
     /**
@@ -60,6 +60,11 @@ class EventsController extends Controller
     {
         $event = $this->eventService->getFullEventById($id);
         return response()->json($event);
+    }
+
+    public function showOneEventByIdUnsecured($id): JsonResponse
+    {
+        return $this->showOneEventById($id);
     }
 
     /**
@@ -107,7 +112,13 @@ class EventsController extends Controller
         ]);
 
         $event_id = $request->get('event_id');
-        $team_id= $request->get('team_id');
+        $team_id = $request->get('team_id');
+
+        $taskId = $request->get('task_id');
+        if (!$taskId) {
+            throw new \Exception("Unexpected error (netgrif)");
+        }
+
 
         $team = Team::whereId($team_id)->first();
         $event = Event::whereId($event_id)->first();
@@ -121,75 +132,77 @@ class EventsController extends Controller
         if ($event->registration_start > $todayDate) throw new \Exception("Registracia ma toto podujatie ešte nebola spustená");
         if ($event->registration_end < $todayDate) throw new \Exception("Registracia ma toto podujatie vypršala");
 
+        // TODO - 13/05/2021 - NA TOTO POZOR!
+        return app('db')->transaction(function () use ($event, $team, $taskId) {
+            // Ak sa jedna o nejaky public event, kde sa prihlasuju ludia samy za seba
+            // v takom pripade pocitame s tym, ze v evente je nastavene max_team_members 1
+            if ($event->max_team_members == 1 && !$team) {
+                $user_id = auth()->id();
+                $user = User::findOrFail($user_id);
+                $user_name = $user->firstname . ' ' . $user->surname;
 
-        // Ak sa jedna o nejaky public event, kde sa prihlasuju ludia samy za seba
-        // v takom pripade pocitame s tym, ze v evente je nastavene max_team_members 1
-        if ($event->max_team_members == 1 && !$team) {
-            $user_id = auth()->id();
-            $user = User::findOrFail($user_id);
-            $user_name = $user->firstname . ' ' . $user->surname;
+                /*
+                 * Check if user already have team of himself
+                 */
+                $exists = $user->ownTeams()->where('team_name', $user_name)->get();
+                if (sizeof($exists) == 0) {
+                    $team = new Team(array('team_name' => $user_name));
+                    $user->ownTeams()->save($team);
+                    $team->save();
 
-            /*
-             * Check if user already have team of himself
-             */
-            $exists = $user->ownTeams()->where('team_name', $user_name)->get();
-            if (sizeof($exists) == 0) {
-                $team = new Team(array('team_name' => $user_name));
-                $user->ownTeams()->save($team);
-                $team->save();
+                    $user->teams()->attach($team);
+                    $user->save();
+                }
 
-                $user->teams()->attach($team);
-                $user->save();
+                /*
+                 * Check if team already signed in event
+                 */
+                $team = $user->ownTeams()->where('team_name', $user_name)->first();
+                if ($event->teams()->find($team->id)) {
+                    throw new \Exception("Team sa uz nachadza na evente");
+                } else {
+                    if ($event->max_teams > sizeof($event->teams()->get())) {
+                        $event->teams()->save($team);
+                        $this->eventService->runTask($taskId);
+                        return response()->json('Done', 200);
+                    } else throw new \Exception("Kapacita eventu je uz plna");
+
+                }
+
             }
 
-            /*
-             * Check if team already signed in event
-             */
-            $team = $user->ownTeams()->where('team_name', $user_name)->first();
-            if($event->teams()->find($team->id)){
+            if (!$team) {
+                throw new \Exception("team not found");
+            }
+
+            $team_members_size = $team->team_members()->get();
+
+            if ($event->min_team_members > sizeof($team_members_size)) {
+                throw new \Exception("Team má málo členov");
+            }
+
+            if ($event->max_team_members < sizeof($team_members_size)) {
+                throw new \Exception("Team má vela členov");
+            }
+
+
+            if ($team->user_id != auth()->id()) {
+                throw new \Exception("Nie si vlastníkom tímu!");
+            }
+
+            if ($event->teams()->find($team->id)) {
                 throw new \Exception("Team sa uz nachadza na evente");
             }
-            else{
-                if($event->max_teams > sizeof($event->teams()->get())) {
-                    $event->teams()->save($team);
-                    return response()->json('Done', 200);
-                }
-                else throw new \Exception("Kapacita eventu je uz plna");
 
+            if ($event->max_teams > sizeof($event->teams()->get())) {
+                $event->teams()->save($team);
+            } else {
+                throw new \Exception("Kapacita eventu je uz plna");
             }
 
-        }
-
-        if (!$team) {
-            throw new \Exception("team not found");
-        }
-
-        $team_members_siźe = $team->team_members()->get();
-
-        if ($event->min_team_members > sizeof($team_members_siźe)){
-            throw new \Exception("Team má málo členov");
-        }
-
-        if ($event->max_team_members < sizeof($team_members_siźe)){
-            throw new \Exception("Team má vela členov");
-        }
-
-
-        if ($team->user_id != auth()->id()){
-            throw new \Exception("Nie si vlastníkom tímu!");
-        }
-
-        if($event->teams()->find($team->id)){
-            throw new \Exception("Team sa uz nachadza na evente");
-        }
-
-        else{
-            if($event->max_teams > sizeof($event->teams()->get())) $event->teams()->save($team);
-            else throw new \Exception("Kapacita eventu je uz plna");
-        }
-
-
-        return response()->json('Done', 200);
+            $this->eventService->runTask($taskId);
+            return response()->json('Done');
+        });
     }
 
     /**
@@ -250,15 +263,15 @@ class EventsController extends Controller
 
         $this->jsonMapper->mapObjectFromString($event->toJson(), $dto);
 
-        if (($todayDate < $dto->event_end) && ($todayDate > $dto->event_start)){
+        if (($todayDate < $dto->event_end) && ($todayDate > $dto->event_start)) {
             throw new \Exception("Podujatie aktuálne prebieha a nie je možné ho zrušiť", 500);
         }
 
-        if (($todayDate > $dto->event_end)){
+        if (($todayDate > $dto->event_end)) {
             throw new \Exception("Podujatie už skončilo", 500);
         }
 
-        if ($event->user_id == $user_id){
+        if ($event->user_id == $user_id) {
             if ($event->disabled = true) return response()->json('Podujatie bolo neaktívne aj predtým..', 200);
 
             $event->disabled = true;
@@ -288,31 +301,35 @@ class EventsController extends Controller
         $dt = new DateTime($todayDatee);
         $todayDate = Carbon::instance($dt);
 
-        if (($todayDate < $dto->event_end) && ($todayDate > $dto->event_start)){
+        if (($todayDate < $dto->event_end) && ($todayDate > $dto->event_start)) {
             throw new \Exception("Podujatie aktuálne prebieha a nie je možné odhlásiť tím");
         }
 
-        if (($todayDate > $dto->event_end)){
+        if (($todayDate > $dto->event_end)) {
             throw new \Exception("Podujatie už skončilo");
         }
 
-        // ak je prihlaseny user vlastnikom eventu, moze odhlasit team
-        if ($event->user_id == $user_id){
-            $event->teams()->detach($team_id);
-            return response()->json('Tim bol uspesne odhlaseny z podujatia vlastnikom eventu', 200);
-        }
+        $taskId = request()->get("task_id");
+        return app('db')->transaction(function () use ($taskId, $event, $user_id, $team_id) {
+            // ak je prihlaseny user vlastnikom eventu, moze odhlasit team
+            if ($event->user_id == $user_id) {
+                $event->teams()->detach($team_id);
+                return response()->json('Tim bol uspesne odhlaseny z podujatia vlastnikom eventu', 200);
+            }
 
-        // teamy na evente, kde je user kapitan
-        $teams_on_event_owned_by_user = $event->teams->where('user_id', $user_id);
+            // teamy na evente, kde je user kapitan
+            $teams_on_event_owned_by_user = $event->teams->where('user_id', $user_id);
 
-        $exists = $teams_on_event_owned_by_user->where('id', $team_id);
+            $exists = $teams_on_event_owned_by_user->where('id', $team_id);
 
-        if (sizeof($exists) > 0){
-            $event->teams()->detach($team_id);
-            return response()->json('Tim bol uspesne odhlaseny z podujatia kapitanom timu', 200);
-        }
+            if (sizeof($exists) > 0) {
+                $event->teams()->detach($team_id);
+                return response()->json('Tim bol uspesne odhlaseny z podujatia kapitanom timu', 200);
+            }
 
-        throw new \Exception("Something went wrong!");
+            $this->eventService->runTask($taskId);
+            return response()->json('Done');
+        });
     }
 
     public function runTask(string $stringId): JsonResponse
@@ -341,7 +358,7 @@ class EventsController extends Controller
             $team = Team::findOrFail($event_team->team_id);
             $team->increment('points', $event_team->points);
             $team->increment('events_total');
-            if ($team->id == $winner_id){
+            if ($team->id == $winner_id) {
                 $team->increment('wins');
             }
             $team->save();

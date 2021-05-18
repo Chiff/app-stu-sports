@@ -15,6 +15,7 @@ import { AuthService } from '../../../shared/shared/services/auth.service';
 export class EventDetailComponent {
   public EVT_ACTIONS = {
     addTeam: '1',
+    removeTeam: '66',
   };
 
   @ViewChild('ngForm')
@@ -37,7 +38,7 @@ export class EventDetailComponent {
 
   private getEventById(id: string) {
     if (!this.auth?.isLogged()) {
-      this.http.get<EventDTO>(`api/event/byid/${id}`).subscribe((data) => {
+      this.http.get<EventDTO>(`api/event/byid/${id}/guest`).subscribe((data) => {
         this.event = data;
         this.event.available_transitions = null;
       });
@@ -117,11 +118,11 @@ export class EventDetailComponent {
   public hasAction(action: Actions): boolean {
     const a = this.EVT_ACTIONS[action];
 
-    if (!this.event?.available_transitions || !a) return false;
+    if (!this.event?.available_transitions?.taskReference?.length || !a) return false;
     return !!this.event.available_transitions.taskReference.find((e) => e.transitionId === a);
   }
 
-  add() {
+  add(): void {
     this.addTeamError = null;
 
     if (this.ngForm.invalid) {
@@ -133,6 +134,7 @@ export class EventDetailComponent {
       .post('api/event/addTeamById', {
         event_id: this.event.id,
         team_id: this.teamId,
+        task_id: this.getTransitionString('addTeam'),
       })
       .subscribe({
         next: () => {
@@ -144,6 +146,29 @@ export class EventDetailComponent {
         },
       });
   }
+
+  remove(t: TeamDTO): void {
+    if (!window.confirm('Naozaj si prajete odhlásiť tento tím z podujatie?')) {
+      return;
+    }
+
+    this.http
+      .delete(`api/event/${this.event.id}/teams/delete/${t.id}`, {
+        params: { task_id: this.getTransitionString('removeTeam') },
+      })
+      .subscribe({
+        next: () => {
+          this.getEventById(this.event.id);
+        },
+        error: (err: CustomHttpError<ErrorResponse>) => {
+          window.alert(err.error.error.message);
+        },
+      });
+  }
+
+  private getTransitionString(action: Actions) {
+    return this.event.available_transitions.taskReference.find((t) => t.transitionId === this.EVT_ACTIONS[action])?.stringId;
+  }
 }
 
-export type Actions = 'addTeam';
+export type Actions = 'addTeam' | 'removeTeam';

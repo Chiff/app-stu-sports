@@ -99,13 +99,13 @@ class EventService
         $dt = new DateTime($todayDatee);
         $todayDate = Carbon::instance($dt);
 
-        if (($todayDate > $dto->registration_end)){
+        if (($todayDate > $dto->registration_end)) {
             throw new Exception("Koniec registracie je pred sucastnym datumom", 500);
         }
-        if (($todayDate > $dto->event_end)){
+        if (($todayDate > $dto->event_end)) {
             throw new Exception("Koniec udalosti je pred sucastnym datumom", 500);
         }
-        if (($todayDate > $dto->event_start)){
+        if (($todayDate > $dto->event_start)) {
             throw new Exception("Zaciatok udalosti je pred sucastnym datumom", 500);
         }
         // TODO - 13/05/2021 - NA TOTO POZOR!
@@ -263,32 +263,31 @@ class EventService
         $tasks = $this->taskService->getTasksOfCaseUsingGET($eventCaseId);
 
         $isOwner = $this->isEventOwner(auth()->id(), $eventCaseId);
-        $hasTeam = $this->hasTeamOnEvent(auth()->id(), $eventCaseId);
+        $hasTeamOnEvent = $this->hasTeamOnEvent(auth()->id(), $eventCaseId);
 
-        $adminTransIds = [5, 6, 7, 96, 57];
-        $teamOwner = [66, 59];
-        $iterator = 0;
+        $allowForTeamOwner = ["66"];
+        $allowForUnknown = ["1"];
+        $adminTransIds = ["5", "6", "7", "96"];
+
+
+        $result = new TasksReferences();
+        $result->taskReference = [];
+
         foreach ($tasks->taskReference as $task) {
+            if ($isOwner && in_array($task->transitionId, $adminTransIds)) {
+                array_push($result->taskReference, $task);
+            }
 
-            //ak uzivatel nie je vlastnikom podujatia
-            if ($isOwner == false) {
-                if (in_array($task->transitionId, $adminTransIds)) {
-                    unset($tasks->taskReference[$iterator]);
-                    $iterator++;
-                    continue;
-                }
+            if ($hasTeamOnEvent == true && in_array($task->transitionId, $allowForTeamOwner)) {
+                array_push($result->taskReference, $task);
             }
-            //ak uzivatel nevlastni ziadny z prihlasenych timov
-            if ($hasTeam == false) {
-                if (in_array($task->transitionId, $teamOwner)) {
-                    unset($tasks->taskReference[$iterator]);
-                    $iterator++;
-                    continue;
-                }
+
+            if ($hasTeamOnEvent == false && in_array($task->transitionId, $allowForUnknown)) {
+                array_push($result->taskReference, $task);
             }
-            $iterator++;
         }
-        return $tasks;
+
+        return $result;
     }
 
     public function hasTeamOnEvent($user_id, $eventCaseId): bool
@@ -298,8 +297,13 @@ class EventService
         $userTeams = Team::whereUserId($user_id)->select('id')->get()->toArray();
         $eventTeams = Event::whereExtId($eventCaseId)->first()->teams;
 
+        $tmp = [];
+        foreach ($userTeams as $ut) {
+            array_push($tmp, $ut["id"]);
+        }
+
         foreach ($eventTeams as $eventTeam) {
-            if (in_array($eventTeam->id, $userTeams)) {
+            if (in_array($eventTeam->id, $tmp)) {
                 return true;
             }
         }
@@ -329,11 +333,6 @@ class EventService
         $this->jsonMapper->mapObjectFromString($event->toJson(), $dto);
         $dto->teams_on_event = $teams;
 
-        $case_id = $event->ext_id;
-
-        $dto->available_transitions = $this->getEventActiveTasks($case_id);
-
-
         return $dto;
     }
 
@@ -347,8 +346,8 @@ class EventService
         }
 
         $dto = new EventDTO();
-        // TODO - 16. 5. 2021 - @msteklac/@mrybar - done
         $dto = $this->mapEventWithTeams($event, $dto);
+        $dto->available_transitions = $this->getEventActiveTasks($event->ext_id);
 
         return $dto;
     }

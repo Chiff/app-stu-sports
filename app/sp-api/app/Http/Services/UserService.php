@@ -67,6 +67,7 @@ class UserService
 
     public function detail(): UserDTO|null
     {
+
         $user = User::whereId(auth()->id())->get()->first();
         $userDTO = new UserDTO();
         $this->mapper->mapObjectFromString($user->toJson(), $userDTO);
