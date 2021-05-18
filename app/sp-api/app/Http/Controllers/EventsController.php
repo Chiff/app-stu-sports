@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Dto\Event\EventDTO;
 use App\Http\Services\EventService;
 use App\Models\Event;
+use App\Models\EventTeam;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -115,8 +116,8 @@ class EventsController extends Controller
 
         $todayDate = date('Y-m-d H:m:i');
 
-        if ($event->registration_start > $todayDate) return response()->json('Registracia ma toto podujatie ešte nebola spustená', 400);
-        if ($event->registration_end < $todayDate) return response()->json('Registracia ma toto podujatie vypršala', 400);
+        if ($event->registration_start > $todayDate) throw new \Exception("Registracia ma toto podujatie ešte nebola spustená");
+        if ($event->registration_end < $todayDate) throw new \Exception("Registracia ma toto podujatie vypršala");
 
 
         // Ak sa jedna o nejaky public event, kde sa prihlasuju ludia samy za seba
@@ -144,14 +145,14 @@ class EventsController extends Controller
              */
             $team = $user->ownTeams()->where('team_name', $user_name)->first();
             if($event->teams()->find($team->id)){
-                return response()->json('Team sa uz nachadza na evente', 200);
+                throw new \Exception("Team sa uz nachadza na evente");
             }
             else{
                 if($event->max_teams > sizeof($event->teams()->get())) {
                     $event->teams()->save($team);
                     return response()->json('Done', 200);
                 }
-                else return response()->json('Kapacita eventu je uz plna', 400);
+                else throw new \Exception("Kapacita eventu je uz plna");
 
             }
 
@@ -164,27 +165,25 @@ class EventsController extends Controller
         $team_members_siźe = $team->team_members()->get();
 
         if ($event->min_team_members > sizeof($team_members_siźe)){
-            return response()->json('Team má málo členov', 404);
+            throw new \Exception("Team má málo členov");
         }
 
         if ($event->max_team_members < sizeof($team_members_siźe)){
-            return response()->json('Team má vela členov', 404);
+            throw new \Exception("Team má vela členov");
         }
 
 
         if ($team->user_id != auth()->id()){
-            return response()->json('Nie si vlastníkom tímu!', 404);
+            throw new \Exception("Nie si vlastníkom tímu!");
         }
 
         if($event->teams()->find($team->id)){
-
-            return response()->json('Team sa uz nachadza na evente', 200);
+            throw new \Exception("Team sa uz nachadza na evente");
         }
 
         else{
             if($event->max_teams > sizeof($event->teams()->get())) $event->teams()->save($team);
-            else return response()->json('Kapacita eventu je uz plna', 400);
-
+            else throw new \Exception("Kapacita eventu je uz plna");
         }
 
 
@@ -272,6 +271,33 @@ class EventsController extends Controller
         return response()->json($result, 200);
     }
 
+    /**
+     * Finish event and declare winner
+     * @param $id
+     * @param Request $request
+     * @throws ValidationException
+     */
+    public function finishEventById($id, Request $request): JsonResponse
+    {
+        $event_teams = EventTeam::whereEventId($id);
+        $this->validate($request, [
+            'winner_id' => 'required',
+        ]);
+
+        $winner_id = $request->get('winner_id');
+        EventTeam::where('team_id', $winner_id)->update(array('is_winner' => true));
+
+        foreach ($event_teams as $event_team) {
+            $team = Team::findOrFail($event_team->team_id);
+            $team->increment('points', $event_team->points);
+            $team->increment('events_total');
+            if ($team->id == $winner_id){
+                $team->increment('wins');
+            }
+            $team->save();
+        }
+        return response()->json('Podujatie bolo uspesne dokoncene', 200);
+    }
     // TODO: hodit to na detail EventDTO, nie takto -> kuk mapEventWithTeams
 //    public function showTeamsOnEvent(int $event_id): JsonResponse
 //    {
