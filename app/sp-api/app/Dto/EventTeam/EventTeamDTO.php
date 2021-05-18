@@ -11,8 +11,8 @@ use App\Models\AppSerializable;
 /** @typescript */
 class EventTeamDTO extends AppSerializable
 {
-    public ?string $id_team;
-    public ?string $id_event;
+    public ?string $team_id;
+    public ?string $event_id;
     public ?int $points;
     public ?bool $is_winner;
 }

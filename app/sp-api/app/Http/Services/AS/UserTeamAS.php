@@ -4,6 +4,7 @@
 namespace App\Http\Services\AS;
 
 use App\Models\Event;
+use App\Models\EventTeam;
 use Faker\Provider\DateTime;
 use App\Dto\Event\EventDTO;
 use App\Dto\Team\TeamDTO;
@@ -102,6 +103,7 @@ class UserTeamAS
                 array_push($future, $eventDto);
             }
         }
+
         $teamDto->active_events = $active;
         $teamDto->ended_events = $finished;
         $teamDto->future_events = $future;

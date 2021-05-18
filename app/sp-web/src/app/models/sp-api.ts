@@ -36,8 +36,8 @@ export interface EventDTO {
 }
 
 export interface EventTeamDTO {
-  id_team: string;
-  id_event: string;
+  team_id: string;
+  event_id: string;
   points: number;
   is_winner: boolean;
 }

@@ -5,6 +5,7 @@ namespace App\Http\Services;
 
 use App\Dto\Event\EventDTO;
 use App\Dto\Event\MyEventsDTO;
+use App\Dto\EventTeam\EventTeamDTO;
 use App\Dto\User\UserDTO;
 use App\Http\Services\AS\EventAS;
 use App\Http\Services\AS\UserTeamAS;
@@ -336,6 +337,20 @@ class EventService
         return $dto;
     }
 
+    public function mapEventWithTeamOnEvent($event, $dto): EventDTO
+    {
+        $collection = EventTeam::whereEventId($event->id)->get();
+
+        $eventTeams = [];
+        foreach ($collection as $model) {
+            $dto2 = new EventTeamDTO();
+            $this->jsonMapper->mapObjectFromString($model->toJson(), $dto2);
+            array_push($eventTeams, $dto2);
+        }
+
+        $dto->event_team_info = $eventTeams;
+        return $dto;
+    }
 
     public function getFullEventById($id): EventDTO
     {
@@ -347,6 +362,7 @@ class EventService
 
         $dto = new EventDTO();
         $dto = $this->mapEventWithTeams($event, $dto);
+        $dto = $this->mapEventWithTeamOnEvent($event, $dto);
         $dto->available_transitions = $this->getEventActiveTasks($event->ext_id);
 
         return $dto;
