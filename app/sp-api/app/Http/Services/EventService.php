@@ -273,8 +273,8 @@ class EventService
         $allowForTeamOwner = ["66"]; // odhlasenie timu
         $allowForUnknown = ["1"]; // prihlasenie timu
         $allowBeforeStart = ["5", "96"]; // zrusenie, editovanie
-        $allowBeforeEnd = ["6", "999"]; // start
-        $allowAfterEnd = ["7"]; // vyhodnotenie
+        $allowBeforeEnd = ["6", "999"]; // start + pridanie bodov (ak je odstartovane)
+        $allowAfterEnd = ["7", "999"]; // vyhodnotenie + pridanie bodov (ak NIE je ukoncene)
 
 
         $result = new TasksReferences();
@@ -364,12 +364,13 @@ class EventService
 
     public function mapEventWithTeamOnEvent($event, $dto): EventDTO
     {
-        $collection = EventTeam::whereEventId($event->id)->get();
+        $collection = EventTeam::whereEventId($event->id)->orderBy('points', 'desc')->get();
 
         $eventTeams = [];
         foreach ($collection as $model) {
             $dto2 = new EventTeamDTO();
             $this->jsonMapper->mapObjectFromString($model->toJson(), $dto2);
+            $dto2->team_name = Team::whereId($model->team_id)->first()->team_name;
             array_push($eventTeams, $dto2);
         }
 

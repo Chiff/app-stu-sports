@@ -173,6 +173,41 @@ export class EventDetailComponent {
   private getTransitionString(action: Actions) {
     return this.event.available_transitions.taskReference.find((t) => t.transitionId === this.EVT_ACTIONS[action])?.stringId;
   }
+
+  startEvent(): void {
+    if (!window.confirm('Naozaj si prajete zahájiť podujatie?')) {
+      return;
+    }
+
+    this.http.post(`api/event/runtask/${this.getTransitionString('startEvent')}`, null).subscribe({
+      next: () => {
+        this.getEventById(this.event.id);
+      },
+      error: (err: CustomHttpError<ErrorResponse>) => {
+        window.alert(err.error.error.message);
+      },
+    });
+  }
+
+  addPoint(t: TeamDTO): void {
+    if (!window.confirm('Naozaj si prajete pridať bod pre tento tím?')) {
+      return;
+    }
+
+    this.http
+      .post(`api/event/${this.event.id}/points`, {
+        team_id: t.id,
+        points: 1,
+      })
+      .subscribe({
+        next: () => {
+          this.getEventById(this.event.id);
+        },
+        error: (err: CustomHttpError<ErrorResponse>) => {
+          window.alert(err.error.error.message);
+        },
+      });
+  }
 }
 
-export type Actions = 'addTeam' | 'removeTeam';
+export type Actions = 'addTeam' | 'removeTeam' | 'cancelEvent' | 'startEvent' | 'editEvent' | 'addPoint';
