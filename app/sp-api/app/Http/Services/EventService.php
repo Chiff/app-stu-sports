@@ -116,7 +116,7 @@ class EventService
                 throw new Exception("could not create", 500);
             }
 
-            $netId = env('API_INTERES_EVENT_NET_ID');
+            $netId = $this->workflowService->getEventNetId();
             $title = "event";
             $netgrifEvent = $this->workflowService->createCaseUsingPOST($netId, $title);
 
@@ -131,7 +131,7 @@ class EventService
             //TODO backend doplnit transitionId do databazy
             $tasks = $this->taskService->searchTask(array(
                 'case' => array('id' => $caseId),
-                'transitionId' => env('API_INTERES_EVENT_CREATE_EVENT_TRANSITION')
+                'transitionId' => '2'
             ));
             $taskId = $tasks->_embedded->tasks[0]->stringId;
 

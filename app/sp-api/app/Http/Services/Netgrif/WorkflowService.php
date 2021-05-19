@@ -13,9 +13,17 @@ class WorkflowService extends AbstractNetgrifService
 {
     private JsonMapper $mapper;
 
+    private string $event_net_id;
+    private string $system_net_id;
+    private string $system_net_identifier_netgrif;
+
     public function __construct(JsonMapper $mapper)
     {
         $this->mapper = $mapper;
+        $this->event_net_id = "60a59c91f9ac3b6fec69e5a9";
+        $this->system_net_id = "60a594ebf9ac3b6fec666549";
+        $this->system_net_identifier_netgrif = "5f86b236f9ac3b272d6bd7ad_final_system";
+
 
         $this->apiPaths = [
             'getAllUsingGET' => 'api/workflow/all',
@@ -33,6 +41,32 @@ class WorkflowService extends AbstractNetgrifService
             'getFileByNameUsingGET' => 'api/workflow/case/{id}/file/{field}/{name}',
         ];
     }
+
+    /**
+     * @return string
+     */
+    public function getEventNetId(): string
+    {
+        return $this->event_net_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSystemNetId(): string
+    {
+        return $this->system_net_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSystemNetIdentifierNetgrif(): string
+    {
+        return $this->system_net_identifier_netgrif;
+    }
+
+
 
     public function deleteCaseUsingDELETE($id): MessageResource
     {

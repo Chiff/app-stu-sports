@@ -30,7 +30,7 @@ class SystemService
      */
     public function getAllSystemCases(): EmbededCases
     {
-        $params = array('petriNet' => array('identifier' => env('API_INTERES_SYSTEM_NED_IDENTIFIER')));
+        $params = array('petriNet' => array('identifier' => $this->workflowService->getSystemNetIdentifierNetgrif()));
         return $this->workflowService->searchCasesElastic($params);
     }
 
@@ -52,8 +52,7 @@ class SystemService
      */
     public function createSystemCase(): CaseResource
     {
-        //$userId = auth()->user()->ext_id;
-        $netId = env('API_INTERES_SYSTEM_NET_ID');
+        $netId = $this->workflowService->getSystemNetId();
         $title = "system_" . auth()->id();
         return $this->workflowService->createCaseUsingPOST($netId, $title);
     }
@@ -77,7 +76,21 @@ class SystemService
         if(!$user) {
             throw new \Exception("User not found", 500);
         }
-        return $this->taskService->runTask($stringId);
+
+
+        $messageResource = $this->taskService->runTask($stringId);
+
+        $tasksIds = ['49', '50', '51', '4'];
+        $availableTasks = $this->getRunnableTasksOfSystem();
+        foreach ($availableTasks->taskReference as $task) {
+            if(in_array($task->transitionId, $tasksIds)) {
+                $this->taskService->runTask($task->stringId);
+            }
+        }
+
+        return $messageResource;
     }
+
+
 
 }

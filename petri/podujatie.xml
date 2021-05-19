@@ -118,7 +118,6 @@
 		<icon>note_add</icon>
 		<dataGroup>
 			<id>DataGroup_3</id>
-			<layout>grid</layout>
 			<dataRef>
 				<id>podujatie_owner_id</id>
 				<logic>
@@ -229,11 +228,11 @@
 					uid: f.podujatie_owner_id;
 
 					change email value {
-						loggedUser().email
+					loggedUser().email
 					}
 
 					change uid value {
-						loggedUser().id
+					loggedUser().id
 					}
 				</action>
 			</actions>
@@ -248,6 +247,8 @@
 		</layout>
 		<label>podujatie dostupne \ system</label>
 		<icon>settings</icon>
+		<assignPolicy>auto</assignPolicy>
+		<finishPolicy>auto_no_data</finishPolicy>
 		<trigger type="auto"/>
 	</transition>
 	<transition>
@@ -259,6 +260,8 @@
 		</layout>
 		<label>podujatie nedostupne \ system</label>
 		<icon>settings</icon>
+		<assignPolicy>auto</assignPolicy>
+		<finishPolicy>auto_no_data</finishPolicy>
 		<trigger type="auto"/>
 	</transition>
 	<transition>
@@ -314,7 +317,6 @@
 		<assignPolicy>auto</assignPolicy>
 		<dataGroup>
 			<id>DataGroup_0</id>
-			<layout>grid</layout>
 			<dataRef>
 				<id>pocet_bodov</id>
 				<logic>
@@ -465,7 +467,6 @@
 		<icon>zoom_in</icon>
 		<dataGroup>
 			<id>DataGroup_0</id>
-			<layout>grid</layout>
 			<dataRef>
 				<id>pocet_bodov</id>
 				<logic>
@@ -525,16 +526,6 @@
 				<logic>
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
-					<action trigger="set">
-						max: f.300,
-						min: f.400;
-
-						if (min.value > max.value) {
-							change min value {
-								return max.value;
-							}
-						}
-                    </action>
 				</logic>
 				<layout>
 					<x>0</x>
@@ -551,16 +542,6 @@
 				<logic>
 					<behavior>editable</behavior>
 					<behavior>required</behavior>
-					<action trigger="set">
-						max: f.300,
-						min: f.400;
-
-						if (min.value > max.value) {
-							change max value {
-								return min.value
-							}
-						}
-					</action>
 				</logic>
 				<layout>
 					<x>2</x>
@@ -876,25 +857,28 @@
 	</arc>
 	<arc>
 		<id>98</id>
-		<type>variable</type>
+		<type>regular</type>
 		<sourceId>61</sourceId>
 		<destinationId>4</destinationId>
-		<multiplicity>300</multiplicity>
+		<multiplicity>1</multiplicity>
+		<reference>300</reference>
 	</arc>
 	<arc>
 		<id>99</id>
-		<type>variable</type>
+		<type>regular</type>
 		<sourceId>4</sourceId>
 		<destinationId>61</destinationId>
-		<multiplicity>300</multiplicity>
+		<multiplicity>1</multiplicity>
+		<reference>300</reference>
 		<breakPoint><x>460</x><y>340</y></breakPoint>
 	</arc>
 	<arc>
 		<id>100</id>
-		<type>variable</type>
+		<type>regular</type>
 		<sourceId>61</sourceId>
 		<destinationId>6</destinationId>
-		<multiplicity>400</multiplicity>
+		<multiplicity>1</multiplicity>
+		<reference>400</reference>
 		<breakPoint><x>260</x><y>540</y></breakPoint>
 	</arc>
 	<arc>
