@@ -45,7 +45,7 @@ class TeamController extends Controller
             return response()->json($team, 200);
         }
 
-        throw new Exception("Not created, team with this name already exists", 304);
+        throw new Exception("Tím s rovnakým menom už existuje", 304);
     }
 
     public function getTeamById(int $id): JsonResponse
@@ -80,12 +80,12 @@ class TeamController extends Controller
     {
         $team = Team::whereId($id)->first();
         if (!$team) {
-            throw new \Exception("team not found");
+            throw new \Exception("Tím nebol nájdený");
         }
 
         $loggedUserId = auth()->id();
         if ($team->user_id != $loggedUserId) {
-            throw new \Exception("not an owner");
+            throw new \Exception("Nie ste vlastníkom tímu");
         }
 
         $this->validate($request, ['user_mail' => 'required|email']);
@@ -93,12 +93,12 @@ class TeamController extends Controller
 
         $user = User::whereEmail($userEmail)->first();
         if (!$user) {
-            throw new \Exception("user not found");
+            throw new \Exception("Užívateľ nebol nájdený");
         }
 
         $hasEvent = $user->teams()->get()->contains('id', '=', $team->id);
         if ($hasEvent) {
-            throw new \Exception("user already in this team");
+            throw new \Exception("Užívateľ už sa nachádza v tomto tíme");
         }
 
         $user->teams()->save($team);
@@ -112,15 +112,15 @@ class TeamController extends Controller
         $team = Team::whereId($team_id)->first();
 
         if (!$team) {
-            throw new \Exception("Team doesnt exist");
+            throw new \Exception("Takýto tím neexistuje");
         }
 
         if ($team->user_id == $user_id){
             $team->delete();
-            return response()->json('Team deleted', 200);
+            return response()->json('Tím vymazaný', 200);
         }
 
-        return response()->json('You are not owner of the team:', 301);
+        return response()->json('"Nie ste vlastníkom tímu', 301);
     }
 
 }

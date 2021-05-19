@@ -91,23 +91,23 @@ class EventService
         $this->jsonMapper->mapObjectFromString(json_encode($request->toArray()), $dto);
 
         if ($dto->min_teams > $dto->max_teams) {
-            throw new Exception("Max pocet timov je mensi ako minimalny", 500);
+            throw new Exception("Maximálny počet tímov je menší ako minimálny", 500);
         }
         if ($dto->min_team_members > $dto->max_team_members) {
-            throw new Exception("Max pocet hracov v time je mensi ako minimalny", 500);
+            throw new Exception("Maximálny počet hráčov v tíme je menší ako minimálny", 500);
         }
 
 
         $todayDate = DateUtil::now();
 
         if (($todayDate > $dto->registration_end)) {
-            throw new Exception("Koniec registracie je pred sucastnym datumom", 500);
+            throw new Exception("Koniec registrácie je pred súčastným dátumom", 500);
         }
         if (($todayDate > $dto->event_end)) {
-            throw new Exception("Koniec udalosti je pred sucastnym datumom", 500);
+            throw new Exception("Koniec udalosti je pred súčastným dátumom", 500);
         }
         if (($todayDate > $dto->event_start)) {
-            throw new Exception("Zaciatok udalosti je pred sucastnym datumom", 500);
+            throw new Exception("Začiatok udalosti je pred súčastným dátumom", 500);
         }
         // TODO - 13/05/2021 - NA TOTO POZOR!
         app('db')->transaction(function () use ($dto) {

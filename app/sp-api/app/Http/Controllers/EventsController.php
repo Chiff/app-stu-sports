@@ -130,8 +130,8 @@ class EventsController extends Controller
 
         $todayDate = DateUtil::now();
 
-        if ($event->registration_start > $todayDate) throw new \Exception("Registracia ma toto podujatie ešte nebola spustená");
-        if ($event->registration_end < $todayDate) throw new \Exception("Registracia ma toto podujatie vypršala");
+        if ($event->registration_start > $todayDate) throw new \Exception("Registrácia na toto podujatie ešte nebola spustená");
+        if ($event->registration_end < $todayDate) throw new \Exception("Registrácia na toto podujatie vypršala");
 
         // TODO - 13/05/2021 - NA TOTO POZOR!
         return app('db')->transaction(function () use ($event, $team, $taskId) {
@@ -160,13 +160,13 @@ class EventsController extends Controller
                  */
                 $team = $user->ownTeams()->where('team_name', $user_name)->first();
                 if ($event->teams()->find($team->id)) {
-                    throw new \Exception("Team sa uz nachadza na evente");
+                    throw new \Exception("Tím je už na udalosť prihlásený");
                 } else {
                     if ($event->max_teams > sizeof($event->teams()->get())) {
                         $event->teams()->save($team);
                         $this->eventService->runTask($taskId);
                         return response()->json('Done', 200);
-                    } else throw new \Exception("Kapacita eventu je uz plna");
+                    } else throw new \Exception("Kapacita udalosti je už naplnená");
 
                 }
 
@@ -192,13 +192,13 @@ class EventsController extends Controller
             }
 
             if ($event->teams()->find($team->id)) {
-                throw new \Exception("Team sa uz nachadza na evente");
+                throw new \Exception("Tím je už na udalosť prihlásený");
             }
 
             if ($event->max_teams > sizeof($event->teams()->get())) {
                 $event->teams()->save($team);
             } else {
-                throw new \Exception("Kapacita eventu je uz plna");
+                throw new \Exception("Kapacita udalosti je už naplnená");
             }
 
             $this->eventService->runTask($taskId);
@@ -279,7 +279,7 @@ class EventsController extends Controller
             return response()->json('Podujatie bolo zrušené', 200);
         }
 
-        throw new \Exception("Nie si vlastníkom eventu");
+        throw new \Exception("Nie si vlastníkom podujatia");
     }
 
     public function deleteTeamByIdFromEvent(int $event_id, int $team_id): JsonResponse
@@ -312,7 +312,7 @@ class EventsController extends Controller
             if ($event->user_id == $user_id) {
                 $event->teams()->detach($team_id);
                 $this->eventService->runTask($taskId);
-                return response()->json('Tim bol uspesne odhlaseny z podujatia vlastnikom eventu', 200);
+                return response()->json('Tím bol úspešne odhlásený z podujatia vlastníkom podujatia', 200);
             }
 
             // teamy na evente, kde je user kapitan
@@ -323,7 +323,7 @@ class EventsController extends Controller
             if (sizeof($exists) > 0) {
                 $event->teams()->detach($team_id);
                 $this->eventService->runTask($taskId);
-                return response()->json('Tim bol uspesne odhlaseny z podujatia kapitanom timu', 200);
+                return response()->json('Tím bol úspešne odhlásený z podujatia kapitánom tímu', 200);
             }
 
             $this->eventService->runTask($taskId);
@@ -362,7 +362,7 @@ class EventsController extends Controller
             }
             $team->save();
         }
-        return response()->json('Podujatie bolo uspesne dokoncene', 200);
+        return response()->json('Podujatie bolo úspešne dokončené', 200);
     }
 
     public function addPointsById($id, Request $request): JsonResponse
@@ -380,10 +380,10 @@ class EventsController extends Controller
             EventTeam::where('team_id', $team_id)
                 ->where('event_id', $id)
                 ->update(array('points' => ($event_team->points + $points)));
-            return response()->json('Body uspesne pridane', 200);
+            return response()->json('Body úspešne pridané', 200);
         }
 
-        throw new \Exception("Tim nie je prihlaseny na toto podujatie");
+        throw new \Exception("Tím nie je prihlásený na toto podujatie");
     }
     // TODO: hodit to na detail EventDTO, nie takto -> kuk mapEventWithTeams
 //    public function showTeamsOnEvent(int $event_id): JsonResponse
