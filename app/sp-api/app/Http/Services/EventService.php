@@ -241,8 +241,8 @@ class EventService
         $this->taskService->finishUsingGET($taskId);
 
         $UpdatedEventDTO = new EventDTO();
+        $UpdatedEventDTO = $this->mapEventWithOwner($event, $UpdatedEventDTO);
         $this->jsonMapper->mapObjectFromString($event->toJson(), $UpdatedEventDTO);
-
 
         return $UpdatedEventDTO;
     }
