@@ -204,47 +204,49 @@ class EventService
 
         if ($dateStartChange < $dt ) throw new \Exception("Podujatie nemožno začať v minulosti");
 
-        if ($dto->user_id == $user_id){
-            $event->update([
-                'name' => $request->get('name'),
-                'registration_start'=> $request->get('registration_start'),
-                'registration_end'=> $request->get('registration_end'),
-                'event_start' => $request->get('event_start'),
-                'event_end'=> $request->get('event_end'),
-                'description'=> $request->get('description'),
-                'type' => $request->get('type')
-            ]);
+        return app('db')->transaction(function () use ($dto, $event, $user_id,$request) {
+            if ($dto->user_id == $user_id){
+                $event->update([
+                    'name' => $request->get('name'),
+                    'registration_start'=> $request->get('registration_start'),
+                    'registration_end'=> $request->get('registration_end'),
+                    'event_start' => $request->get('event_start'),
+                    'event_end'=> $request->get('event_end'),
+                    'description'=> $request->get('description'),
+                    'type' => $request->get('type')
+                ]);
+            }
+            else throw new \Exception("Nie si vlastníkom podujatia");
 
-        }
-        else throw new \Exception("Nie si vlastníkom podujatia");
 
-        $caseId = $event->ext_id;
-        $netgrif_editEvent_transId = 96;
+            $caseId = $event->ext_id;
+            $netgrif_editEvent_transId = 96;
 
-        $tasks = $this->taskService->searchTask(array(
-            'case' => array('id' => $caseId),
-            'transitionId' => $netgrif_editEvent_transId
-        ));
-        $taskId = $tasks->_embedded->tasks[0]->stringId;
+            $tasks = $this->taskService->searchTask(array(
+                'case' => array('id' => $caseId),
+                'transitionId' => $netgrif_editEvent_transId
+            ));
+            $taskId = $tasks->_embedded->tasks[0]->stringId;
 
-        $this->taskService->assignUsingGET($taskId);
+            $this->taskService->assignUsingGET($taskId);
 
-        $taskData =
-            '{
+            $taskData =
+                '{
                     "podujatie_nazov": {
                         "type": "text",
                         "value": "' . $request->get('name') . '"
                     }
             }';
 
-        $this->taskService->setTaskData($taskId, $taskData);
-        $this->taskService->finishUsingGET($taskId);
+            $this->taskService->setTaskData($taskId, $taskData);
+            $this->taskService->finishUsingGET($taskId);
 
-        $UpdatedEventDTO = new EventDTO();
-        $UpdatedEventDTO = $this->mapEventWithOwner($event, $UpdatedEventDTO);
-        $this->jsonMapper->mapObjectFromString($event->toJson(), $UpdatedEventDTO);
+            $UpdatedEventDTO = new EventDTO();
+            $UpdatedEventDTO = $this->mapEventWithOwner($event, $UpdatedEventDTO);
+            $this->jsonMapper->mapObjectFromString($event->toJson(), $UpdatedEventDTO);
 
-        return $UpdatedEventDTO;
+            return $UpdatedEventDTO;
+        });
     }
 
     public function getMyEvents(bool $onlyActive = true): MyEventsDTO
