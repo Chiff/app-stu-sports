@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { EventDTO } from '../../../models/sp-api';
+import { AuthService } from '../../../shared/shared/services/auth.service';
 
 @Component({
   selector: 'sp-event-list',
@@ -10,7 +11,7 @@ export class EventListComponent implements OnInit {
   activeEvents: EventDTO[];
   isLoading: boolean = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, public auth: AuthService) {}
 
   ngOnInit(): void {
     this.isLoading = true;

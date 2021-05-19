@@ -22,8 +22,17 @@
       </thead>
       <tbody>
         <tr *ngFor="let e of activeEvents">
-          <td>
+          <td *ngIf="!auth.isLogged()">
             <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
+          </td>
+          <td *ngIf="auth.isLogged()">
+            <i class="fas fa-search text-muted" *ngIf="!auth.canDoAction('detailPodujatia')"></i>
+            <a
+              routerLink="/event/detail/{{ e.id }}"
+              *ngIf="auth.canDoAction('detailPodujatia')"
+              (click)="auth.run('detailPodujatia')"
+              ><i class="fas fa-search text-primary"></i
+            ></a>
           </td>
           <td>{{ e.name }}</td>
           <td>{{ e.registration_start | date }} - {{ e.registration_end | date }}</td>

@@ -52,4 +52,27 @@ export class AuthService {
     this.router.navigate(['/logout.html']);
     this.http.get('api/user/logout').subscribe();
   }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  private transitionMap = {
+    detailPodujatia: '11',
+    detailTimu: '31',
+    vytvoritPodujatie: '10',
+    vytvoritTim: '58',
+  };
+
+  public canDoAction(action: SystemAction): boolean {
+    return !!this.userDto?.available_transitions?.taskReference?.find((e) => e.transitionId === this.transitionMap[action]);
+  }
+
+  public getTaskId(action: SystemAction): string {
+    return this.userDto?.available_transitions?.taskReference?.find((e) => e.transitionId === this.transitionMap[action])
+      ?.stringId;
+  }
+
+  public run(action: SystemAction): void {
+    this.http.post<never>(`api/system/runtask/${this.getTaskId(action)}`, null).subscribe();
+  }
 }
+
+export type SystemAction = 'detailPodujatia' | 'detailTimu' | 'vytvoritPodujatie' | 'vytvoritTim';

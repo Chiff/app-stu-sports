@@ -56,6 +56,7 @@ export interface TeamDTO {
 }
 
 export interface UserDTO {
+  available_transitions: { taskReference: TaskReferenceModel[] };
   id: string;
   firstname: string;
   surname: string;
