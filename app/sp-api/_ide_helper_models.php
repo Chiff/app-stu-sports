@@ -94,11 +94,34 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|EventTeam newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EventTeam query()
  * @method static \Illuminate\Database\Eloquent\Builder|EventTeam whereEventId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|EventTeam whereIsWinner($value)
- * @method static \Illuminate\Database\Eloquent\Builder|EventTeam wherePoints($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventTeam whereTeamId($value)
  */
 	class IdeHelperEventTeam extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Notifications
+ *
+ * @mixin IdeHelperNotifications
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $html_content
+ * @property int $entity_id
+ * @property int $entity_type
+ * @property-read \App\Models\Ciselnik $type
+ * @method static \Illuminate\Database\Eloquent\Builder|Notifications newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Notifications newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Notifications query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Notifications whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notifications whereEntityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notifications whereEntityType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notifications whereHtmlContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notifications whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notifications whereUpdatedAt($value)
+ */
+	class IdeHelperNotifications extends \Eloquent {}
 }
 
 namespace App\Models{

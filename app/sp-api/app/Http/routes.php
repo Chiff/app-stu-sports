@@ -52,7 +52,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('', ['uses' => 'TeamController@showAllTeams']);
         $router->get('my', ['uses' => 'TeamController@showAllUserTeams']);
         $router->get('{id}', ['uses' => 'TeamController@getTeamById']);
-//        $router->get('my/15', ['uses' => 'TeamController@getTeamById']);
         $router->post('create', ['uses' => 'TeamController@createTeam']);
         $router->put('update', ['uses' => 'TeamController@updateTeam']);
         $router->post('{id}/add', ['uses' => 'TeamController@addOneMemberToTeamByEmail']);
@@ -67,6 +66,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'system'], function () use ($router) {
         $router->get('/tasks', ['uses' => 'SystemController@getActiveTasks']);
         $router->post('/runtask/{stringId}', ['uses' => 'SystemController@runTask']);
+        $router->get('', ['uses' => 'NotificationsController@myNotifications']);
+    });
+
+    $router->group(['prefix' => 'notification'], function () use ($router) {
+        $router->get('{entity_type}/{entity_id}', ['uses' => 'NotificationsController@getNotifications']);
     });
 
 });

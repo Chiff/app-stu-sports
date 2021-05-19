@@ -18,6 +18,7 @@ use App\Http\Services\Netgrif\PetriNetService;
 use App\Http\Services\Netgrif\TaskService;
 use App\Http\Services\Netgrif\UserService as NetgrifUserService;
 use App\Http\Services\Netgrif\WorkflowService;
+use App\Http\Services\NotificationService;
 use App\Http\Services\SystemService;
 use App\Http\Services\TeamService;
 use App\Http\Services\UserService;
@@ -82,6 +83,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(TeamService::class);
         $this->app->singleton(CiselnikService::class);
         $this->app->singleton(SystemService::class);
+        $this->app->singleton(NotificationService::class);
 
         // application service
         $this->app->singleton(UserTeamAS::class);

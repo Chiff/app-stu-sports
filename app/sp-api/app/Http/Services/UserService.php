@@ -21,10 +21,12 @@ class UserService
     private JsonMapper $mapper;
     private UserTeamAS $userTeamAS;
     private SystemAS $systemAS;
+    private NotificationService $notificationService;
 
     public function __construct(
         AuthenticationService $authService,
         Netgrif\UserService $netgrifUserService,
+        NotificationService $notificationService,
         UserTeamAS $userTeamAS,
         JsonMapper $mapper,
         SystemAS $systemAS
@@ -36,6 +38,7 @@ class UserService
 
         $this->mapper = $mapper;
         $this->systemAS = $systemAS;
+        $this->notificationService = $notificationService;
     }
 
     public function login(LoginCredentials $credentials): User|null
@@ -60,6 +63,11 @@ class UserService
             if (!$user->save()) {
                 return null;
             }
+
+            $this->notificationService->createNotificationForUser(
+                "Vitaj <b>". $user->firstname ."</b>!",
+                $user->id
+            );
         }
 
         return $user;

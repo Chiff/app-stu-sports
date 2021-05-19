@@ -67,24 +67,6 @@
 		<label>detail podujatia</label>
 	</transition>
 	<transition>
-		<id>19</id>
-		<x>1180</x>
-		<y>1020</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>prihlasit na podujatie</label>
-	</transition>
-	<transition>
-		<id>20</id>
-		<x>1300</x>
-		<y>1020</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>zrusit podujatie</label>
-	</transition>
-	<transition>
 		<id>31</id>
 		<x>740</x>
 		<y>740</y>
@@ -92,24 +74,6 @@
 			<offset>0</offset>
 		</layout>
 		<label>detail timu</label>
-	</transition>
-	<transition>
-		<id>35</id>
-		<x>620</x>
-		<y>980</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>rozpustit tim</label>
-	</transition>
-	<transition>
-		<id>36</id>
-		<x>780</x>
-		<y>980</y>
-		<layout>
-			<offset>0</offset>
-		</layout>
-		<label>pridat clena do timu</label>
 	</transition>
 	<transition>
 		<id>49</id>
@@ -241,36 +205,6 @@
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>23</id>
-		<type>regular</type>
-		<sourceId>16</sourceId>
-		<destinationId>19</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>24</id>
-		<type>regular</type>
-		<sourceId>16</sourceId>
-		<destinationId>20</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>27</id>
-		<type>regular</type>
-		<sourceId>19</sourceId>
-		<destinationId>14</destinationId>
-		<multiplicity>1</multiplicity>
-		<breakPoint><x>1180</x><y>1140</y></breakPoint>
-	</arc>
-	<arc>
-		<id>28</id>
-		<type>regular</type>
-		<sourceId>20</sourceId>
-		<destinationId>14</destinationId>
-		<multiplicity>1</multiplicity>
-		<breakPoint><x>1300</x><y>1140</y></breakPoint>
-	</arc>
-	<arc>
 		<id>33</id>
 		<type>regular</type>
 		<sourceId>5</sourceId>
@@ -278,40 +212,10 @@
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>
-		<id>38</id>
-		<type>regular</type>
-		<sourceId>36</sourceId>
-		<destinationId>14</destinationId>
-		<multiplicity>1</multiplicity>
-		<breakPoint><x>780</x><y>1140</y></breakPoint>
-	</arc>
-	<arc>
-		<id>40</id>
-		<type>regular</type>
-		<sourceId>35</sourceId>
-		<destinationId>14</destinationId>
-		<multiplicity>1</multiplicity>
-		<breakPoint><x>620</x><y>1140</y></breakPoint>
-	</arc>
-	<arc>
 		<id>41</id>
 		<type>regular</type>
 		<sourceId>31</sourceId>
 		<destinationId>34</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>42</id>
-		<type>regular</type>
-		<sourceId>34</sourceId>
-		<destinationId>35</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-	<arc>
-		<id>43</id>
-		<type>regular</type>
-		<sourceId>34</sourceId>
-		<destinationId>36</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
 	<arc>

@@ -28,14 +28,19 @@ class CiselnikService
      * @return CiselnikDTO[]
      * @throws Exception
      */
-    public function getType(string $type): array
+    public function getType(string $type, string $filterLabel = ''): array
     {
         if (!$this->isValidType($type)) {
             throw new Exception("type not found", 404);
         }
 
-        $ciselniky = Ciselnik::whereType($type)->get();
-        return $this->ciselnikAS->mapCiselnikCollection($ciselniky);
+        $ciselniky = Ciselnik::whereType($type);
+
+        if ($filterLabel) {
+            $ciselniky->where('label', '=', $filterLabel);
+        }
+
+        return $this->ciselnikAS->mapCiselnikCollection($ciselniky->get());
     }
 
     public function create(CiselnikDTO $dto): bool
