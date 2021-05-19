@@ -25,6 +25,7 @@ use App\Models\Team;
 use App\Models\User;
 use App\Models\UserTeam;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use JsonMapper\JsonMapper;
@@ -168,6 +169,82 @@ class EventService
     {
         $events = Event::where('disabled', '=', 0)->orderBy('id', 'desc')->get();
         return $this->mapEventsWithOwner($events);
+    }
+
+    public function update(int $id, Request $request): EventDTO
+    {
+        $user_id = auth()->id();
+        $event = Event::whereId($id)->first();
+
+        if (!$event) throw new \Exception("Podujatie neexistuje");
+
+        $dto = new EventDTO();
+        $dtoRequest = new EventDTO();
+
+        $dto->user_id = auth()->id();
+        $this->jsonMapper->mapObjectFromString($event->toJson(), $dto);
+
+        $dt = DateUtil::now();
+
+        // neviem či chcem aj takúto valid
+//        if ($event->disabled)  throw new \Exception("Podujatie je zrušené e preto nie sú možné zmeny");
+        if ($dto->event_start <= $dt && $dt <= $event->event_end) throw new \Exception("Podujatie práve prebieha a zmeny nie sú možné");
+        if ($dto->event_end < $dt) throw new \Exception("Event už skončil");
+
+        $this->jsonMapper->mapObjectFromString(json_encode($request->toArray()), $dtoRequest);
+
+        $dateStartChange = $dtoRequest->event_start;
+        $dateEndChange = $dtoRequest->event_end;
+        $registrationStartChange = $dtoRequest->registration_start;
+        $registrationEndChange = $dtoRequest->registration_end;
+
+        if ($registrationStartChange > $registrationEndChange) throw new \Exception("Logická chyba dátumu");
+        if ($dateStartChange > $dateEndChange) throw new \Exception("Logická chyba dátumu");
+        if ($dateStartChange < $registrationEndChange) throw new \Exception("Logická chyba dátumu");
+
+        if ($dateStartChange < $dt ) throw new \Exception("Podujatie nemožno začať v minulosti");
+
+        if ($dto->user_id == $user_id){
+            $event->update([
+                'name' => $request->get('name'),
+                'registration_start'=> $request->get('registration_start'),
+                'registration_end'=> $request->get('registration_end'),
+                'event_start' => $request->get('event_start'),
+                'event_end'=> $request->get('event_end'),
+                'description'=> $request->get('description'),
+                'type' => $request->get('type')
+            ]);
+
+        }
+        else throw new \Exception("Nie si vlastníkom podujatia");
+
+        $caseId = $event->ext_id;
+        $netgrif_editEvent_transId = 96;
+
+        $tasks = $this->taskService->searchTask(array(
+            'case' => array('id' => $caseId),
+            'transitionId' => $netgrif_editEvent_transId
+        ));
+        $taskId = $tasks->_embedded->tasks[0]->stringId;
+
+        $this->taskService->assignUsingGET($taskId);
+
+        $taskData =
+            '{
+                    "podujatie_nazov": {
+                        "type": "text",
+                        "value": "' . $request->get('name') . '"
+                    }
+            }';
+
+        $this->taskService->setTaskData($taskId, $taskData);
+        $this->taskService->finishUsingGET($taskId);
+
+        $UpdatedEventDTO = new EventDTO();
+        $this->jsonMapper->mapObjectFromString($event->toJson(), $UpdatedEventDTO);
+
+
+        return $UpdatedEventDTO;
     }
 
     public function getMyEvents(bool $onlyActive = true): MyEventsDTO

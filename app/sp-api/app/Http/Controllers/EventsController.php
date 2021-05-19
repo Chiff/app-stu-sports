@@ -244,11 +244,10 @@ class EventsController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function update($id, Request $request): JsonResponse
+    public function update(int $id, Request $request): JsonResponse
     {
-        $event = Event::findOrFail($id);
-        $event->update($request->all());
-        return response()->json($event, 200);
+        $eventDTO = $this->eventService->update( $id,  $request);
+        return response()->json($eventDTO, 200);
     }
 
     public function disableEventById(int $event_id): JsonResponse
