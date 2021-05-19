@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Dto\Event\EventDTO;
 use App\Http\Services\EventService;
+use App\Http\Utils\DateUtil;
 use App\Models\Event;
 use App\Models\EventTeam;
 use App\Models\Team;
@@ -127,7 +128,7 @@ class EventsController extends Controller
             throw new \Exception("event not found");
         }
 
-        $todayDate = date('Y-m-d H:m:i');
+        $todayDate = DateUtil::now();
 
         if ($event->registration_start > $todayDate) throw new \Exception("Registracia ma toto podujatie ešte nebola spustená");
         if ($event->registration_end < $todayDate) throw new \Exception("Registracia ma toto podujatie vypršala");
@@ -255,10 +256,8 @@ class EventsController extends Controller
 
         $dto = new EventDTO();
 
-        $todayDatee = date('Y-m-dTH:m:i');
 
-        $dt = new DateTime($todayDatee);
-        $todayDate = Carbon::instance($dt);
+        $todayDate = DateUtil::now();
 
         if (!$event) throw new \Exception("event not found");
 
@@ -297,10 +296,7 @@ class EventsController extends Controller
         $dto = new EventDTO();
         $this->jsonMapper->mapObjectFromString($event->toJson(), $dto);
 
-        $todayDatee = date('Y-m-dTH:m:i');
-
-        $dt = new DateTime($todayDatee);
-        $todayDate = Carbon::instance($dt);
+        $todayDate = DateUtil::now();
 
         if (($todayDate < $dto->event_end) && ($todayDate > $dto->event_start)) {
             throw new \Exception("Podujatie aktuálne prebieha a nie je možné odhlásiť tím");

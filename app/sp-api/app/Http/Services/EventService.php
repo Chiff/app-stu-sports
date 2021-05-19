@@ -97,10 +97,8 @@ class EventService
             throw new Exception("Max pocet hracov v time je mensi ako minimalny", 500);
         }
 
-        $todayDatee = date('Y-m-dTH:m:i');
 
-        $dt = new DateTime($todayDatee);
-        $todayDate = Carbon::instance($dt);
+        $todayDate = DateUtil::now();
 
         if (($todayDate > $dto->registration_end)) {
             throw new Exception("Koniec registracie je pred sucastnym datumom", 500);
@@ -170,7 +168,7 @@ class EventService
      */
     public function getPublicEvents(): array
     {
-        $todayDate = date('Y/m/d H:m:i');
+        $todayDate = DateUtil::now();
         $events = Event::where('registration_end', '>=', $todayDate)->get();
 
         return $this->mapEventsWithOwner($events);
@@ -199,7 +197,7 @@ class EventService
         $events = $user->ownEvents();
 
         if ($onlyActive) {
-            $todayDate = date('Y/m/d H:m:i');
+            $todayDate = DateUtil::now();
             $events->where('event_end', '>=', $todayDate);
         }
 
@@ -218,7 +216,7 @@ class EventService
         $events = Event::select()->whereIn('id', $eventTeam->select('event_id'));
 
         if ($onlyActive) {
-            $todayDate = date('Y/m/d H:m:i');
+            $todayDate = DateUtil::now();
             $events->where('event_end', '>=', $todayDate);
         }
 
