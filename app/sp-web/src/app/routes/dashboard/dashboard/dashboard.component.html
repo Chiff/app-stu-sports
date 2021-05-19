@@ -23,7 +23,13 @@
             <tbody>
               <tr *ngFor="let e of myEvents.upcoming">
                 <td>
-                  <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
+                  <i class="fas fa-search text-muted" *ngIf="!auth.canDoAction('detailPodujatia')"></i>
+                  <a
+                    routerLink="/event/detail/{{ e.id }}"
+                    *ngIf="auth.canDoAction('detailPodujatia')"
+                    (click)="auth.run('detailPodujatia')"
+                    ><i class="fas fa-search text-primary"></i
+                  ></a>
                 </td>
                 <td>{{ e.name }}</td>
                 <td>{{ e.event_start | date }}</td>
@@ -38,12 +44,14 @@
       <h2 class="text-primary d-flex justify-content-between">
         Vytvorené podujatia
 
-        <a routerLink="/event/new"><i class="fas fa-plus"></i></a>
+        <a routerLink="/event/new" *ngIf="auth.canDoAction('vytvoritPodujatie')"><i class="fas fa-plus"></i></a>
       </h2>
       <div class="card">
         <div class="card-body" [ngClass]="{ 'p-0': myEvents?.owned?.length }">
           <div class="alert alert-warning m-0" *ngIf="!myEvents?.owned?.length">
-            Momentálne nemáte žiadne vlastné podujatia, môžete <a routerLink="/event/new">vytvoriť nové</a>.
+            Momentálne nemáte žiadne vlastné podujatia<span *ngIf="auth.canDoAction('vytvoritPodujatie')"
+              >,môžete <a routerLink="/event/new">vytvoriť nové</a></span
+            >.
           </div>
           <table class="table table-bordered m-0 table-border-none" *ngIf="myEvents?.owned?.length">
             <thead>
@@ -57,7 +65,13 @@
             <tbody>
               <tr *ngFor="let e of myEvents.owned">
                 <td>
-                  <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
+                  <i class="fas fa-search text-muted" *ngIf="!auth.canDoAction('detailPodujatia')"></i>
+                  <a
+                    routerLink="/event/detail/{{ e.id }}"
+                    *ngIf="auth.canDoAction('detailPodujatia')"
+                    (click)="auth.run('detailPodujatia')"
+                    ><i class="fas fa-search text-primary"></i
+                  ></a>
                 </td>
                 <td>{{ e.name }}</td>
                 <td>{{ e.event_start | date }}</td>
@@ -75,12 +89,14 @@
       <h2 class="text-primary d-flex justify-content-between">
         Moje tímy
 
-        <a routerLink="/team/new"><i class="fas fa-plus"></i></a>
+        <a routerLink="/team/new" *ngIf="auth.canDoAction('vytvoritTim')"><i class="fas fa-plus"></i></a>
       </h2>
       <div class="card">
         <div class="card-body" [ngClass]="{ 'p-0': user?.teams?.length }">
           <div class="alert alert-warning m-0" *ngIf="!user?.teams?.length">
-            Momentálne nie ste v žiadnom tíme, môžete <a routerLink="/team/new">vytvoriť nový</a>.
+            Momentálne nie ste v žiadnom tíme<span *ngIf="auth.canDoAction('vytvoritTim')"
+              >,môžete <a routerLink="/event/new">vytvoriť nový</a></span
+            >.
           </div>
           <table class="table table-bordered m-0 table-border-none" *ngIf="user?.teams?.length">
             <thead>
@@ -93,7 +109,10 @@
             <tbody>
               <tr *ngFor="let e of user.teams">
                 <td>
-                  <a routerLink="/team/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
+                  <i class="fas fa-search text-muted" *ngIf="!auth.canDoAction('detailTimu')"></i>
+                  <a routerLink="/team/detail/{{ e.id }}" *ngIf="auth.canDoAction('detailTimu')" (click)="auth.run('detailTimu')"
+                    ><i class="fas fa-search text-primary"></i
+                  ></a>
                 </td>
                 <td>
                   <span *ngIf="e.disabled" title="Tento tím je neaktívny">
@@ -146,7 +165,13 @@
             <tbody>
               <tr *ngFor="let e of myEvents.ended">
                 <td>
-                  <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
+                  <i class="fas fa-search text-muted" *ngIf="!auth.canDoAction('detailPodujatia')"></i>
+                  <a
+                    routerLink="/event/detail/{{ e.id }}"
+                    *ngIf="auth.canDoAction('detailPodujatia')"
+                    (click)="auth.run('detailPodujatia')"
+                    ><i class="fas fa-search text-primary"></i
+                  ></a>
                 </td>
                 <td>{{ e.name }}</td>
                 <td>{{ e.event_start | date }}</td>
