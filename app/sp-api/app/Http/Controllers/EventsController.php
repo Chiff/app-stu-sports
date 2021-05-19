@@ -143,7 +143,7 @@ class EventsController extends Controller
                 /*
                  * Check if user already have team of himself
                  */
-                $exists = $user->ownTeams()->where('team_name', $user_name)->get();
+                $exists = $user->ownTeams()->where('team_name', $user_name)->where('disabled', '=', '0')->get();
                 if (sizeof($exists) == 0) {
                     $team = new Team(array('team_name' => $user_name));
                     $user->ownTeams()->save($team);
@@ -151,6 +151,10 @@ class EventsController extends Controller
 
                     $user->teams()->attach($team);
                     $user->save();
+                }
+
+                if ($team->disabled) {
+                    throw new \Exception("Tento tím je deaktivovaný");
                 }
 
                 /*

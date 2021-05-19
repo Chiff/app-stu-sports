@@ -1,18 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { TaskReferenceModel } from './generated-swagger';
 
-// TODO - 12/05/2021 - permissions
-export interface AccountModel extends UserDTO {
-  permissions: AccountPermissionEnum[];
-}
-
-// TODO - 08/03/2021 - zatial nemame
-export enum AccountPermissionEnum {
-  APP_EDIT,
-  TEAM_MANAGER,
-  PARTICIPANT,
-}
-
 export interface EventDTO {
   id: string;
   user_id: string;
@@ -53,6 +41,7 @@ export interface MyEventsDTO {
 export interface TeamDTO {
   id: string;
   team_name: string;
+  disabled: string;
   created_at: DateTimeAsString;
   updated_at: DateTimeAsString;
   registration_start: DateTimeAsString;

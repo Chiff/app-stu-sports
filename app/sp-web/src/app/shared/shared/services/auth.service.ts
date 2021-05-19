@@ -1,27 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { AccountModel, AccountPermissionEnum } from '../../../models/sp-api';
+import { UserDTO } from '../../../models/sp-api';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private userDto: AccountModel = null;
-  private userPromise: Promise<AccountModel> = null;
+  private userDto: UserDTO = null;
+  private userPromise: Promise<UserDTO> = null;
   private inprogress: boolean = false;
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  public get userSnapshot(): AccountModel {
+  public get userSnapshot(): UserDTO {
     return this.userDto;
   }
 
-  public user(force: boolean = false): Promise<AccountModel> {
+  public user(force: boolean = false): Promise<UserDTO> {
     if (this.inprogress) return this.userPromise;
     if (this.userPromise == null || force) {
       this.inprogress = true;
-      this.userPromise = this.http.get<AccountModel>('api/user/detail').toPromise();
+      this.userPromise = this.http.get<UserDTO>('api/user/detail').toPromise();
       this.userPromise.then(
         (user) => {
           this.inprogress = false;
@@ -41,23 +41,7 @@ export class AuthService {
     return !!this.userDto?.id;
   }
 
-  public hasPermission(permissions: AccountPermissionEnum[] | AccountPermissionEnum): boolean {
-    if (!this.userDto?.permissions) return false;
-
-    if (!Array.isArray(permissions)) {
-      permissions = [permissions];
-    }
-
-    if (!permissions) {
-      return false;
-    }
-
-    return !!permissions.find((r) => {
-      return this.userDto.permissions.includes(r);
-    });
-  }
-
-  public onLogin(user: AccountModel): void {
+  public onLogin(user: UserDTO): void {
     this.userDto = user;
     this.inprogress = false;
     this.userPromise = null;

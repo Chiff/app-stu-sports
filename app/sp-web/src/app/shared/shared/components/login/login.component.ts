@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
-import { AccountModel } from '../../../../models/sp-api';
+import { UserDTO } from '../../../../models/sp-api';
 
 @Component({
   selector: 'sp-login',
@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
     this.bad = false;
 
     this.http.post('api/user/login', this.user).subscribe({
-      next: (user: AccountModel) => {
+      next: (user: UserDTO) => {
         this.auth.onLogin(user);
         this.router.navigate(['/dashboard']);
       },

@@ -116,7 +116,8 @@ class TeamController extends Controller
         }
 
         if ($team->user_id == $user_id){
-            $team->delete();
+            $team->disabled = 1;
+            $team->save();
             return response()->json('Tím vymazaný', 200);
         }
 

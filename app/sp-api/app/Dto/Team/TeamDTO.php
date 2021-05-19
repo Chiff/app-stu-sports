@@ -21,6 +21,7 @@ class TeamDTO extends AppSerializable
     public ?int $points;
     public ?int $wins;
     public ?int $events_total;
+    public ?bool $disabled;
     /**
      * @var UserDTO[]|null
      */

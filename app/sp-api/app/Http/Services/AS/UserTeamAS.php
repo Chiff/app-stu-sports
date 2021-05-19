@@ -117,7 +117,7 @@ class UserTeamAS
      */
     public function getTeamsByUser(User $user): array
     {
-        $teams = $user->teams()->get();
+        $teams = $user->teams()->orderBy('disabled')->orderBy('created_at', 'desc')->get();
         return $this->mapTeamsWithOwner($teams);
     }
 

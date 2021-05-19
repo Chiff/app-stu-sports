@@ -7,8 +7,8 @@ import localeSkExtra from '@angular/common/locales/extra/sk';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthService } from './shared/shared/services/auth.service';
-import { AccountModel } from './models/sp-api';
 import { SharedModule } from './shared/shared/shared.module';
+import { UserDTO } from './models/sp-api';
 
 registerLocaleData(
   ((locale) => {
@@ -20,7 +20,7 @@ registerLocaleData(
 );
 
 const beforeAppInit = (authService: AuthService, router: Router) => {
-  const appInitPromise = new Promise<AccountModel>((resolve) => {
+  const appInitPromise = new Promise<UserDTO>((resolve) => {
     authService.user(true).then(
       (user) => {
         resolve(user);

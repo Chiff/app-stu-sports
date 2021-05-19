@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { CustomHttpError, ErrorResponse, TeamDTO } from '../../../models/sp-api';
+import { AuthService } from '../../../shared/shared/services/auth.service';
 
 @Component({
   selector: 'sp-team-detail',
@@ -18,7 +19,7 @@ export class TeamDetailComponent {
   newMail: string = '';
   error: string = '';
 
-  constructor(private http: HttpClient, private route: ActivatedRoute) {
+  constructor(private http: HttpClient, private route: ActivatedRoute, public auth: AuthService) {
     this.route.params.subscribe((p) => {
       this.getTeamById(p.id);
     });
@@ -31,6 +32,11 @@ export class TeamDetailComponent {
   }
 
   add(): void {
+    if (this.isSpecial()) {
+      window.alert('Váš "jednotkový" tím nie je možné editovať!');
+      return;
+    }
+
     this.error = null;
 
     if (this.ngForm.invalid) {
@@ -50,5 +56,29 @@ export class TeamDetailComponent {
         this.error = err.error.error.message;
       },
     });
+  }
+
+  disableTeam(): void {
+    if (this.isSpecial()) {
+      window.alert('Váš "jednotkový" tím nie je možné editovať!');
+      return;
+    }
+
+    if (!window.confirm('Naozaj si prajete deaktivovať tento tím? Táto akcia je nezvratná!')) {
+      return;
+    }
+
+    this.http.delete(`api/team/delete/${this.team.id}`).subscribe({
+      next: () => {
+        this.getTeamById(this.team.id);
+      },
+      error: (err: CustomHttpError<ErrorResponse>) => {
+        window.alert(err.error.error.message);
+      },
+    });
+  }
+
+  isSpecial(): boolean {
+    return this.team.team_name === `${this.auth.userSnapshot.firstname} ${this.auth.userSnapshot.surname}`;
   }
 }

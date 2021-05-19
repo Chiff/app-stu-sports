@@ -5,7 +5,7 @@ import { parseDate } from '@annotation/ng-datepicker';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { zip } from 'rxjs';
 import { NgForm } from '@angular/forms';
-import { AccountModel, CustomHttpError, ErrorResponse, EventDTO, TeamDTO } from '../../../models/sp-api';
+import { CustomHttpError, ErrorResponse, EventDTO, TeamDTO, UserDTO } from '../../../models/sp-api';
 import { AuthService } from '../../../shared/shared/services/auth.service';
 import { EventNewComponent } from '../event-new/event-new.component';
 
@@ -30,7 +30,7 @@ export class EventDetailComponent implements OnDestroy {
   @ViewChild('eventNewComponent')
   private eventNewComponent: EventNewComponent;
 
-  public user: AccountModel;
+  public user: UserDTO;
   public availibleTeams: TeamDTO[] = [];
 
   public event: EventDTO;
@@ -81,7 +81,7 @@ export class EventDetailComponent implements OnDestroy {
       if (
         event.min_team_members === 1 &&
         event.max_team_members === 1 &&
-        !this.availibleTeams.find((t) => t.users.length === 1)
+        !this.availibleTeams.find((t) => t.users.length === 1 && !t.disabled)
       ) {
         this.availibleTeams.push({
           team_name: `${user.firstname} ${user.surname}`,
@@ -90,7 +90,7 @@ export class EventDetailComponent implements OnDestroy {
       }
 
       const teamsOnEvent = event.teams_on_event.map((t) => t.id);
-      this.availibleTeams = this.availibleTeams.filter((t) => !teamsOnEvent.includes(t.id));
+      this.availibleTeams = this.availibleTeams.filter((t) => !teamsOnEvent.includes(t.id)).filter((t) => !t.disabled);
 
       if (this.availibleTeams?.length === 1) {
         this.teamId = this.availibleTeams[0].id;

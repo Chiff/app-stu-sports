@@ -95,7 +95,15 @@
                 <td>
                   <a routerLink="/team/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
                 </td>
-                <td>{{ e.team_name }}</td>
+                <td>
+                  <span *ngIf="e.disabled" title="Tento tím je neaktívny">
+                    <i class="fas fa-skull-crossbones text-danger"></i>&nbsp;
+                  </span>
+                  <span *ngIf="!e.disabled" title="Tento tím je aktívny">
+                    <i class="fas fa-heartbeat text-success"></i>&nbsp;
+                  </span>
+                  {{ e.team_name }}
+                </td>
                 <td>{{ e.owner?.firstname }} {{ e.owner?.surname }}</td>
               </tr>
             </tbody>

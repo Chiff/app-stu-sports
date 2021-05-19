@@ -46,10 +46,12 @@ class Team extends Model
 
 
     protected $fillable = [
+        'user_id',
         'team_name',
         'wins',
         'points',
-        'events_total'
+        'events_total',
+        'disabled',
     ];
     protected $hidden = [];
 

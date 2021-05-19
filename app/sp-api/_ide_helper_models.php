@@ -114,6 +114,7 @@ namespace App\Models{
  * @property int $points
  * @property int $wins
  * @property int $events_total
+ * @property int $disabled
  * @property-read \App\Models\User $owner
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $teamMembers
  * @property-read int|null $team_members_count
@@ -122,6 +123,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Team newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Team query()
  * @method static \Illuminate\Database\Eloquent\Builder|Team whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Team whereDisabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Team whereEventsTotal($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Team whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Team wherePoints($value)
