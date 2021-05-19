@@ -181,7 +181,6 @@ class EventService
         $dto = new EventDTO();
         $dtoRequest = new EventDTO();
 
-        $dto->user_id = auth()->id();
         $this->jsonMapper->mapObjectFromString($event->toJson(), $dto);
 
         $dt = DateUtil::now();
@@ -217,7 +216,6 @@ class EventService
                 ]);
             }
             else throw new \Exception("Nie si vlastníkom podujatia");
-
 
             $caseId = $event->ext_id;
             $netgrif_editEvent_transId = 96;
