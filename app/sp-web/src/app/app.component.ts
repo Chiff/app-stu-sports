@@ -12,8 +12,8 @@ export class AppComponent implements OnDestroy {
   private tickTimeout = 4000;
   public ready = false;
 
-  private t1: number;
-  private t2: number;
+  private t1: NodeJS.Timeout;
+  private t2: NodeJS.Timeout;
 
   constructor(public auth: AuthService, private router: Router) {
     this.router.events.subscribe((e) => {

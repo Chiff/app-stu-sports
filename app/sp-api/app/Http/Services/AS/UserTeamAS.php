@@ -7,6 +7,7 @@ use App\Dto\Event\EventDTO;
 use App\Dto\Team\TeamDTO;
 use App\Dto\User\UserDTO;
 use App\Http\Utils\DateUtil;
+use App\Models\Event;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Collection;
@@ -68,13 +69,15 @@ class UserTeamAS
         }
         $teamDto->users = $team_array;
 
-        $events = $team->getSignedEvents()->get();
+        $events = $team->getSignedEvents()->orderBy('event_end', 'desc')->get();
         $active = [];
         $finished = [];
         $future = [];
 
         $todayDate = DateUtil::now();
         foreach ($events as $event) {
+            if (!$event instanceof Event) continue; // type fix
+
             $eventDto = new EventDTO();
             $this->mapper->mapObjectFromString($event->toJson(), $eventDto);
 
@@ -84,11 +87,16 @@ class UserTeamAS
 
             $eventDto->owner = $userDto;
 
-            if (($todayDate < $eventDto->event_end) && ($todayDate > $eventDto->event_start)) {
+            $hasWinner = $event->teams()->where('is_winner', '=', true)->count() > 0;
+            $isFuture = !$eventDto->disabled && $todayDate < $eventDto->event_start;
+            $isActive = !$eventDto->disabled && $todayDate >= $eventDto->event_start && !$hasWinner;
+            $isEnded = $eventDto->disabled || ($todayDate >= $eventDto->event_end && $hasWinner);
+
+            if ($isActive) {
                 array_push($active, $eventDto);
-            } elseif ($todayDate > $eventDto->event_end) {
+            } elseif ($isEnded) {
                 array_push($finished, $eventDto);
-            } elseif ($todayDate < $eventDto->event_start) {
+            } elseif ($isFuture) {
                 array_push($future, $eventDto);
             }
         }

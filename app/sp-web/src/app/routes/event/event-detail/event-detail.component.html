@@ -1,232 +1,285 @@
-<div class="alert alert-info" *ngIf="fresh(event)">
-  <i class="fas fa-fw fa-info-circle"></i>&nbsp;Podujatie je naplánované. Svoj tím môžete zaregistrovať od
-  <span class="fw-bold">{{ event.registration_start | date: 'short' }}</span> .
-</div>
-<div class="alert alert-success" *ngIf="inReg(event)">
-  <i class="fas fa-fw fa-pencil-alt"></i>&nbsp;Prebieha registrácia na podujatie. Registrácia bude ukončená
-  <span class="fw-bold">{{ event.registration_end | date: 'short' }}</span> .
-</div>
-<div class="alert alert-warning" *ngIf="isActive(event)">
-  <i class="fas fa-fw fa-clock"></i>&nbsp;Podujatie práve prebieha. Predpokladaný koniec podujatia je
-  <span class="fw-bold">{{ event.event_end | date: 'short' }}</span> .
-</div>
-<div class="alert alert-danger" *ngIf="isFinished(event)">
-  <i class="fas fa-fw fa-exclamation-triangle"></i>&nbsp;Podujatie bolo ukončené.
-</div>
+<ng-container *ngIf="event && !event?.disabled">
+  <div class="alert alert-info" *ngIf="fresh(event)">
+    <i class="fas fa-fw fa-info-circle"></i>&nbsp;Podujatie je naplánované. Svoj tím môžete zaregistrovať od
+    <span class="fw-bold">{{ event.registration_start | date: 'short' }}</span> .
+  </div>
+  <div class="alert alert-success" *ngIf="inReg(event)">
+    <i class="fas fa-fw fa-pencil-alt"></i>&nbsp;Prebieha registrácia na podujatie. Registrácia bude ukončená
+    <span class="fw-bold">{{ event.registration_end | date: 'short' }}</span> .
+  </div>
+
+  <ng-container *ngIf="canBeStarted(event)">
+    <div class="alert alert-warning" *ngIf="isActive(event)">
+      <i class="fas fa-fw fa-clock"></i>&nbsp;Podujatie práve prebieha. Predpokladaný koniec podujatia je
+      <span class="fw-bold">{{ event.event_end | date: 'short' }}</span> .
+    </div>
+    <div class="alert alert-danger" *ngIf="isFinished(event)">
+      <i class="fas fa-fw fa-exclamation-triangle"></i>&nbsp;Podujatie bude čoskoro ukončené.
+    </div>
+  </ng-container>
+
+  <!--  <ng-container *ngIf="!canBeStarted(event) && !hasAction('editEvent')">-->
+  <!--    <div class="alert alert-danger">-->
+  <!--      <i class="fas fa-fw fa-exclamation-triangle"></i>&nbsp;Toto podujatie nesplnilo požadovanú kapacitu a bolo čoskoro zrušené.-->
+  <!--    </div>-->
+  <!--  </ng-container>-->
+</ng-container>
+
+<ng-container *ngIf="event?.disabled">
+  <div class="alert alert-primary"><i class="fas fa-fw fa-info-circle"></i>&nbsp;Toto podujatie bolo ukončené.</div>
+</ng-container>
 
 <h1 class="text-primary d-flex justify-content-between my-4">
   Detail podujatia
 
-  <i class="fas fa-spin fa-spinner" *ngIf="!event"></i>
-  <button class="btn btn-success" *ngIf="event && hasAction('startEvent')" (click)="startEvent()">
-    <i class="fas fa-play"></i>&nbsp; Zahájiť podujatie
-  </button>
+  <span class="text-end" *ngIf="!isEditing">
+    <i class="fas fa-spin fa-spinner" *ngIf="!event"></i>
+    <button class="btn btn-success" *ngIf="event && hasAction('startEvent')" (click)="startEvent()">
+      <i class="fas fa-play"></i>&nbsp;Zahájiť podujatie
+    </button>
+    <button class="btn btn-info text-light" *ngIf="event && hasAction('editEvent')" (click)="editEvent()">
+      <i class="fas fa-edit"></i>&nbsp;Upraviť podujatie
+    </button>
+    <button class="btn btn-danger text-light" *ngIf="event && hasAction('cancelEvent')" (click)="cancelEvent()">
+      <i class="fas fa-trash"></i>&nbsp;Zrušiť podujatie
+    </button>
+  </span>
+
+  <span class="text-end" *ngIf="isEditing">
+    <button class="btn btn-outline-primary" (click)="cancelEdit()"><i class="fas fa-chevron-left"></i>&nbsp;Späť</button>
+    <button class="btn btn-warning text-light" (click)="sendEditedEvent()">
+      <i class="fas fa-edit"></i>&nbsp;Uložiť podujatie
+    </button>
+  </span>
 </h1>
-<div class="row" *ngIf="event">
-  <div class="col-sm-12 col-lg-6 mb-2">
-    <div class="card">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-list fa-fw text-primary"></i>&nbsp;Názov</div>
-          <div class="col-sm-12 col-md-8">{{ event.name }}</div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-pencil-alt fa-fw text-primary"></i>&nbsp;Popis</div>
-          <div class="col-sm-12 col-md-8">{{ event.description || '-' }}</div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-gamepad fa-fw text-primary"></i>&nbsp;Typ</div>
-          <div class="col-sm-12 col-md-8">{{ event.type?.label }}</div>
-        </div>
-      </div>
-    </div>
 
-    <div class="card mt-2">
-      <div class="card-body">
-        <h4 class="text-primary">Obmedzenia</h4>
-        <div class="row">
-          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-users fa-fw text-primary"></i>&nbsp;Počet tímov</div>
-          <div class="col-sm-12 col-md-8" *ngIf="event.min_teams != event.max_teams">
-            {{ event.min_teams }} - {{ event.max_teams }}
-          </div>
-          <div class="col-sm-12 col-md-8" *ngIf="event.min_teams == event.max_teams">{{ event.min_teams }}</div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-user fa-fw text-primary"></i>&nbsp;Počet hráčov v tíme</div>
-          <div class="col-sm-12 col-md-8" *ngIf="event.min_team_members != event.max_team_members">
-            {{ event.min_team_members }} - {{ event.max_team_members }}
-          </div>
-          <div class="col-sm-12 col-md-8" *ngIf="event.min_team_members == event.max_team_members">
-            {{ event.min_team_members }}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-12 col-lg-6 mb-2">
-    <div class="card">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-crown fa-fw text-primary"></i>&nbsp;Zakladateľ</div>
-          <div class="col-sm-12 col-md-8">{{ event.owner.firstname }} {{ event.owner.surname }}</div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-calendar fa-fw text-primary"></i>&nbsp;Vytvorený</div>
-          <div class="col-sm-12 col-md-8">{{ event.created_at | date: 'shortDate' }}</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card mt-2">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-clock fa-fw text-primary"></i>&nbsp;Registrácia</div>
-          <div class="col-sm-12 col-md-8">
-            {{ event.registration_start | date: 'short' }} - {{ event.registration_end | date: 'short' }}
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-play fa-fw text-primary"></i>&nbsp;Začiatok</div>
-          <div class="col-sm-12 col-md-8">{{ event.event_start | date: 'short' }}</div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-flag-checkered fa-fw text-primary"></i>&nbsp;Koniec</div>
-          <div class="col-sm-12 col-md-8">{{ event.event_end | date: 'short' }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<ng-container *ngIf="event && (isActive(event) || isFinished(event))">
-  <h3 class="text-primary mt-4 d-flex justify-content-between align-items-end">Leaderboard</h3>
-
-  <div class="" *ngIf="!event?.event_team_info?.length">
-    <div class="alert alert-info m-0 fs-5">
-      <i class="fas fa-grin-beam-sweat"></i>&nbsp; Na toto podujatie nebol prihlásený žiaden tím.
-    </div>
-  </div>
-
-  <div class="card" *ngIf="event.event_team_info?.length">
-    <div class="card-body p-0">
-      <table class="table table-bordered m-0 table-border-none">
-        <thead>
-          <tr>
-            <th width="1"></th>
-            <th>Tím</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let t of event.event_team_info; let i = index">
-            <td>{{ i + 1 }}.</td>
-            <td [ngClass]="{ 'table-success': t.is_winner }">
-              <b>{{ t.team_name }}</b
-              >, počet bodov: <b>{{ t.points }}</b>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+<ng-container *ngIf="event && isEditing">
+  <sp-event-new [event]="event" [isPopup]="true" #eventNewComponent></sp-event-new>
 </ng-container>
 
-<ng-container *ngIf="event">
-  <h3 class="text-primary mt-4 d-flex justify-content-between align-items-end">
-    Tímy na podujatí
-
-    <button class="btn btn-primary" *ngIf="!addTeam && this.hasAction('addTeam')" (click)="addTeam = true">Prihlásiť sa</button>
-    <button class="btn btn-outline-primary" *ngIf="addTeam && this.hasAction('addTeam')" (click)="addTeam = false">Zrušiť</button>
-  </h3>
-
-  <div class="card mb-4" *ngIf="addTeam">
-    <div class="card-body">
-      <form #ngForm="ngForm">
-        <div class="form-group form-group-spaced" *ngIf="availibleTeams?.length">
-          <label class="form-control-required" for="event.teamId">Tím</label>
-          <ng-select
-            [items]="availibleTeams"
-            bindValue="id"
-            bindLabel="team_name"
-            [(ngModel)]="teamId"
-            id="event.teamId"
-            name="event.teamId"
-            [required]="true"
-          ></ng-select>
-        </div>
-
-        <div class="form-group form-group-spaced" *ngIf="!availibleTeams?.length">
-          <div class="alert alert-warning m-0">
-            Žiaden z vaších tímov nevyhovuje nastaveniam podujatia, môžete <a routerLink="/team/new">vytvoriť nový</a> alebo
-            pridajte/odoberte členov zo <a routerLink="/dashboard">svojich tímov</a>.
-          </div>
-        </div>
-
-        <div class="form-group form-group-spaced" *ngIf="addTeamError">
-          <div class="alert alert-danger m-0">
-            {{ addTeamError }}
-          </div>
-        </div>
-
-        <div class="form-group form-group-spaced mt-2" *ngIf="availibleTeams?.length">
-          <button class="btn btn-primary" type="button" (click)="add()">Prihlásiť na podujatie</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="!event?.teams_on_event?.length">
-    <div class="card-body">
-      <div class="alert alert-warning m-0">
-        Na toto podujatie nie je prihlásený žiaden tím.
-        <button class="btn btn-link p-0" *ngIf="hasAction('addTeam')" (click)="addTeam = true">Prihláste svoj tím</button>
-      </div>
-    </div>
-  </div>
-  <div class="row" *ngIf="event?.teams_on_event?.length">
-    <div class="col-sm-12 col-md-6" *ngFor="let t of event.teams_on_event">
+<ng-container *ngIf="event && !isEditing">
+  <div class="row" *ngIf="event">
+    <div class="col-sm-12 col-lg-6 mb-2">
       <div class="card">
         <div class="card-body">
           <div class="row">
-            <div class="col">
-              <!--prettier-ignore-->
-              <div class="row">
+            <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-list fa-fw text-primary"></i>&nbsp;Názov</div>
+            <div class="col-sm-12 col-md-8">{{ event.name }}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-pencil-alt fa-fw text-primary"></i>&nbsp;Popis</div>
+            <div class="col-sm-12 col-md-8">{{ event.description || '-' }}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-gamepad fa-fw text-primary"></i>&nbsp;Typ</div>
+            <div class="col-sm-12 col-md-8">{{ event.type?.label }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-2">
+        <div class="card-body">
+          <h4 class="text-primary">Obmedzenia</h4>
+          <div class="row">
+            <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-users fa-fw text-primary"></i>&nbsp;Počet tímov</div>
+            <div class="col-sm-12 col-md-8" *ngIf="event.min_teams != event.max_teams">
+              {{ event.min_teams }} - {{ event.max_teams }}
+            </div>
+            <div class="col-sm-12 col-md-8" *ngIf="event.min_teams == event.max_teams">{{ event.min_teams }}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-user fa-fw text-primary"></i>&nbsp;Počet hráčov v tíme</div>
+            <div class="col-sm-12 col-md-8" *ngIf="event.min_team_members != event.max_team_members">
+              {{ event.min_team_members }} - {{ event.max_team_members }}
+            </div>
+            <div class="col-sm-12 col-md-8" *ngIf="event.min_team_members == event.max_team_members">
+              {{ event.min_team_members }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12 col-lg-6 mb-2">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-crown fa-fw text-primary"></i>&nbsp;Zakladateľ</div>
+            <div class="col-sm-12 col-md-8">{{ event.owner.firstname }} {{ event.owner.surname }}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-calendar fa-fw text-primary"></i>&nbsp;Vytvorený</div>
+            <div class="col-sm-12 col-md-8">{{ event.created_at | date: 'shortDate' }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-2">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-clock fa-fw text-primary"></i>&nbsp;Registrácia</div>
+            <div class="col-sm-12 col-md-8">
+              {{ event.registration_start | date: 'short' }} - {{ event.registration_end | date: 'short' }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-play fa-fw text-primary"></i>&nbsp;Začiatok</div>
+            <div class="col-sm-12 col-md-8">{{ event.event_start | date: 'short' }}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-flag-checkered fa-fw text-primary"></i>&nbsp;Koniec</div>
+            <div class="col-sm-12 col-md-8">{{ event.event_end | date: 'short' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="event && (isActive(event) || isFinished(event))">
+    <h3 class="text-primary mt-4 d-flex justify-content-between align-items-end">Leaderboard</h3>
+
+    <div class="" *ngIf="!event?.event_team_info?.length">
+      <div class="alert alert-info m-0 fs-5">
+        <i class="fas fa-grin-beam-sweat"></i>&nbsp; Na toto podujatie nebol prihlásený žiaden tím.
+      </div>
+    </div>
+
+    <div class="card" *ngIf="event.event_team_info?.length">
+      <div class="card-body p-0">
+        <table class="table table-bordered m-0 table-border-none">
+          <thead>
+            <tr>
+              <th width="1"></th>
+              <th>Tím</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let t of event.event_team_info; let i = index">
+              <td>{{ i + 1 }}.</td>
+              <td [ngClass]="{ 'table-success': t.is_winner }">
+                <b>{{ t.team_name }}</b
+                >, počet bodov: <b>{{ t.points }}</b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="event">
+    <h3 class="text-primary mt-4 d-flex justify-content-between align-items-end">
+      Tímy na podujatí
+
+      <button class="btn btn-primary" *ngIf="!addTeam && this.hasAction('addTeam')" (click)="addTeam = true">
+        <i class="fas fa-plus"></i>&nbsp;Prihlásiť sa
+      </button>
+      <button class="btn btn-outline-primary" *ngIf="addTeam && this.hasAction('addTeam')" (click)="addTeam = false">
+        <i class="fas fa-times"></i>&nbsp;Zrušiť
+      </button>
+    </h3>
+
+    <div class="card mb-4" *ngIf="addTeam">
+      <div class="card-body">
+        <form #ngForm="ngForm">
+          <div class="form-group form-group-spaced" *ngIf="availibleTeams?.length">
+            <label class="form-control-required" for="event.teamId">Tím</label>
+            <ng-select
+              [items]="availibleTeams"
+              bindValue="id"
+              bindLabel="team_name"
+              [(ngModel)]="teamId"
+              id="event.teamId"
+              name="event.teamId"
+              [required]="true"
+            ></ng-select>
+          </div>
+
+          <div class="form-group form-group-spaced" *ngIf="!availibleTeams?.length">
+            <div class="alert alert-warning m-0">
+              Žiaden z vaších tímov nevyhovuje nastaveniam podujatia, môžete <a routerLink="/team/new">vytvoriť nový</a> alebo
+              pridajte/odoberte členov zo <a routerLink="/dashboard">svojich tímov</a>.
+            </div>
+          </div>
+
+          <div class="form-group form-group-spaced" *ngIf="addTeamError">
+            <div class="alert alert-danger m-0">
+              {{ addTeamError }}
+            </div>
+          </div>
+
+          <div class="form-group form-group-spaced mt-2" *ngIf="availibleTeams?.length">
+            <button class="btn btn-primary" type="button" (click)="add()">Prihlásiť na podujatie</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="!event?.teams_on_event?.length">
+      <div class="card-body">
+        <div class="alert alert-warning m-0">
+          Na toto podujatie nie je prihlásený žiaden tím.
+          <button class="btn btn-link p-0" *ngIf="hasAction('addTeam')" (click)="addTeam = true">Prihláste svoj tím</button>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="event?.teams_on_event?.length">
+      <div class="col-sm-12 col-md-6 mb-2" *ngFor="let t of event.teams_on_event">
+        <div class="card" [ngClass]="{ 'border-success': isWinner(t) }">
+          <div class="card-body">
+            <div class="row">
+              <div class="col">
+                <!--prettier-ignore-->
+                <div class="row">
                 <div class="col-sm-12 col-md-6 col-xl-4 fw-bold"><i class="fas fa-list fa-fw text-primary"></i>&nbsp;Názov</div>
                 <div class="col-sm-12 col-md-6 col-xl-8"><a routerLink="/team/detail/{{ t.id }}">{{ t.team_name }}</a></div>
               </div>
-              <!--prettier-ignore-->
-              <div class="row">
+                <!--prettier-ignore-->
+                <div class="row">
                 <div class="col-sm-12 col-md-6 col-xl-4 fw-bold"><i class="fas fa-crown fa-fw text-primary"></i>&nbsp;Zakladateľ</div>
                 <div class="col-sm-12 col-md-6 col-xl-8">{{ t.owner?.firstname }} {{ t.owner?.surname }}</div>
               </div>
 
-              <!--prettier-ignore-->
-              <div class="mt-4">
+                <!--prettier-ignore-->
+                <div class="mt-4">
+                <span class="pe-3" title="Víťaz tohto podujatia" *ngIf="isWinner(t)"><i class="fas fa-trophy text-success pe-1 d-lg-none"></i></span>
                 <span class="pe-3" title="Počet výhier"><i class="fas fa-trophy text-primary pe-1"></i>{{ t.wins || 0 }}</span>
                 <span class="pe-3" title="Počet hier"><i class="fas fa-check text-primary pe-1"></i>{{ t.events_total || 0 }}</span>
                 <span class="pe-3" title="Počet bodov"><i class="fas fa-hashtag text-primary pe-1"></i>{{ t.points || 0 }}</span>
                 <span class="pe-3" title="Počet členov"><i class="fas fa-users text-primary pe-1"></i>{{ t.users?.length || 0 }}</span>
               </div>
-            </div>
-            <div class="col-sm-12 mt-2 mt-lg-0 col-lg-auto d-flex flex-row flex-lg-column justify-content-lg-between">
-              <button
-                class="btn btn-success m-lg-0"
-                *ngIf="event.owner.id === user.id && hasAction('addPoint') && !hasAction('startEvent')"
-                (click)="addPoint(t)"
-              >
-                Pridať bod
-              </button>
-              <button
-                class="btn m-lg-0"
-                [ngClass]="{ 'btn-primary': user.id === t.owner.id, 'btn-outline-primary': user.id !== t.owner.id }"
-                [disabled]="!(hasAction('removeTeam') && user.id === t.owner.id)"
-                (click)="remove(t)"
-              >
-                Odhlásiť
-              </button>
+              </div>
+              <div class="col-sm-12 mt-2 mt-lg-0 col-lg-auto d-flex flex-row flex-lg-column justify-content-lg-between">
+                <button
+                  class="btn btn-success m-lg-0"
+                  *ngIf="event.owner.id === user?.id && hasAction('addPoint') && !hasAction('startEvent')"
+                  (click)="addPoint(t)"
+                >
+                  Pridať bod
+                </button>
+                <button
+                  class="btn btn-primary m-lg-0"
+                  *ngIf="event.owner.id === user?.id && hasAction('finishEvent')"
+                  (click)="finishEvent(t)"
+                >
+                  Vybrať víťaza
+                </button>
+                <button
+                  class="btn m-lg-0"
+                  [ngClass]="{ 'btn-primary': user?.id === t.owner.id, 'btn-outline-primary': user?.id !== t.owner.id }"
+                  [disabled]="!(hasAction('removeTeam') && user?.id === t.owner.id)"
+                  *ngIf="!hasAction('finishEvent') && hasAction('removeTeam')"
+                  (click)="remove(t)"
+                >
+                  Odhlásiť
+                </button>
+
+                <i class="fa fa-trophy text-success fa-4x d-none d-lg-block" *ngIf="isWinner(t)"></i>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </ng-container>
 </ng-container>
+<div class="bottom-spacer mt-4">&nbsp;</div>

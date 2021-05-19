@@ -33,6 +33,7 @@ export interface EventDTO {
   teams_on_event: TeamDTO[];
   available_transitions: { taskReference: TaskReferenceModel[] };
   event_team_info: EventTeamDTO[];
+  disabled: boolean;
 }
 
 export interface EventTeamDTO {
@@ -45,6 +46,7 @@ export interface EventTeamDTO {
 
 export interface MyEventsDTO {
   owned: EventDTO[];
+  ended: EventDTO[];
   upcoming: EventDTO[];
 }
 

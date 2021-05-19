@@ -251,33 +251,25 @@ class EventsController extends Controller
     {
         $user_id = auth()->id();
         $event = Event::whereId($event_id)->first();
-
         $dto = new EventDTO();
-
-
-        $todayDate = DateUtil::now();
 
         if (!$event) throw new \Exception("event not found");
 
         $this->jsonMapper->mapObjectFromString($event->toJson(), $dto);
 
-        if (($todayDate < $dto->event_end) && ($todayDate > $dto->event_start)) {
-            throw new \Exception("Podujatie aktuálne prebieha a nie je možné ho zrušiť", 500);
-        }
+        $taskId = request()->get("task_id");
+        return app('db')->transaction(function () use ($taskId, $event, $user_id,) {
 
-        if (($todayDate > $dto->event_end)) {
-            throw new \Exception("Podujatie už skončilo", 500);
-        }
+            if ($event->user_id == $user_id) {
+                $event->disabled = 1;
+                $event->update();
 
-        if ($event->user_id == $user_id) {
-            if ($event->disabled = true) return response()->json('Podujatie bolo neaktívne aj predtým..', 200);
+                $this->eventService->runTask($taskId);
+                return response()->json('Podujatie bolo zrušené', 200);
+            }
 
-            $event->disabled = true;
-            $event->update();
-            return response()->json('Podujatie bolo zrušené', 200);
-        }
-
-        throw new \Exception("Nie si vlastníkom podujatia");
+            throw new \Exception("Nie si vlastníkom podujatia");
+        });
     }
 
     public function deleteTeamByIdFromEvent(int $event_id, int $team_id): JsonResponse
@@ -343,24 +335,34 @@ class EventsController extends Controller
      */
     public function finishEventById($id, Request $request): JsonResponse
     {
-        $event_teams = EventTeam::whereEventId($id);
+        $event_teams = EventTeam::whereEventId($id)->get();
         $this->validate($request, [
             'winner_id' => 'required',
         ]);
 
         $winner_id = $request->get('winner_id');
-        EventTeam::where('team_id', $winner_id)->where('event_id', $id)->update(array('is_winner' => true));
 
-        foreach ($event_teams as $event_team) {
-            $team = Team::findOrFail($event_team->team_id);
-            $team->increment('points', $event_team->points);
-            $team->increment('events_total');
-            if ($team->id == $winner_id) {
-                $team->increment('wins');
+        $taskId = request()->get("task_id");
+        return app('db')->transaction(function () use ($taskId, $winner_id, $event_teams, $id) {
+            EventTeam::where('team_id', $winner_id)->where('event_id', $id)->update(array('is_winner' => true));
+
+            foreach ($event_teams as $event_team) {
+                $team = Team::findOrFail($event_team->team_id);
+                $team->increment('points', $event_team->points);
+                $team->increment('events_total');
+                if ($team->id == $winner_id) {
+                    $team->increment('wins');
+                }
+                $team->save();
             }
-            $team->save();
-        }
-        return response()->json('Podujatie bolo úspešne dokončené', 200);
+
+            $event = Event::whereId($id)->first();
+            $event->disabled = 1;
+            $event->save();
+
+            $this->eventService->runTask($taskId);
+            return response()->json('Podujatie bolo úspešne dokončené', 200);
+        });
     }
 
     public function addPointsById($id, Request $request): JsonResponse

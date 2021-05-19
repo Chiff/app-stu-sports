@@ -36,7 +36,7 @@
     </div>
     <div class="col mt-4">
       <h2 class="text-primary d-flex justify-content-between">
-        Moje podujatia
+        Vytvorené podujatia
 
         <a routerLink="/event/new"><i class="fas fa-plus"></i></a>
       </h2>
@@ -118,6 +118,34 @@
             <dt class="col-sm-12 col-md-6">Email</dt>
             <dd class="col-sm-12 col-md-6">{{ user?.email }}</dd>
           </dl>
+        </div>
+      </div>
+    </div>
+
+    <div class="col mt-4" *ngIf="myEvents?.ended?.length">
+      <h2 class="text-primary d-flex justify-content-between">Ukončené podujatia</h2>
+      <div class="card" style="max-height: 400px; overflow-y: auto">
+        <div class="card-body p-0">
+          <table class="table table-bordered m-0 table-border-none" *ngIf="myEvents?.ended?.length">
+            <thead>
+              <tr>
+                <th width="1"></th>
+                <th>Názov</th>
+                <th>Začiatok</th>
+                <th>Koniec</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let e of myEvents.ended">
+                <td>
+                  <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
+                </td>
+                <td>{{ e.name }}</td>
+                <td>{{ e.event_start | date }}</td>
+                <td>{{ e.event_end | date }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

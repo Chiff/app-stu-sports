@@ -88,7 +88,7 @@ namespace App\Models{
  * @mixin IdeHelperEventTeam
  * @property int $event_id
  * @property int $team_id
- * @property int|null $points
+ * @property int $points
  * @property int|null $is_winner
  * @method static \Illuminate\Database\Eloquent\Builder|EventTeam newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EventTeam newQuery()
@@ -111,9 +111,9 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $user_id
  * @property string $team_name
- * @property int|null $points
- * @property int|null $wins
- * @property int|null $events_total
+ * @property int $points
+ * @property int $wins
+ * @property int $events_total
  * @property-read \App\Models\User $owner
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $teamMembers
  * @property-read int|null $team_members_count

@@ -18,4 +18,8 @@ class MyEventsDTO extends AppSerializable
      * @var EventDTO[]|null
      */
     public ?array $upcoming = [];
+    /**
+     * @var EventDTO[]|null
+     */
+    public ?array $ended = [];
 }

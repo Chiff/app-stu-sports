@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { parseDate } from '@annotation/ng-datepicker';
@@ -7,23 +7,28 @@ import { zip } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { AccountModel, CustomHttpError, ErrorResponse, EventDTO, TeamDTO } from '../../../models/sp-api';
 import { AuthService } from '../../../shared/shared/services/auth.service';
+import { EventNewComponent } from '../event-new/event-new.component';
 
 @Component({
   selector: 'sp-event-detail',
   templateUrl: './event-detail.component.html',
 })
-export class EventDetailComponent {
+export class EventDetailComponent implements OnDestroy {
   public EVT_ACTIONS = {
     addTeam: '1',
     removeTeam: '66',
     cancelEvent: '5',
     startEvent: '6',
+    finishEvent: '7',
     editEvent: '96',
     addPoint: '999',
   };
 
   @ViewChild('ngForm')
   private ngForm: NgForm;
+
+  @ViewChild('eventNewComponent')
+  private eventNewComponent: EventNewComponent;
 
   public user: AccountModel;
   public availibleTeams: TeamDTO[] = [];
@@ -34,13 +39,25 @@ export class EventDetailComponent {
   public teamId: string = null;
   public addTeamError: string = null;
 
+  private refreshInterval: NodeJS.Timeout;
+  public isEditing: boolean = false;
+
   constructor(private http: HttpClient, private route: ActivatedRoute, public auth: AuthService) {
     this.route.params.subscribe((p) => {
       this.getEventById(p.id);
     });
   }
 
-  private getEventById(id: string) {
+  ngOnDestroy(): void {
+    clearInterval(this.refreshInterval);
+  }
+
+  public getEventById(id: string): void {
+    clearInterval(this.refreshInterval);
+    this.refreshInterval = setInterval(() => {
+      this.getEventById(id);
+    }, 30000);
+
     if (!this.auth?.isLogged()) {
       this.http.get<EventDTO>(`api/event/byid/${id}/guest`).subscribe((data) => {
         this.event = data;
@@ -208,6 +225,88 @@ export class EventDetailComponent {
         },
       });
   }
+
+  finishEvent(t: TeamDTO): void {
+    if (!window.confirm('Naozaj si prajete vybrať víťaza?')) {
+      return;
+    }
+
+    this.http
+      .post(`api/event/${this.event.id}/finish`, {
+        winner_id: t.id,
+        task_id: this.getTransitionString('finishEvent'),
+      })
+      .subscribe({
+        next: () => {
+          this.getEventById(this.event.id);
+        },
+        error: (err: CustomHttpError<ErrorResponse>) => {
+          window.alert(err.error.error.message);
+        },
+      });
+  }
+
+  isWinner(t: TeamDTO): boolean {
+    return !!this.event?.event_team_info.find((x) => x.team_id === t.id)?.is_winner;
+  }
+
+  canBeStarted(event: EventDTO): boolean {
+    const teamCount = event?.teams_on_event?.length || 0;
+    return event?.min_teams <= teamCount && teamCount <= event?.max_teams;
+  }
+
+  cancelEvent(): void {
+    if (!window.confirm('Naozaj si prajete zrušiť toto podujatie?')) {
+      return;
+    }
+
+    this.http
+      .put(`api/event/disable/${this.event.id}`, {
+        task_id: this.getTransitionString('cancelEvent'),
+      })
+      .subscribe({
+        next: () => {
+          this.getEventById(this.event.id);
+        },
+        error: (err: CustomHttpError<ErrorResponse>) => {
+          window.alert(err.error.error.message);
+        },
+      });
+  }
+
+  editEvent() {
+    clearInterval(this.refreshInterval);
+    this.isEditing = true;
+  }
+
+  sendEditedEvent(): void {
+    if (!window.confirm('Naozaj si prajete upraviť toto podujatie?')) {
+      return;
+    }
+
+    this.eventNewComponent.error = null;
+    this.eventNewComponent.ngForm.form.markAllAsTouched();
+    if (this.eventNewComponent.ngForm.invalid) {
+      this.eventNewComponent.error = 'Vyplňte všetky povinné údaje a opravte chyby';
+      return;
+    }
+
+    this.eventNewComponent.error = 'update not implemented!!!';
+    // this.http.post('api/event/create', this.event).subscribe({
+    //   next: (event: EventDTO) => {
+    //     this.isEditing = false;
+    //     this.getEventById(event.id);
+    //   },
+    //   error: (err: CustomHttpError<ErrorResponse>) => {
+    //     this.eventNewComponent.error = err.error.error.message;
+    //   },
+    // });
+  }
+
+  cancelEdit() {
+    this.isEditing = false;
+    this.getEventById(this.event.id);
+  }
 }
 
-export type Actions = 'addTeam' | 'removeTeam' | 'cancelEvent' | 'startEvent' | 'editEvent' | 'addPoint';
+export type Actions = 'addTeam' | 'removeTeam' | 'cancelEvent' | 'finishEvent' | 'startEvent' | 'editEvent' | 'addPoint';

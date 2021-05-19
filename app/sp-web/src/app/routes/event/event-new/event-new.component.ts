@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -10,9 +10,14 @@ import { CiselnikDTO, CiselnikTypeEnum, CustomHttpError, ErrorResponse, EventDTO
 })
 export class EventNewComponent {
   @ViewChild('ngForm')
-  private ngForm: NgForm;
+  public ngForm: NgForm;
 
+  @Input()
   public event: EventDTO = {} as EventDTO;
+
+  @Input()
+  public isPopup: boolean = false;
+
   public error: string;
 
   public eventType: CiselnikDTO[] = [];

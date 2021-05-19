@@ -166,20 +166,19 @@ class EventService
      */
     public function getPublicEvents(): array
     {
-        $todayDate = DateUtil::now();
-        $events = Event::where('event_end', '>=', $todayDate)->get();
-
+        $events = Event::where('disabled', '=', 0)->orderBy('id', 'desc')->get();
         return $this->mapEventsWithOwner($events);
     }
 
-    public function getMyEvents(bool $onlyActive = false): MyEventsDTO
+    public function getMyEvents(bool $onlyActive = true): MyEventsDTO
     {
         $user_id = auth()->id();
         $user = User::findOrFail($user_id);
 
         $response = new MyEventsDTO();
 
-        $response->owned = $this->getOwnedEvents($user, $onlyActive);
+        $response->owned = $this->getOwnedEvents($user, true);
+        $response->ended = $this->getOwnedEvents($user, false);
         $response->upcoming = $this->getUpcomingEvents($user, $onlyActive);
 
         return $response;
@@ -195,8 +194,9 @@ class EventService
         $events = $user->ownEvents();
 
         if ($onlyActive) {
-            $todayDate = DateUtil::now();
-            $events->where('event_end', '>=', $todayDate);
+            $events->where('disabled', '=', 0)->orderBy('id', 'desc');
+        } else {
+            $events->where('disabled', '=', 1)->orderBy('id', 'desc');
         }
 
         return $this->mapEventsWithOwner($events->get());
@@ -211,15 +211,24 @@ class EventService
     {
         $teams = UserTeam::whereUserId($user->id)->select('team_id');
         $eventTeam = EventTeam::select('event_id')->whereIn('team_id', $teams);
-        $events = Event::select()->whereIn('id', $eventTeam->select('event_id'));
+        $events = Event::select()->where('disabled', '=', 0)->whereIn('id', $eventTeam->select('event_id'))->orderBy('id', 'desc');
 
-        if ($onlyActive) {
-            $todayDate = DateUtil::now();
-            $events->where('event_end', '>=', $todayDate);
+        $qr = $events->get();
+        $col = new Collection();
+
+        foreach ($qr as $e) {
+            if (!($e instanceof Event)) continue;
+
+            // ak nema vitaza neskoncilo
+            $hasWinner = $e->teams()->where('is_winner', '=', true)->count() > 0;
+            if (!$hasWinner) {
+                $col->add($e);
+            }
         }
 
-        return $this->mapEventsWithOwner($events->get());
+        return $this->mapEventsWithOwner($col);
     }
+
 
     private function mapEventWithOwner(Event $model, EventDTO $dto = null): EventDTO
     {
@@ -261,11 +270,6 @@ class EventService
     {
         $tasks = $this->taskService->getTasksOfCaseUsingGET($eventCaseId);
 
-        $tmp = new TaskReference();
-        $tmp->transitionId = "999";
-        $tmp->title = "pridaj bod";
-        $tmp->stringId = "-1";
-        array_push($tasks->taskReference, $tmp);
 
         $isOwner = $this->isEventOwner(auth()->id(), $eventCaseId);
         $hasTeamOnEvent = $this->hasTeamOnEvent(auth()->id(), $eventCaseId);
@@ -273,8 +277,8 @@ class EventService
         $allowForTeamOwner = ["66"]; // odhlasenie timu
         $allowForUnknown = ["1"]; // prihlasenie timu
         $allowBeforeStart = ["5", "96"]; // zrusenie, editovanie
-        $allowBeforeEnd = ["6", "999"]; // start + pridanie bodov (ak je odstartovane)
-        $allowAfterEnd = ["7", "999"]; // vyhodnotenie + pridanie bodov (ak NIE je ukoncene)
+        $allowBeforeEnd = ["6"]; // start + pridanie bodov (ak je odstartovane)
+        $allowAfterEnd = ["7"]; // vyhodnotenie + pridanie bodov (ak NIE je ukoncene)
 
 
         $result = new TasksReferences();
@@ -285,11 +289,15 @@ class EventService
         $isBeforeEnd = $dto->event_start <= $dt && $dt <= $dto->event_end;
         $isAfterEnd = $dto->event_end < $dt;
 
+
+        $canStartEvent = false;
+        $allowAddPoints = false;
         foreach ($tasks->taskReference as $task) {
 
             // event skoncil + $isOwner
             if ($isOwner && $isAfterEnd && in_array($task->transitionId, $allowAfterEnd)) {
                 array_push($result->taskReference, $task);
+                $allowAddPoints = true;
             }
 
             // event nezacal + $isOwner
@@ -300,6 +308,8 @@ class EventService
             // event startuje
             if ($isOwner && $isBeforeEnd && in_array($task->transitionId, $allowBeforeEnd)) {
                 array_push($result->taskReference, $task);
+                $allowAddPoints = true;
+                $canStartEvent = true;
             }
 
             // mam tim na evente + event nezacal
@@ -310,6 +320,22 @@ class EventService
             // nemam tim na evente + event nezacal
             if ($hasTeamOnEvent == false && $isBeforeStart && in_array($task->transitionId, $allowForUnknown)) {
                 array_push($result->taskReference, $task);
+            }
+        }
+
+        if (!$canStartEvent && ($isBeforeEnd || $isAfterEnd)) {
+            foreach ($tasks->taskReference as $task) {
+                if (in_array($task->transitionId, ["5"])) {
+                    array_push($result->taskReference, $task);
+                }
+            }
+        } else {
+            if ($allowAddPoints || ($isBeforeEnd && !$isBeforeStart)) {
+                $tmp = new TaskReference();
+                $tmp->transitionId = "999";
+                $tmp->title = "pridaj bod";
+                $tmp->stringId = "-1";
+                array_push($result->taskReference, $tmp);
             }
         }
 

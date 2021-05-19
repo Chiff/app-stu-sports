@@ -51,6 +51,7 @@ class EventDTO extends AppSerializable
     public ?UserDTO $owner = null;
     public ?string $description = null;
     public ?CiselnikDTO $type = null;
+    public ?bool $disabled = null;
 
     /**
      * @var TeamDTO[]|null
