@@ -24,10 +24,8 @@ use App\Models\Netgrif\TasksReferences;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\UserTeam;
-use DateTime;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use JsonMapper\JsonMapper;
 
@@ -169,7 +167,7 @@ class EventService
     public function getPublicEvents(): array
     {
         $todayDate = DateUtil::now();
-        $events = Event::where('registration_end', '>=', $todayDate)->get();
+        $events = Event::where('event_end', '>=', $todayDate)->get();
 
         return $this->mapEventsWithOwner($events);
     }

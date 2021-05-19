@@ -3,15 +3,12 @@
 
 namespace App\Http\Services\AS;
 
-use App\Models\Event;
-use App\Models\EventTeam;
-use Faker\Provider\DateTime;
 use App\Dto\Event\EventDTO;
 use App\Dto\Team\TeamDTO;
 use App\Dto\User\UserDTO;
+use App\Http\Utils\DateUtil;
 use App\Models\Team;
 use App\Models\User;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use JsonMapper\JsonMapper;
 
@@ -76,30 +73,22 @@ class UserTeamAS
         $finished = [];
         $future = [];
 
-        $todayDatee = date('Y-m-dTH:m:i');
-
-
+        $todayDate = DateUtil::now();
         foreach ($events as $event) {
             $eventDto = new EventDTO();
-            $userDto = new UserDTO();
-
-            $dt = new \DateTime($todayDatee);
-            $todayDate = Carbon::instance($dt);
-
             $this->mapper->mapObjectFromString($event->toJson(), $eventDto);
 
+            $userDto = new UserDTO();
             $user = User::whereId($eventDto->user_id)->first();
             $this->mapper->mapObjectFromString($user->toJson(), $userDto);
 
             $eventDto->owner = $userDto;
 
-            if (($todayDate < $eventDto->event_end) && ($todayDate > $eventDto->event_start)){
+            if (($todayDate < $eventDto->event_end) && ($todayDate > $eventDto->event_start)) {
                 array_push($active, $eventDto);
-            }
-            elseif ($todayDate > $eventDto->event_end){
+            } elseif ($todayDate > $eventDto->event_end) {
                 array_push($finished, $eventDto);
-            }
-            elseif($todayDate < $eventDto->event_start){
+            } elseif ($todayDate < $eventDto->event_start) {
                 array_push($future, $eventDto);
             }
         }

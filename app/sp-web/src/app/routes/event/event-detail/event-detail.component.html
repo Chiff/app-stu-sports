@@ -29,7 +29,7 @@
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-pencil-alt fa-fw text-primary"></i>&nbsp;Popis</div>
-          <div class="col-sm-12 col-md-8">{{ event.description }}</div>
+          <div class="col-sm-12 col-md-8">{{ event.description || '-' }}</div>
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-4 fw-bold"><i class="fas fa-gamepad fa-fw text-primary"></i>&nbsp;Typ</div>
@@ -174,7 +174,8 @@
             </div>
             <div class="col-sm-12 mt-2 mt-lg-0 col-lg-auto d-flex flex-column flex-column-reverse">
               <button
-                class="btn btn-outline-primary"
+                class="btn"
+                [ngClass]="{ 'btn-primary': user.id === t.owner.id, 'btn-outline-primary': user.id !== t.owner.id }"
                 [disabled]="!(hasAction('removeTeam') && user.id === t.owner.id)"
                 (click)="remove(t)"
               >
