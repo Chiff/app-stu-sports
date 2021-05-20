@@ -9,7 +9,6 @@ use App\Dto\Notification\MyNotificationsDTO;
 use App\Dto\Notification\NotificationDTO;
 use App\Models\Notifications;
 use Carbon\Carbon;
-use Exception;
 
 class NotificationService
 {

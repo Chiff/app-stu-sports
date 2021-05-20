@@ -403,7 +403,7 @@ class EventsController extends Controller
                     $team->increment('wins');
 
                     //notofikacia pri vitazny tim
-                    $this->notificationService->createNotificationForTeam(
+                    $this->eventService->notificationService->createNotificationForTeam(
                         "Stali ste sa víťazným tímom na podujatí. Gratulujeme!",
                         $team->id
                     );
