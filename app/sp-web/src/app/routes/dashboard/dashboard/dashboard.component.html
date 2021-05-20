@@ -95,7 +95,7 @@
         <div class="card-body" [ngClass]="{ 'p-0': user?.teams?.length }">
           <div class="alert alert-warning m-0" *ngIf="!user?.teams?.length">
             Momentálne nie ste v žiadnom tíme<span *ngIf="auth.canDoAction('vytvoritTim')"
-              >,môžete <a routerLink="/event/new">vytvoriť nový</a></span
+              >,môžete <a routerLink="/team/new">vytvoriť nový</a></span
             >.
           </div>
           <table class="table table-bordered m-0 table-border-none" *ngIf="user?.teams?.length">
