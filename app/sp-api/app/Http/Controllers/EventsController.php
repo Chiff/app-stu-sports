@@ -292,7 +292,7 @@ class EventsController extends Controller
                 //oznamenie vsetkym prihlasenym timom
                 foreach ($event->teams as $team) {
                     $this->eventService->notificationService->createNotificationForTeam(
-                        "Podujatie s názvom <b>". $event->name ."</b>, na ktoré bol tím ". $team->team_name ." prihlásený, bolo práve zrušené.",
+                        "Podujatie s názvom <b>". $event->name ."</b>, na ktoré bol tím <b>". $team->team_name ."</b> prihlásený, bolo práve zrušené.",
                         $team->id
                     );
                 }
