@@ -114,7 +114,7 @@ class EventService
             throw new Exception("Začiatok udalosti je pred súčastným dátumom", 500);
         }
         // TODO - 13/05/2021 - NA TOTO POZOR!
-        app('db')->transaction(function () use ($dto) {
+        app('db')->transaction(function () use ($dto, $request) {
             $createdEvent = $this->eventAS->createEvent($dto);
 
             if (!$createdEvent) {
@@ -161,6 +161,8 @@ class EventService
             $this->taskService->setTaskData($taskId, $taskData);
             $this->taskService->finishUsingGET($taskId);
 
+            $this->runTask($request->get('task_id'));
+
             $this->jsonMapper->mapObjectFromString($createdEvent, $dto);
         });
 
@@ -168,8 +170,6 @@ class EventService
             "Podujatie <b>" . $dto->name . "</b> bolo úspešne vytvorené!",
             $dto->id
         );
-
-        $this->runTask($request['task_id']);
 
         return $dto;
     }

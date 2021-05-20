@@ -52,19 +52,22 @@ class TeamController extends Controller
             throw new \Exception("Tím s rovnakým názvom už vlastníš. Zvoľ prosím iný názov tímu.", 403);
         }
 
-        $team = new Team(array('team_name' => $team_name));
-        $user->ownTeams()->save($team);
-        $team->team_members()->save($user);
+        return app('db')->transaction(function () use ($team, $request, $user) {
 
-        //notifikacia pre tim
-        $this->notificationService->createNotificationForTeam(
-            "Tím <b>". $team_name ."</b> bol úspešne vytvorený! Prajeme Vám veľa športových úspechov.",
+            $team = new Team(array('team_name' => $request->get('team_name')));
+            $user->ownTeams()->save($team);
+            $team->team_members()->save($user);
+
+            //notifikacia pre tim
+            $this->notificationService->createNotificationForTeam(
+                "Tím <b>". $request->get('team_name') ."</b> bol úspešne vytvorený! Prajeme Vám veľa športových úspechov.",
                 $team->id
-        );
+            );
 
-        $this->taskService->runTask($request['task_id']);
-        return response()->json($team, 200);
+            $this->taskService->runTask($request['task_id']);
 
+            return response()->json($team, 200);
+        });
     }
 
     public function getTeamById(int $id): JsonResponse
