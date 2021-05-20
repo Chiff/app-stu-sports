@@ -8,6 +8,7 @@ use App\Dto\CiselnikDTO;
 use App\Dto\Notification\MyNotificationsDTO;
 use App\Dto\Notification\NotificationDTO;
 use App\Models\Notifications;
+use Carbon\Carbon;
 use Exception;
 
 class NotificationService
@@ -63,7 +64,7 @@ class NotificationService
     {
         $ciselnikDto = $this->ciselnikService->getType('ENTITY_TYPE', $entity_type)[0];
 
-        $notifications = Notifications::whereEntityType($ciselnikDto->id)->get();
+        $notifications = Notifications::whereEntityType($ciselnikDto->id)->where('created_at', '>=', Carbon::now()->subDays(7))->get();
         $my_notif_dto = new MyNotificationsDTO();
         foreach($notifications as $notification) {
 
@@ -73,26 +74,6 @@ class NotificationService
         }
 
         return $my_notif_dto;
-    }
-
-    public function myNotifications(): MyNotificationsDTO
-    {
-        // 1) route /api/notifications/{entity_type}/{entity_id} - napr. vrati notifikacie pre EVENT s id=5 || vrati NotificationDTO[]
-        // 2) metoda NotificationService::createNotif
-
-        $ciselnikDto = $this->ciselnikService->getType('ENTITY_TYPE', 'User')[0];
-
-        $notifications = Notifications::whereEntityType($ciselnikDto->id)->get();
-
-        $my_notif_dto = new MyNotificationsDTO();
-        foreach($notifications as $notification) {
-
-            if($notification->entity_id == auth()->id()) {
-                array_push($my_notif_dto->notifications, $this->mapNotification($notification));
-            }
-        }
-        return $my_notif_dto;
-
     }
 
 }
