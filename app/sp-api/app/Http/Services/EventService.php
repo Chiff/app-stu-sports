@@ -394,10 +394,15 @@ class EventService
         $result->taskReference = [];
 
         $dt = DateUtil::now();
+        $canRegister = $dt >= $dto->registration_start;
         $isBeforeStart = $dt < $dto->event_start;
         $isBeforeEnd = $dto->event_start <= $dt && $dt <= $dto->event_end;
         $isAfterEnd = $dto->event_end < $dt;
 
+//        var_dump($canRegister);
+//        var_dump($isBeforeStart);
+//        var_dump($isBeforeEnd);
+//        var_dump($isAfterEnd);
 
         $canStartEvent = false;
         $allowAddPoints = false;
@@ -427,7 +432,7 @@ class EventService
             }
 
             // nemam tim na evente + event nezacal
-            if ($hasTeamOnEvent == false && $isBeforeStart && in_array($task->transitionId, $allowForUnknown)) {
+            if ($hasTeamOnEvent == false && $isBeforeStart && $canRegister && in_array($task->transitionId, $allowForUnknown)) {
                 array_push($result->taskReference, $task);
             }
         }

@@ -857,28 +857,25 @@
 	</arc>
 	<arc>
 		<id>98</id>
-		<type>regular</type>
+		<type>variable</type>
 		<sourceId>61</sourceId>
 		<destinationId>4</destinationId>
-		<multiplicity>1</multiplicity>
-		<reference>300</reference>
+		<multiplicity>300</multiplicity>
 	</arc>
 	<arc>
 		<id>99</id>
-		<type>regular</type>
+		<type>variable</type>
 		<sourceId>4</sourceId>
 		<destinationId>61</destinationId>
-		<multiplicity>1</multiplicity>
-		<reference>300</reference>
+		<multiplicity>300</multiplicity>
 		<breakPoint><x>460</x><y>340</y></breakPoint>
 	</arc>
 	<arc>
 		<id>100</id>
-		<type>regular</type>
+		<type>variable</type>
 		<sourceId>61</sourceId>
 		<destinationId>6</destinationId>
-		<multiplicity>1</multiplicity>
-		<reference>400</reference>
+		<multiplicity>400</multiplicity>
 		<breakPoint><x>260</x><y>540</y></breakPoint>
 	</arc>
 	<arc>

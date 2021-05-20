@@ -56,7 +56,7 @@ export class EventDetailComponent implements OnDestroy {
     clearInterval(this.refreshInterval);
     this.refreshInterval = setInterval(() => {
       this.getEventById(id);
-    }, 30000);
+    }, 10000);
 
     if (!this.auth?.isLogged()) {
       this.http.get<EventDTO>(`api/event/byid/${id}/guest`).subscribe((data) => {

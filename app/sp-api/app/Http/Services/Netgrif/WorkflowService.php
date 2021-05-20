@@ -20,7 +20,7 @@ class WorkflowService extends AbstractNetgrifService
     public function __construct(JsonMapper $mapper)
     {
         $this->mapper = $mapper;
-        $this->event_net_id = "60a59c91f9ac3b6fec69e5a9";
+        $this->event_net_id = "60a67a38f9ac3b6fec1ef9da";
         $this->system_net_id = "60a594ebf9ac3b6fec666549";
         $this->system_net_identifier_netgrif = "5f86b236f9ac3b272d6bd7ad_final_system";
 
