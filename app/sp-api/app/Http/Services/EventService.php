@@ -165,12 +165,12 @@ class EventService
 
             $this->notificationService->createNotificationForEvent(
                 "Podujatie <b>" . $dto->name . "</b> bolo úspešne vytvorené!",
-                $dto->id
+                $createdEvent->id
             );
 
             $this->notificationService->createNotificationForUser(
-                "Podujatie <b>" . $dto->name . "</b> bolo úspešne vytvorené!",
-                $dto->user_id
+                "Tvoje podujatie <b>" . $createdEvent->name . "</b> bolo úspešne vytvorené!",
+                $createdEvent->user_id
             );
 
             $this->jsonMapper->mapObjectFromString($createdEvent, $dto);
