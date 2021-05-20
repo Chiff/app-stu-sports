@@ -9,6 +9,11 @@
   </div>
 
   <ng-container *ngIf="canBeStarted(event)">
+    <div class="alert alert-success" *ngIf="shoudStartSoon(event)">
+      <i class="fas fa-fw fa-check"></i>&nbsp;Podujatie začína <span class="fw-bold">{{ event.event_start | date: 'short' }}</span
+      >. Registrácia bola ukončená.
+    </div>
+
     <div class="alert alert-warning" *ngIf="isActive(event)">
       <i class="fas fa-fw fa-clock"></i>&nbsp;Podujatie práve prebieha. Predpokladaný koniec podujatia je
       <span class="fw-bold">{{ event.event_end | date: 'short' }}</span> .
@@ -18,11 +23,11 @@
     </div>
   </ng-container>
 
-  <!--  <ng-container *ngIf="!canBeStarted(event) && !hasAction('editEvent')">-->
-  <!--    <div class="alert alert-danger">-->
-  <!--      <i class="fas fa-fw fa-exclamation-triangle"></i>&nbsp;Toto podujatie nesplnilo požadovanú kapacitu a bolo čoskoro zrušené.-->
-  <!--    </div>-->
-  <!--  </ng-container>-->
+  <ng-container *ngIf="!inReg(event) && !fresh(event) && !canBeStarted(event)">
+    <div class="alert alert-danger">
+      <i class="fas fa-fw fa-exclamation-triangle"></i>&nbsp;Toto podujatie nesplnilo požadovanú kapacitu a bude čoskoro zrušené.
+    </div>
+  </ng-container>
 </ng-container>
 
 <ng-container *ngIf="event?.disabled">
@@ -214,8 +219,8 @@
       </div>
     </div>
 
-    <div class="card" *ngIf="!event?.teams_on_event?.length">
-      <div class="card-body">
+    <div class="card border-0" *ngIf="!event?.teams_on_event?.length">
+      <div class="card-body p-0">
         <div class="alert alert-warning m-0">
           Na toto podujatie nie je prihlásený žiaden tím.
           <button class="btn btn-link p-0" *ngIf="hasAction('addTeam')" (click)="addTeam = true">Prihláste svoj tím</button>
@@ -267,7 +272,7 @@
                   class="btn m-lg-0"
                   [ngClass]="{ 'btn-primary': user?.id === t.owner.id, 'btn-outline-primary': user?.id !== t.owner.id }"
                   [disabled]="!(hasAction('removeTeam') && user?.id === t.owner.id)"
-                  *ngIf="!hasAction('finishEvent') && hasAction('removeTeam')"
+                  *ngIf="!hasAction('finishEvent') && hasAction('removeTeam') && user?.id === t.owner.id"
                   (click)="remove(t)"
                 >
                   Odhlásiť

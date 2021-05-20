@@ -25,7 +25,6 @@ use App\Models\Team;
 use App\Models\User;
 use App\Models\UserTeam;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use JsonMapper\JsonMapper;
@@ -166,7 +165,7 @@ class EventService
         });
 
         $this->notificationService->createNotificationForEvent(
-            "Podujatie <b>". $dto->name ."</b> bolo úspešne vytvorené!",
+            "Podujatie <b>" . $dto->name . "</b> bolo úspešne vytvorené!",
             $dto->id
         );
 
@@ -212,10 +211,10 @@ class EventService
         if ($dateStartChange > $dateEndChange) throw new \Exception("Logická chyba dátumu");
         if ($dateStartChange < $registrationEndChange) throw new \Exception("Logická chyba dátumu");
 
-        if ($dateStartChange < $dt ) throw new \Exception("Podujatie nemožno začať v minulosti");
+        if ($dateStartChange < $dt) throw new \Exception("Podujatie nemožno začať v minulosti");
 
-        return app('db')->transaction(function () use ($dto,$dtoRequest, $event, $user_id,$request) {
-            if ($dto->user_id == $user_id){
+        return app('db')->transaction(function () use ($dto, $dtoRequest, $event, $user_id, $request) {
+            if ($dto->user_id == $user_id) {
 
                 $event->name = $dtoRequest->name;
                 $event->registration_start = $dtoRequest->registration_start;
@@ -230,8 +229,7 @@ class EventService
                     throw new \Exception("Nepodarilo sa upraviť podujatie");
                 }
 
-            }
-            else throw new \Exception("Nie si vlastníkom podujatia");
+            } else throw new \Exception("Nie si vlastníkom podujatia");
 
             $caseId = $event->ext_id;
             $netgrif_editEvent_transId = 96;
@@ -268,8 +266,8 @@ class EventService
             //notifikacia pre prihlasene timy
             foreach ($event->teams as $team) {
                 $this->notificationService->createNotificationForTeam(
-                    "Podujatie <b>". $event->name .
-                    "</b>, na ktoré je tím <b>". $team->team_name .
+                    "Podujatie <b>" . $event->name .
+                    "</b>, na ktoré je tím <b>" . $team->team_name .
                     "</b> prihlásený, bolo aktualizované.",
                     $team->id
                 );
@@ -394,7 +392,7 @@ class EventService
         $result->taskReference = [];
 
         $dt = DateUtil::now();
-        $canRegister = $dt >= $dto->registration_start;
+        $canRegister = $dt >= $dto->registration_start && $dt <= $dto->registration_end;
         $isBeforeStart = $dt < $dto->event_start;
         $isBeforeEnd = $dto->event_start <= $dt && $dt <= $dto->event_end;
         $isAfterEnd = $dto->event_end < $dt;
@@ -402,16 +400,23 @@ class EventService
 //        var_dump($canRegister);
 //        var_dump($isBeforeStart);
 //        var_dump($isBeforeEnd);
-//        var_dump($isAfterEnd);
+//        var_dump($tasks->taskReference);
 
         $canStartEvent = false;
+        $canEndEvent = false;
         $allowAddPoints = false;
         foreach ($tasks->taskReference as $task) {
 
             // event skoncil + $isOwner
-            if ($isOwner && $isAfterEnd && in_array($task->transitionId, $allowAfterEnd)) {
-                array_push($result->taskReference, $task);
-                $allowAddPoints = true;
+            if (in_array($task->transitionId, $allowAfterEnd)) {
+                if ($isAfterEnd && $isOwner) {
+                    array_push($result->taskReference, $task);
+                }
+
+                if ($isOwner) {
+                    $allowAddPoints = true;
+                    $canEndEvent = true;
+                }
             }
 
             // event nezacal + $isOwner
@@ -420,8 +425,11 @@ class EventService
             }
 
             // event startuje
-            if ($isOwner && $isBeforeEnd && in_array($task->transitionId, $allowBeforeEnd)) {
-                array_push($result->taskReference, $task);
+            if ($isBeforeEnd && in_array($task->transitionId, $allowBeforeEnd)) {
+                if ($isOwner) {
+                    array_push($result->taskReference, $task);
+                }
+
                 $allowAddPoints = true;
                 $canStartEvent = true;
             }
@@ -439,18 +447,18 @@ class EventService
 
         if (!$canStartEvent && ($isBeforeEnd || $isAfterEnd)) {
             foreach ($tasks->taskReference as $task) {
-                if (in_array($task->transitionId, ["5"])) {
+                if ($isOwner && in_array($task->transitionId, ["5"])) {
                     array_push($result->taskReference, $task);
                 }
             }
-        } else {
-            if ($allowAddPoints || ($isBeforeEnd && !$isBeforeStart)) {
-                $tmp = new TaskReference();
-                $tmp->transitionId = "999";
-                $tmp->title = "pridaj bod";
-                $tmp->stringId = "-1";
-                array_push($result->taskReference, $tmp);
-            }
+        }
+
+        if (($canEndEvent|| $canStartEvent) && $allowAddPoints) {
+            $tmp = new TaskReference();
+            $tmp->transitionId = "999";
+            $tmp->title = "pridaj bod";
+            $tmp->stringId = "-1";
+            array_push($result->taskReference, $tmp);
         }
 
         return $result;

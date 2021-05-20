@@ -127,6 +127,16 @@ export class EventDetailComponent implements OnDestroy {
     return +now >= +start && +now < +end;
   }
 
+  shoudStartSoon(event: EventDTO): boolean {
+    if (!event) return false;
+
+    const now = new Date();
+    const start = parseDate(event.registration_end, 'yyyy-MM-ddTHH:mm:ss', 'sk');
+    const end = parseDate(event.event_start, 'yyyy-MM-ddTHH:mm:ss', 'sk');
+
+    return +now >= +start && +now < +end;
+  }
+
   fresh(event: EventDTO): boolean {
     if (!event) return false;
 
