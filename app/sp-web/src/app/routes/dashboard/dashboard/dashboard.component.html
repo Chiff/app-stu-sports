@@ -24,10 +24,7 @@
               <tr *ngFor="let e of myEvents.upcoming">
                 <td>
                   <i class="fas fa-search text-muted" *ngIf="!auth.canDoAction('detailPodujatia')"></i>
-                  <a
-                    routerLink="/event/detail/{{ e.id }}"
-                    *ngIf="auth.canDoAction('detailPodujatia')"
-                    (click)="auth.run('detailPodujatia')"
+                  <a routerLink="/event/detail/{{ e.id }}" *ngIf="auth.canDoAction('detailPodujatia')"
                     ><i class="fas fa-search text-primary"></i
                   ></a>
                 </td>
@@ -66,10 +63,7 @@
               <tr *ngFor="let e of myEvents.owned">
                 <td>
                   <i class="fas fa-search text-muted" *ngIf="!auth.canDoAction('detailPodujatia')"></i>
-                  <a
-                    routerLink="/event/detail/{{ e.id }}"
-                    *ngIf="auth.canDoAction('detailPodujatia')"
-                    (click)="auth.run('detailPodujatia')"
+                  <a routerLink="/event/detail/{{ e.id }}" *ngIf="auth.canDoAction('detailPodujatia')"
                     ><i class="fas fa-search text-primary"></i
                   ></a>
                 </td>
@@ -110,7 +104,7 @@
               <tr *ngFor="let e of user.teams">
                 <td>
                   <i class="fas fa-search text-muted" *ngIf="!auth.canDoAction('detailTimu')"></i>
-                  <a routerLink="/team/detail/{{ e.id }}" *ngIf="auth.canDoAction('detailTimu')" (click)="auth.run('detailTimu')"
+                  <a routerLink="/team/detail/{{ e.id }}" *ngIf="auth.canDoAction('detailTimu')"
                     ><i class="fas fa-search text-primary"></i
                   ></a>
                 </td>
@@ -166,10 +160,7 @@
               <tr *ngFor="let e of myEvents.ended">
                 <td>
                   <i class="fas fa-search text-muted" *ngIf="!auth.canDoAction('detailPodujatia')"></i>
-                  <a
-                    routerLink="/event/detail/{{ e.id }}"
-                    *ngIf="auth.canDoAction('detailPodujatia')"
-                    (click)="auth.run('detailPodujatia')"
+                  <a routerLink="/event/detail/{{ e.id }}" *ngIf="auth.canDoAction('detailPodujatia')"
                     ><i class="fas fa-search text-primary"></i
                   ></a>
                 </td>

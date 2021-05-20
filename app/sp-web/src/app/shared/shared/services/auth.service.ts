@@ -69,10 +69,6 @@ export class AuthService {
     return this.userDto?.available_transitions?.taskReference?.find((e) => e.transitionId === this.transitionMap[action])
       ?.stringId;
   }
-
-  public run(action: SystemAction): void {
-    this.http.post<never>(`api/system/runtask/${this.getTaskId(action)}`, null).subscribe();
-  }
 }
 
 export type SystemAction = 'detailPodujatia' | 'detailTimu' | 'vytvoritPodujatie' | 'vytvoritTim';

@@ -2,7 +2,6 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { zip } from 'rxjs';
 import { CiselnikDTO, CiselnikTypeEnum, CustomHttpError, ErrorResponse, EventDTO } from '../../../models/sp-api';
 import { AuthService } from '../../../shared/shared/services/auth.service';
 
@@ -42,12 +41,9 @@ export class EventNewComponent {
       return;
     }
 
-    zip(
-      this.http.post<EventDTO>('api/event/create', this.event),
-      this.http.post<any>(`api/system/runtask/${this.auth.getTaskId('vytvoritPodujatie')}`, null)
-    ).subscribe({
-      next: ([event, _]) => {
-        console.warn(event);
+    this.event['task_id'] = this.auth.getTaskId('vytvoritPodujatie');
+    this.http.post<EventDTO>('api/event/create', this.event).subscribe({
+      next: (event) => {
         this.router.navigate([`/event/detail/${event.id}`]);
       },
       error: (err: CustomHttpError<ErrorResponse>) => {
