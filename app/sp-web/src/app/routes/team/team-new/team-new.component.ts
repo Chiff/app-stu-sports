@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { zip } from 'rxjs';
-import { CustomHttpError, ErrorResponse, EventDTO, TeamDTO } from '../../../models/sp-api';
+import { CustomHttpError, ErrorResponse, TeamDTO } from '../../../models/sp-api';
 import { AuthService } from '../../../shared/shared/services/auth.service';
 
 @Component({
@@ -31,11 +30,9 @@ export class TeamNewComponent {
       return;
     }
 
-    zip(
-      this.http.post<TeamDTO>('api/team/create', this.team),
-      this.http.post<any>(`api/system/runtask/${this.auth.getTaskId('vytvoritTim')}`, null)
-    ).subscribe({
-      next: ([team, _]) => {
+    this.team['task_id'] = this.auth.getTaskId('vytvoritTim');
+    this.http.post<TeamDTO>('api/team/create', this.team).subscribe({
+      next: (team) => {
         console.warn(team);
         this.router.navigate([`/team/detail/${team.id}`]);
       },

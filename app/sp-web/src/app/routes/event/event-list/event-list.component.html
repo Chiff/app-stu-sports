@@ -27,10 +27,7 @@
           </td>
           <td *ngIf="auth.isLogged()">
             <i class="fas fa-search text-muted" *ngIf="!auth.canDoAction('detailPodujatia')"></i>
-            <a
-              routerLink="/event/detail/{{ e.id }}"
-              *ngIf="auth.canDoAction('detailPodujatia')"
-              (click)="auth.run('detailPodujatia')"
+            <a routerLink="/event/detail/{{ e.id }}" *ngIf="auth.canDoAction('detailPodujatia')"
               ><i class="fas fa-search text-primary"></i
             ></a>
           </td>
