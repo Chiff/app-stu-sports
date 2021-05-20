@@ -9,7 +9,6 @@ use App\Http\Services\TeamService;
 use App\Models\Event;
 use App\Models\Team;
 use App\Models\User;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller;
@@ -60,8 +59,14 @@ class TeamController extends Controller
 
             //notifikacia pre tim
             $this->notificationService->createNotificationForTeam(
-                "Tím <b>". $request->get('team_name') ."</b> bol úspešne vytvorený! Prajeme Vám veľa športových úspechov.",
+                "Tím <b>" . $request->get('team_name') . "</b> bol úspešne vytvorený! Prajeme Vám veľa športových úspechov.",
                 $team->id
+            );
+
+            //notifikacia pre tim
+            $this->notificationService->createNotificationForUser(
+                "Tím <b>" . $request->get('team_name') . "</b> bol úspešne vytvorený! Prajeme Vám veľa športových úspechov.",
+                $user->id
             );
 
             $this->taskService->runTask($request['task_id']);
@@ -126,9 +131,14 @@ class TeamController extends Controller
         $user->teams()->save($team);
 
         $this->notificationService->createNotificationForUser(
-        "<b>". $user->firstname ."</b> informujeme ťa, že si bol pridaný do tímu <b>".
-        $team->team_name . "</b> Prajeme ti veľa úspechov!",
+            "<b>" . $user->firstname . "</b> informujeme ťa, že si bol pridaný do tímu <b>" .
+            $team->team_name . "</b> Prajeme ti veľa úspechov!",
             $user->id
+        );
+
+        $this->notificationService->createNotificationForTeam(
+            "Do tímu sa pripojil nový člen <b>$user->firstname $user->surname</b>!",
+            $team->id
         );
 
         return response()->json();
@@ -144,20 +154,20 @@ class TeamController extends Controller
             throw new \Exception("Takýto tím neexistuje");
         }
 
-        if ($team->user_id == $user_id){
+        if ($team->user_id == $user_id) {
             $team->disabled = 1;
             $team->save();
 
             //notifikacia pre tim
             $this->notificationService->createNotificationForTeam(
-                "Tím <b>". $team->team_name ."</b> bol zrušený",
+                "Tím <b>" . $team->team_name . "</b> bol zrušený",
                 $team->id
             );
 
             //notifikacia pre uzivatelov v time
             foreach ($team->team_members as $member) {
                 $this->notificationService->createNotificationForUser(
-                    "<b>". $member->firstname ."</b> informujeme ťa, že tím <b>". $team->team_name .
+                    "<b>" . $member->firstname . "</b> informujeme ťa, že tím <b>" . $team->team_name .
                     "</b>, do ktorého si patril, bol zrušený",
                     $member->id
                 );

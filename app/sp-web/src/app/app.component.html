@@ -10,7 +10,10 @@
     <a class="p-2 text-dark" routerLink="event">Podujatia</a>
   </nav>
   <a class="btn btn-outline-primary" *ngIf="!auth.isLogged()" routerLink="login">Prihlásiť</a>
-  <a class="btn btn-outline-primary" *ngIf="auth.isLogged()" (click)="auth.logout()">Odhlásiť</a>
+  <a class="btn btn-primary" *ngIf="auth.isLogged()" (click)="auth.logout()">
+    <i class="fas fa-power-off"></i>
+    {{ auth.userSnapshot.firstname }} {{ auth.userSnapshot.surname }}
+  </a>
 </header>
 
 <div class="container">

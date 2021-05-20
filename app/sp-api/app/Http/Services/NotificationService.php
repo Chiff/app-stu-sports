@@ -63,7 +63,7 @@ class NotificationService
     {
         $ciselnikDto = $this->ciselnikService->getType('ENTITY_TYPE', $entity_type)[0];
 
-        $notifications = Notifications::whereEntityType($ciselnikDto->id)->where('created_at', '>=', Carbon::now()->subDays(7))->get();
+        $notifications = Notifications::whereEntityType($ciselnikDto->id)->where('created_at', '>=', Carbon::now()->subDays(7))->orderBy('created_at', 'desc')->get();
         $my_notif_dto = new MyNotificationsDTO();
         foreach($notifications as $notification) {
 

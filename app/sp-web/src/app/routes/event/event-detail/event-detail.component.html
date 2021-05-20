@@ -287,4 +287,23 @@
     </div>
   </ng-container>
 </ng-container>
+
+<ng-container *ngIf="notifications?.notifications?.length">
+  <h3 class="text-primary mt-4">Notifikácie</h3>
+  <div class="card" style="max-height: 400px; overflow-y: auto">
+    <div class="card-body">
+      <ng-container *ngFor="let n of notifications.notifications">
+        <div class="col-sm-12 d-md-none text-muted fw-bold">
+          <i class="fas fa-bell text-muted me-2"></i>{{ n.created_at | date: 'dd. MMM, HH:mm' }}
+        </div>
+        <div class="col-sm-12 col-md-12">
+          <div class="d-none d-md-inline text-muted fw-bold">
+            <i class="fas fa-bell text-muted me-2"></i>{{ n.created_at | date: 'dd. MMM, HH:mm' }}&nbsp;
+          </div>
+          <span [innerHTML]="n.html_content"></span>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>
 <div class="bottom-spacer mt-4">&nbsp;</div>

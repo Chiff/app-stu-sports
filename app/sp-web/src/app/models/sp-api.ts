@@ -1,4 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { SafeHtml } from '@angular/platform-browser';
 import { TaskReferenceModel } from './generated-swagger';
 
 export interface EventDTO {
@@ -53,6 +54,17 @@ export interface TeamDTO {
   points: number;
   wins: number;
   events_total: number;
+}
+
+export interface MyNotificationsDTO {
+  notifications: NotificationDTO[];
+}
+
+export interface NotificationDTO {
+  entity_id: string;
+  html_content: SafeHtml;
+  entity_type: string;
+  created_at: DateTimeAsString;
 }
 
 export interface UserDTO {

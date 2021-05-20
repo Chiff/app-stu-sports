@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
-import { CustomHttpError, ErrorResponse, TeamDTO } from '../../../models/sp-api';
+import { CustomHttpError, ErrorResponse, MyNotificationsDTO, TeamDTO } from '../../../models/sp-api';
 import { AuthService } from '../../../shared/shared/services/auth.service';
 
 @Component({
@@ -15,6 +15,7 @@ export class TeamDetailComponent {
 
   public team: TeamDTO;
 
+  notifications: MyNotificationsDTO;
   addTeammate: boolean = false;
   newMail: string = '';
   error: string = '';
@@ -28,6 +29,10 @@ export class TeamDetailComponent {
   private getTeamById(id: string): void {
     this.http.get<TeamDTO>(`api/team/${id}`).subscribe((data) => {
       this.team = data;
+    });
+
+    this.http.get<MyNotificationsDTO>(`api/notification/Team/${id}`).subscribe((notif) => {
+      this.notifications = notif;
     });
   }
 

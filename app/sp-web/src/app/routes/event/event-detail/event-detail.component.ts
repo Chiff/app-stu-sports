@@ -5,7 +5,7 @@ import { parseDate } from '@annotation/ng-datepicker';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { zip } from 'rxjs';
 import { NgForm } from '@angular/forms';
-import { CustomHttpError, ErrorResponse, EventDTO, TeamDTO, UserDTO } from '../../../models/sp-api';
+import { CustomHttpError, ErrorResponse, EventDTO, MyNotificationsDTO, TeamDTO, UserDTO } from '../../../models/sp-api';
 import { AuthService } from '../../../shared/shared/services/auth.service';
 import { EventNewComponent } from '../event-new/event-new.component';
 
@@ -41,6 +41,7 @@ export class EventDetailComponent implements OnDestroy {
 
   private refreshInterval: NodeJS.Timeout;
   public isEditing: boolean = false;
+  public notifications: MyNotificationsDTO;
 
   constructor(private http: HttpClient, private route: ActivatedRoute, public auth: AuthService) {
     this.route.params.subscribe((p) => {
@@ -57,6 +58,10 @@ export class EventDetailComponent implements OnDestroy {
     this.refreshInterval = setInterval(() => {
       this.getEventById(id);
     }, 10000);
+
+    this.http.get<MyNotificationsDTO>(`api/notification/Event/${id}`).subscribe((notif) => {
+      this.notifications = notif;
+    });
 
     if (!this.auth?.isLogged()) {
       this.http.get<EventDTO>(`api/event/byid/${id}/guest`).subscribe((data) => {

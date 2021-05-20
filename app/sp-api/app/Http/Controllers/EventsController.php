@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Dto\Event\EventDTO;
 use App\Http\Services\EventService;
+use App\Http\Services\NotificationService;
 use App\Http\Utils\DateUtil;
 use App\Models\Event;
 use App\Models\EventTeam;
@@ -23,11 +24,13 @@ class EventsController extends Controller
 
     // tento kod zaruci ze auth middleware nebude obmedzovat showAllEvents
     private JsonMapper $jsonMapper;
+    private NotificationService $notificationService;
 
-    public function __construct(EventService $event, JsonMapper $jsonMapper, array $attributes = [])
+    public function __construct(EventService $event, JsonMapper $jsonMapper, NotificationService $notificationService, array $attributes = [])
     {
         $this->eventService = $event;
         $this->jsonMapper = $jsonMapper;
+        $this->notificationService = $notificationService;
 
         $this->middleware('auth', ['except' => ['showAllEvents', 'showOneEventByIdUnsecured']]);
     }
@@ -393,6 +396,7 @@ class EventsController extends Controller
         $taskId = request()->get("task_id");
         return app('db')->transaction(function () use ($taskId, $winner_id, $event_teams, $id) {
             EventTeam::where('team_id', $winner_id)->where('event_id', $id)->update(array('is_winner' => true));
+            $event = Event::whereId($id)->first();
 
             foreach ($event_teams as $event_team) {
                 $team = Team::findOrFail($event_team->team_id);
@@ -402,9 +406,18 @@ class EventsController extends Controller
                 if ($team->id == $winner_id) {
                     $team->increment('wins');
 
-                    //notofikacia pri vitazny tim
                     $this->eventService->notificationService->createNotificationForTeam(
-                        "Stali ste sa víťazným tímom na podujatí. Gratulujeme!",
+                        "Stali ste sa víťazným tímom na podujatí <b>$event->name<b> s počtom bodov <b>$event_team->points</b>. Gratulujeme!",
+                        $team->id
+                    );
+
+                    $this->eventService->notificationService->createNotificationForUser(
+                        "Na vašom podujatí <b>$event->name<b> zvíťazil tím <b>$team->team_name</b> s počtom bodov <b>$event_team->points</b>.",
+                        $event->user_id
+                    );
+                } else {
+                    $this->eventService->notificationService->createNotificationForTeam(
+                        "Prehrali ste podujatie <b>$event->name<b> s počtom bodov <b>$event_team->points</b>. Veľa šťastia nabudúce!",
                         $team->id
                     );
                 }
@@ -441,8 +454,14 @@ class EventsController extends Controller
             EventTeam::where('team_id', $team_id)
                 ->where('event_id', $id)
                 ->update(array('points' => ($event_team->points + $points)));
+
+
+            $t = Team::whereId($team_id);
+            $this->notificationService->createNotificationForEvent("Tím <b>$t->team_name</b> získal 1 bod!",$id);
+
             return response()->json('Body úspešne pridané', 200);
         }
+
 
         throw new \Exception("Tím nie je prihlásený na toto podujatie");
     }

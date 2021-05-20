@@ -163,13 +163,18 @@ class EventService
 
             $this->runTask($request->get('task_id'));
 
+            $this->notificationService->createNotificationForEvent(
+                "Podujatie <b>" . $dto->name . "</b> bolo úspešne vytvorené!",
+                $dto->id
+            );
+
+            $this->notificationService->createNotificationForUser(
+                "Podujatie <b>" . $dto->name . "</b> bolo úspešne vytvorené!",
+                $dto->user_id
+            );
+
             $this->jsonMapper->mapObjectFromString($createdEvent, $dto);
         });
-
-        $this->notificationService->createNotificationForEvent(
-            "Podujatie <b>" . $dto->name . "</b> bolo úspešne vytvorené!",
-            $dto->id
-        );
 
         return $dto;
     }
@@ -261,7 +266,7 @@ class EventService
 
             //notifikacia pre event
             $this->notificationService->createNotificationForEvent(
-                "Podujatie bolo aktualizované",
+                "Toto podujatie bolo aktualizované!",
                 $event->id
             );
 
