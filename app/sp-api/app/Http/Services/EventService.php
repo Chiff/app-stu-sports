@@ -169,6 +169,8 @@ class EventService
             $dto->id
         );
 
+        $this->runTask($request['task_id']);
+
         return $dto;
     }
 

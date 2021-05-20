@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\Netgrif\TaskService;
 use App\Http\Services\NotificationService;
 use App\Http\Services\TeamService;
 use App\Models\Event;
@@ -17,15 +18,18 @@ class TeamController extends Controller
 {
     private TeamService $teamService;
     private NotificationService $notificationService;
+    private TaskService $taskService;
 
     public function __construct(
         TeamService $teamService,
-        NotificationService $notificationService
+        NotificationService $notificationService,
+        TaskService $taskService
     )
     {
         $this->middleware('auth');
         $this->teamService = $teamService;
         $this->notificationService = $notificationService;
+        $this->taskService = $taskService;
     }
 
 
@@ -44,19 +48,22 @@ class TeamController extends Controller
         $team_name = $request->get('team_name');
         $exists = Team::whereTeamName($team_name)->first();
 
-        if ($exists) throw new Exception("Tím s rovnakým menom už existuje.");
+        if ($exists) {
+            throw new \Exception("Tím s rovnakým názvom už vlastníš. Zvoľ prosím iný názov tímu.", 403);
+        }
 
         $team = new Team(array('team_name' => $team_name));
         $user->ownTeams()->save($team);
         $team->team_members()->save($user);
 
+        //notifikacia pre tim
         $this->notificationService->createNotificationForTeam(
             "Tím <b>". $team_name ."</b> bol úspešne vytvorený! Prajeme Vám veľa športových úspechov.",
                 $team->id
         );
 
+        $this->taskService->runTask($request['task_id']);
         return response()->json($team, 200);
-
 
     }
 
