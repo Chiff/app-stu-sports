@@ -401,13 +401,25 @@ class EventsController extends Controller
                 $team->increment('events_total');
                 if ($team->id == $winner_id) {
                     $team->increment('wins');
+
+                    //notofikacia pri vitazny tim
+                    $this->notificationService->createNotificationForTeam(
+                        "Stali ste sa víťazným tímom na podujatí. Gratulujeme!",
+                        $team->id
+                    );
                 }
+
                 $team->save();
             }
 
             $event = Event::whereId($id)->first();
             $event->disabled = 1;
             $event->save();
+
+            $this->eventService->notificationService->createNotificationForEvent(
+                "Podujatie sa skončilo.",
+                $event->id
+            );
 
             $this->eventService->runTask($taskId);
             return response()->json('Podujatie bolo úspešne dokončené', 200);

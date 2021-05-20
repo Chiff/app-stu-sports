@@ -114,6 +114,13 @@ class TeamController extends Controller
         }
 
         $user->teams()->save($team);
+
+        $this->notificationService->createNotificationForUser(
+        "<b>". $user->firstname ."</b> informujeme ťa, že si bol pridaný do tímu <b>".
+        $team->team_name . "</b> Prajeme ti veľa úspechov!",
+            $user->id
+        );
+
         return response()->json();
     }
 
@@ -131,14 +138,17 @@ class TeamController extends Controller
             $team->disabled = 1;
             $team->save();
 
+            //notifikacia pre tim
             $this->notificationService->createNotificationForTeam(
                 "Tím <b>". $team->team_name ."</b> bol zrušený",
                 $team->id
             );
 
+            //notifikacia pre uzivatelov v time
             foreach ($team->team_members as $member) {
                 $this->notificationService->createNotificationForUser(
-                    "Tím <b>". $team->team_name ."</b> bol zrušený",
+                    "<b>". $member->firstname ."</b> informujeme ťa, že tím <b>". $team->team_name .
+                    "</b>, do ktorého si patril, bol zrušený",
                     $member->id
                 );
             }

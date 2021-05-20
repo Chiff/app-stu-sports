@@ -49,8 +49,8 @@ class TeamService
             throw new RequestErrorException("not found");
         }
 
-        //TODO :: spravit vypisanie team memberov z timu - v Team classe je na to metoda, len neviem ci nemame napicu db model
-        // napicu db model pojebava aj nieco na styl $teams = Team::whereUserId($user->id)->get();, kedze v db uchovavame len
+        //TODO :: spravit vypisanie team memberov z timu - v Team classe je na to metoda, len neviem ci nemame zly db model
+        // db model dava aj nieco na styl $teams = Team::whereUserId($user->id)->get();, kedze v db uchovavame len
         // ownera a nie ludi v time...
 
 

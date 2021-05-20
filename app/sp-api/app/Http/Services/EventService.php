@@ -251,6 +251,22 @@ class EventService
             $UpdatedEventDTO = $this->mapEventWithOwner($event, $UpdatedEventDTO);
             $this->jsonMapper->mapObjectFromString($event->toJson(), $UpdatedEventDTO);
 
+            //notifikacia pre event
+            $this->notificationService->createNotificationForEvent(
+                "Podujatie bolo aktualizované",
+                $event->id
+            );
+
+            //notifikacia pre prihlasene timy
+            foreach ($event->teams as $team) {
+                $this->notificationService->createNotificationForTeam(
+                    "Podujatie <b>". $event->name .
+                    "</b>, na ktoré je tím <b>". $team->team_name .
+                    "</b> prihlásený, bolo aktualizované.",
+                    $team->id
+                );
+            }
+
             return $UpdatedEventDTO;
         });
     }
