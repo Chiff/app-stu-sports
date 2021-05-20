@@ -223,7 +223,7 @@ class EventService
                 $event->event_start = $dtoRequest->event_start;
                 $event->event_end = $dtoRequest->event_end;
                 $event->description = $dtoRequest->description;
-                $event->type = $this->ciselnikService->getOrCreateCiselnik($dto->type)->id;
+                $event->type = $this->ciselnikService->getOrCreateCiselnik($dtoRequest->type, 'EVENT_TYPE')->id;
 
                 $succ = $event->save();
                 if (!$succ) {
