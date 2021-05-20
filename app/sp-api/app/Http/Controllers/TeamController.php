@@ -39,25 +39,25 @@ class TeamController extends Controller
         ]);
         $team = null;
         $user_id = auth()->id();
-        $user = User::findorfail($user_id);
+        $user = User::whereId($user_id)->first();
 
         $team_name = $request->get('team_name');
+        $exists = Team::whereTeamName($team_name)->first();
 
-        $exist = $user->ownTeams()->where('team_name', $team_name)->get();
-        if (count($exist) < 1) {
-            $team = new Team(array('team_name' => $team_name));
-            $user->ownTeams()->save($team);
-            $team->team_members()->save($user);
+        if ($exists) throw new Exception("Tím s rovnakým menom už existuje.");
 
-            $this->notificationService->createNotificationForTeam(
-                "Tím <b>". $team_name ."</b> bol úspešne vytvorený! Prajeme Vám veľa športových úspechov.",
+        $team = new Team(array('team_name' => $team_name));
+        $user->ownTeams()->save($team);
+        $team->team_members()->save($user);
+
+        $this->notificationService->createNotificationForTeam(
+            "Tím <b>". $team_name ."</b> bol úspešne vytvorený! Prajeme Vám veľa športových úspechov.",
                 $team->id
-            );
+        );
 
-            return response()->json($team, 200);
-        }
+        return response()->json($team, 200);
 
-        throw new Exception("Tím s rovnakým menom už existuje", 304);
+
     }
 
     public function getTeamById(int $id): JsonResponse

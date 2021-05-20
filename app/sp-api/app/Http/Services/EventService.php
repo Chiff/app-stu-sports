@@ -214,15 +214,15 @@ class EventService
 
         if ($dateStartChange < $dt ) throw new \Exception("Podujatie nemožno začať v minulosti");
 
-        return app('db')->transaction(function () use ($dto, $event, $user_id,$request) {
+        return app('db')->transaction(function () use ($dto,$dtoRequest, $event, $user_id,$request) {
             if ($dto->user_id == $user_id){
 
-                $event->name = $dto->name;
-                $event->registration_start = $dto->registration_start;
-                $event->registration_end = $dto->registration_end;
-                $event->event_start = $dto->event_start;
-                $event->event_end = $dto->event_end;
-                $event->description = $dto->description;
+                $event->name = $dtoRequest->name;
+                $event->registration_start = $dtoRequest->registration_start;
+                $event->registration_end = $dtoRequest->registration_end;
+                $event->event_start = $dtoRequest->event_start;
+                $event->event_end = $dtoRequest->event_end;
+                $event->description = $dtoRequest->description;
                 $event->type = $this->ciselnikService->getOrCreateCiselnik($dto->type)->id;
 
                 $succ = $event->save();
@@ -230,17 +230,6 @@ class EventService
                     throw new \Exception("Nepodarilo sa upraviť podujatie");
                 }
 
-                var_dump($event);
-
-//                $event->update([
-//                    'name' => $request->get('name'),
-//                    'registration_start'=> $request->get('registration_start'),
-//                    'registration_end'=> $request->get('registration_end'),
-//                    'event_start' => $request->get('event_start'),
-//                    'event_end'=> $request->get('event_end'),
-//                    'description'=> $request->get('description'),
-//                    'type' => $request->get('type')
-//                ]);
             }
             else throw new \Exception("Nie si vlastníkom podujatia");
 
