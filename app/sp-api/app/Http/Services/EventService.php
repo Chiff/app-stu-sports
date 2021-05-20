@@ -41,6 +41,7 @@ class EventService
     private EventAS $eventAS;
     private UserTeamAS $userTeamAS;
     public NotificationService $notificationService;
+    private CiselnikService $ciselnikService;
 
 
     public function __construct(
@@ -51,6 +52,7 @@ class EventService
         JsonMapper $mapper,
         EventAS $eventAS,
         UserTeamAS $userTeamAS,
+        CiselnikService $ciselnikService,
         NotificationService $notificationService
     )
     {
@@ -62,6 +64,7 @@ class EventService
         $this->eventAS = $eventAS;
         $this->userTeamAS = $userTeamAS;
         $this->notificationService = $notificationService;
+        $this->ciselnikService = $ciselnikService;
     }
 
     public function deleteEvent($id): MessageResource
@@ -213,15 +216,31 @@ class EventService
 
         return app('db')->transaction(function () use ($dto, $event, $user_id,$request) {
             if ($dto->user_id == $user_id){
-                $event->update([
-                    'name' => $request->get('name'),
-                    'registration_start'=> $request->get('registration_start'),
-                    'registration_end'=> $request->get('registration_end'),
-                    'event_start' => $request->get('event_start'),
-                    'event_end'=> $request->get('event_end'),
-                    'description'=> $request->get('description'),
-                    'type' => $request->get('type')
-                ]);
+
+                $event->name = $dto->name;
+                $event->registration_start = $dto->registration_start;
+                $event->registration_end = $dto->registration_end;
+                $event->event_start = $dto->event_start;
+                $event->event_end = $dto->event_end;
+                $event->description = $dto->description;
+                $event->type = $this->ciselnikService->getOrCreateCiselnik($dto->type)->id;
+
+                $succ = $event->save();
+                if (!$succ) {
+                    throw new \Exception("Nepodarilo sa upraviť podujatie");
+                }
+
+                var_dump($event);
+
+//                $event->update([
+//                    'name' => $request->get('name'),
+//                    'registration_start'=> $request->get('registration_start'),
+//                    'registration_end'=> $request->get('registration_end'),
+//                    'event_start' => $request->get('event_start'),
+//                    'event_end'=> $request->get('event_end'),
+//                    'description'=> $request->get('description'),
+//                    'type' => $request->get('type')
+//                ]);
             }
             else throw new \Exception("Nie si vlastníkom podujatia");
 

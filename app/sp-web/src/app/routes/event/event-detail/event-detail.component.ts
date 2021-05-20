@@ -291,16 +291,16 @@ export class EventDetailComponent implements OnDestroy {
       return;
     }
 
-    this.eventNewComponent.error = 'update not implemented!!!';
-    // this.http.post('api/event/create', this.event).subscribe({
-    //   next: (event: EventDTO) => {
-    //     this.isEditing = false;
-    //     this.getEventById(event.id);
-    //   },
-    //   error: (err: CustomHttpError<ErrorResponse>) => {
-    //     this.eventNewComponent.error = err.error.error.message;
-    //   },
-    // });
+    // this.eventNewComponent.error = 'update not implemented!!!';
+    this.http.put(`api/event/${this.event.id}`, this.event).subscribe({
+      next: (event: EventDTO) => {
+        this.isEditing = false;
+        this.getEventById(event.id);
+      },
+      error: (err: CustomHttpError<ErrorResponse>) => {
+        this.eventNewComponent.error = err.error.error.message;
+      },
+    });
   }
 
   cancelEdit() {

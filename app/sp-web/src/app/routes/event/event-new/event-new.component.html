@@ -123,6 +123,7 @@
               name="event.min_teams"
               [required]="true"
               [(ngModel)]="event.min_teams"
+              [disabled]="isPopup"
               [min]="1"
             />
           </div>
@@ -135,6 +136,7 @@
               name="event.max_teams"
               [required]="true"
               [(ngModel)]="event.max_teams"
+              [disabled]="isPopup"
               [min]="event.min_teams"
             />
           </div>
@@ -147,6 +149,7 @@
               name="event.min_team_members"
               [required]="true"
               [(ngModel)]="event.min_team_members"
+              [disabled]="isPopup"
               [min]="1"
             />
           </div>
@@ -159,6 +162,7 @@
               name="event.max_team_members"
               [required]="true"
               [(ngModel)]="event.max_team_members"
+              [disabled]="isPopup"
               [min]="event.min_team_members"
             />
           </div>
