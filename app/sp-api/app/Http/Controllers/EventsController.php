@@ -204,6 +204,17 @@ class EventsController extends Controller
             }
 
             $this->eventService->runTask($taskId);
+
+            $this->eventService->notificationService->createNotificationForEvent(
+                "Tím <b>". $team->team_name ."</b> sa prihlásil na podujatie.",
+                $event->id
+            );
+
+            $this->eventService->notificationService->createNotificationForTeam(
+                "Váš tím bol prihlásený na podujatie <b>". $event->name ."</b>. Držíme Vám palce!",
+                $team->id
+            );
+
             return response()->json('Done');
         });
     }
@@ -268,6 +279,26 @@ class EventsController extends Controller
                 $event->update();
 
                 $this->eventService->runTask($taskId);
+
+                //oznamenie pre podujatie
+                $this->eventService->notificationService->createNotificationForEvent(
+                    "Podujatie <b>". $event->name ."</b> bolo zrušené.",
+                    $event->id
+                );
+
+                //oznamenie vsetkym prihlasenym timom
+                foreach ($event->teams as $team) {
+                    $this->eventService->notificationService->createNotificationForTeam(
+                        "Podujatie s názvom <b>". $event->name ."</b>, na ktoré bol tím ". $team->team_name ." prihlásený, bolo práve zrušené.",
+                        $team->id
+                    );
+                }
+                // oznamenie vlastnikovi
+                $this->eventService->notificationService->createNotificationForUser(
+                    "Tvoje podujatie <b>". $event->name ."</b> bolo zrušené!",
+                    $user_id
+                );
+
                 return response()->json('Podujatie bolo zrušené', 200);
             }
 
@@ -300,21 +331,35 @@ class EventsController extends Controller
         }
 
         $taskId = request()->get("task_id");
-        return app('db')->transaction(function () use ($taskId, $event, $user_id, $team_id) {
+        return app('db')->transaction(function () use ($taskId, $event, $user_id, $team) {
             // ak je prihlaseny user vlastnikom eventu, moze odhlasit team
             if ($event->user_id == $user_id) {
-                $event->teams()->detach($team_id);
+                $event->teams()->detach($team->id);
                 $this->eventService->runTask($taskId);
+
+                //notifikacia pre odhlaseny tim
+                $this->eventService->notificationService->createNotificationForTeam(
+                    "Tím bol odhlásený z podujatia <b>". $event->name ."</b>.",
+                    $team->id
+                );
+
+                //notifikacia pre event
+                $this->eventService->notificationService->createNotificationForEvent(
+                    "Tím <b>". $team->team_name ."</b> sa odhlásil z podujatia.",
+                    $event->id
+                );
+
+
                 return response()->json('Tím bol úspešne odhlásený z podujatia vlastníkom podujatia', 200);
             }
 
             // teamy na evente, kde je user kapitan
             $teams_on_event_owned_by_user = $event->teams->where('user_id', $user_id);
 
-            $exists = $teams_on_event_owned_by_user->where('id', $team_id);
+            $exists = $teams_on_event_owned_by_user->where('id', $team->id);
 
             if (sizeof($exists) > 0) {
-                $event->teams()->detach($team_id);
+                $event->teams()->detach($team->id);
                 $this->eventService->runTask($taskId);
                 return response()->json('Tím bol úspešne odhlásený z podujatia kapitánom tímu', 200);
             }
@@ -352,6 +397,7 @@ class EventsController extends Controller
             foreach ($event_teams as $event_team) {
                 $team = Team::findOrFail($event_team->team_id);
                 $team->increment('points', $event_team->points);
+
                 $team->increment('events_total');
                 if ($team->id == $winner_id) {
                     $team->increment('wins');

@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\NotificationService;
 use App\Http\Services\TeamService;
 use App\Models\Event;
 use App\Models\Team;
@@ -15,11 +16,16 @@ use Laravel\Lumen\Routing\Controller;
 class TeamController extends Controller
 {
     private TeamService $teamService;
+    private NotificationService $notificationService;
 
-    public function __construct(TeamService $teamService)
+    public function __construct(
+        TeamService $teamService,
+        NotificationService $notificationService
+    )
     {
         $this->middleware('auth');
         $this->teamService = $teamService;
+        $this->notificationService = $notificationService;
     }
 
 
@@ -42,6 +48,12 @@ class TeamController extends Controller
             $team = new Team(array('team_name' => $team_name));
             $user->ownTeams()->save($team);
             $team->team_members()->save($user);
+
+            $this->notificationService->createNotificationForTeam(
+                "Tím <b>". $team_name ."</b> bol úspešne vytvorený! Prajeme Vám veľa športových úspechov.",
+                $team->id
+            );
+
             return response()->json($team, 200);
         }
 
@@ -118,6 +130,19 @@ class TeamController extends Controller
         if ($team->user_id == $user_id){
             $team->disabled = 1;
             $team->save();
+
+            $this->notificationService->createNotificationForTeam(
+                "Tím <b>". $team->team_name ."</b> bol zrušený",
+                $team->id
+            );
+
+            foreach ($team->team_members as $member) {
+                $this->notificationService->createNotificationForUser(
+                    "Tím <b>". $team->team_name ."</b> bol zrušený",
+                    $member->id
+                );
+            }
+
             return response()->json('Tím vymazaný', 200);
         }
 

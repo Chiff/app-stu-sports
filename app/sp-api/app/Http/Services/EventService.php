@@ -40,6 +40,7 @@ class EventService
     private TaskService $taskService;
     private EventAS $eventAS;
     private UserTeamAS $userTeamAS;
+    public NotificationService $notificationService;
 
 
     public function __construct(
@@ -50,6 +51,7 @@ class EventService
         JsonMapper $mapper,
         EventAS $eventAS,
         UserTeamAS $userTeamAS,
+        NotificationService $notificationService
     )
     {
         $this->jsonMapper = $mapper;
@@ -59,6 +61,7 @@ class EventService
         $this->taskService = $taskService;
         $this->eventAS = $eventAS;
         $this->userTeamAS = $userTeamAS;
+        $this->notificationService = $notificationService;
     }
 
     public function deleteEvent($id): MessageResource
@@ -158,6 +161,11 @@ class EventService
 
             $this->jsonMapper->mapObjectFromString($createdEvent, $dto);
         });
+
+        $this->notificationService->createNotificationForEvent(
+            "Podujatie <b>". $dto->name ."</b> bolo úspešne vytvorené!",
+            $dto->id
+        );
 
         return $dto;
     }
