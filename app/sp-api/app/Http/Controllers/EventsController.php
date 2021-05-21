@@ -170,6 +170,18 @@ class EventsController extends Controller
                     if ($event->max_teams > sizeof($event->teams()->get())) {
                         $event->teams()->save($team);
                         $this->eventService->runTask($taskId);
+
+
+                        $this->eventService->notificationService->createNotificationForEvent(
+                            "Tím <b>". $team->team_name ."</b> sa prihlásil na podujatie.",
+                            $event->id
+                        );
+
+                        $this->eventService->notificationService->createNotificationForTeam(
+                            "Váš tím bol prihlásený na podujatie <b>". $event->name ."</b>. Držíme Vám palce!",
+                            $team->id
+                        );
+
                         return response()->json('Done', 200);
                     } else throw new \Exception("Kapacita udalosti je už naplnená");
 
@@ -431,17 +443,17 @@ class EventsController extends Controller
                     $team->increment('wins');
 
                     $this->eventService->notificationService->createNotificationForTeam(
-                        "Stali ste sa víťazným tímom na podujatí <b>$event->name<b> s počtom bodov <b>$event_team->points</b>. Gratulujeme!",
+                        "Stali ste sa víťazným tímom na podujatí <b>$event->name</b> s počtom bodov <b>$event_team->points</b>. Gratulujeme!",
                         $team->id
                     );
 
                     $this->eventService->notificationService->createNotificationForUser(
-                        "Na vašom podujatí <b>$event->name<b> zvíťazil tím <b>$team->team_name</b> s počtom bodov <b>$event_team->points</b>.",
+                        "Na vašom podujatí <b>$event->name</b> zvíťazil tím <b>$team->team_name</b> s počtom bodov <b>$event_team->points</b>.",
                         $event->user_id
                     );
                 } else {
                     $this->eventService->notificationService->createNotificationForTeam(
-                        "Prehrali ste podujatie <b>$event->name<b> s počtom bodov <b>$event_team->points</b>. Veľa šťastia nabudúce!",
+                        "Prehrali ste podujatie <b>$event->name</b> s počtom bodov <b>$event_team->points</b>. Veľa šťastia nabudúce!",
                         $team->id
                     );
                 }
@@ -480,7 +492,7 @@ class EventsController extends Controller
                 ->update(array('points' => ($event_team->points + $points)));
 
 
-            $t = Team::whereId($team_id);
+            $t = Team::whereId($team_id)->first();
             $this->notificationService->createNotificationForEvent("Tím <b>$t->team_name</b> získal 1 bod!",$id);
 
             return response()->json('Body úspešne pridané', 200);

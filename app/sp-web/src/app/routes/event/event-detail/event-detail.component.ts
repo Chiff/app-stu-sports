@@ -153,7 +153,11 @@ export class EventDetailComponent implements OnDestroy {
   }
 
   public isOnAnyTeam(): boolean {
-    return !this.event.teams_on_event.some((t) => t.users.some((u) => this.user?.id === u.id));
+    if (!this?.event?.teams_on_event?.length) {
+      return false;
+    }
+
+    return this.event.teams_on_event.some((t) => t.users.some((u) => this.user?.id === u.id));
   }
 
   public hasAction(action: Actions): boolean {

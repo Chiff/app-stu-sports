@@ -16,6 +16,7 @@
               <tr>
                 <th width="1"></th>
                 <th>Názov</th>
+                <th>Typ</th>
                 <th>Začiatok</th>
                 <th>Koniec</th>
               </tr>
@@ -29,6 +30,7 @@
                   ></a>
                 </td>
                 <td>{{ e.name }}</td>
+                <td>{{ e.type?.label || '-' }}</td>
                 <td>{{ e.event_start | date }}</td>
                 <td>{{ e.event_end | date }}</td>
               </tr>
@@ -55,6 +57,7 @@
               <tr>
                 <th width="1"></th>
                 <th>Názov</th>
+                <th>Typ</th>
                 <th>Začiatok</th>
                 <th>Koniec</th>
               </tr>
@@ -68,6 +71,7 @@
                   ></a>
                 </td>
                 <td>{{ e.name }}</td>
+                <td>{{ e.type?.label || '-' }}</td>
                 <td>{{ e.event_start | date }}</td>
                 <td>{{ e.event_end | date }}</td>
               </tr>
@@ -116,6 +120,7 @@
                 <th width="1"></th>
                 <th>Názov</th>
                 <th>Zakladateľ</th>
+                <th>Počet členov</th>
               </tr>
             </thead>
             <tbody>
@@ -136,6 +141,7 @@
                   {{ e.team_name }}
                 </td>
                 <td>{{ e.owner?.firstname }} {{ e.owner?.surname }}</td>
+                <td>{{ e.users?.length }}</td>
               </tr>
             </tbody>
           </table>
@@ -170,6 +176,7 @@
               <tr>
                 <th width="1"></th>
                 <th>Názov</th>
+                <th>Typ</th>
                 <th>Začiatok</th>
                 <th>Koniec</th>
               </tr>
@@ -183,6 +190,7 @@
                   ></a>
                 </td>
                 <td>{{ e.name }}</td>
+                <td>{{ e.type?.label || '-' }}</td>
                 <td>{{ e.event_start | date }}</td>
                 <td>{{ e.event_end | date }}</td>
               </tr>

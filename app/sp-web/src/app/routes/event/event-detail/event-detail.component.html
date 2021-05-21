@@ -208,7 +208,7 @@
             </div>
           </div>
 
-          <div class="form-group form-group-spaced mt-2" *ngIf="availibleTeams?.length">
+          <div class="form-group form-group-spaced mt-2" *ngIf="this.hasAction('addTeam') && !isOnAnyTeam()">
             <button class="btn btn-primary" type="button" (click)="add()">Prihlásiť na podujatie</button>
           </div>
         </form>

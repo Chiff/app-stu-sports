@@ -15,6 +15,7 @@
           <tr>
             <th width="1"></th>
             <th>Názov podujatia</th>
+            <th>Typ podujatia</th>
             <th>Registrácia</th>
             <th>Začiatok</th>
             <th>Koniec</th>
@@ -32,7 +33,8 @@
                 ><i class="fas fa-search text-primary"></i
               ></a>
             </td>
-            <td>{{ e.name }}</td>
+            <td class="text-nowrap">{{ e.name }}</td>
+            <td class="text-nowrap">{{ e.type?.label || '-' }}</td>
             <td class="text-nowrap">{{ e.registration_start | date }} - {{ e.registration_end | date }}</td>
             <td class="text-nowrap">{{ e.event_start | date: 'short' }}</td>
             <td class="text-nowrap">{{ e.event_end | date: 'short' }}</td>
