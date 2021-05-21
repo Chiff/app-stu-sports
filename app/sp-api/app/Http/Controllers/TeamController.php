@@ -120,12 +120,12 @@ class TeamController extends Controller
 
         $user = User::whereEmail($userEmail)->first();
         if (!$user) {
-            throw new \Exception("Užívateľ nebol nájdený");
+            throw new \Exception("Používateľ nebol nájdený");
         }
 
         $hasEvent = $user->teams()->get()->contains('id', '=', $team->id);
         if ($hasEvent) {
-            throw new \Exception("Užívateľ už sa nachádza v tomto tíme");
+            throw new \Exception("Používateľ už sa nachádza v tomto tíme");
         }
 
         $user->teams()->save($team);

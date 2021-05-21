@@ -158,7 +158,7 @@
     *ngIf="!addTeammate && !team?.disabled && team?.owner?.id === auth?.userSnapshot?.id && !isSpecial()"
     (click)="addTeammate = true"
   >
-    Pridať užívateľa
+    Pridať používateľa
   </button>
   <button class="btn btn-outline-primary" *ngIf="addTeammate" (click)="addTeammate = false">Zrušiť</button>
 </h3>
