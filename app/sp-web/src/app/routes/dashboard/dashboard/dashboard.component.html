@@ -4,7 +4,7 @@
       <h2 class="text-primary d-flex justify-content-between">
         Podujatia kde som prihlásený
 
-        <a routerLink="/event/list"><i class="fas fa-search"></i></a>
+        <a routerLink="/event/list" aria-label="Zoznam podujatí"><i class="fas fa-search"></i></a>
       </h2>
       <div class="card">
         <div class="card-body" [ngClass]="{ 'p-0': myEvents?.upcoming?.length }">
@@ -25,7 +25,10 @@
               <tr *ngFor="let e of myEvents.upcoming">
                 <td>
                   <i class="fas fa-search text-muted" *ngIf="!auth.canDoAction('detailPodujatia')"></i>
-                  <a routerLink="/event/detail/{{ e.id }}" *ngIf="auth.canDoAction('detailPodujatia')"
+                  <a
+                    routerLink="/event/detail/{{ e.id }}"
+                    aria-label="Detail podujatia"
+                    *ngIf="auth.canDoAction('detailPodujatia')"
                     ><i class="fas fa-search text-primary"></i
                   ></a>
                 </td>
@@ -66,7 +69,10 @@
               <tr *ngFor="let e of myEvents.owned">
                 <td>
                   <i class="fas fa-search text-muted" *ngIf="!auth.canDoAction('detailPodujatia')"></i>
-                  <a routerLink="/event/detail/{{ e.id }}" *ngIf="auth.canDoAction('detailPodujatia')"
+                  <a
+                    routerLink="/event/detail/{{ e.id }}"
+                    aria-label="Detail podujatia"
+                    *ngIf="auth.canDoAction('detailPodujatia')"
                     ><i class="fas fa-search text-primary"></i
                   ></a>
                 </td>
@@ -127,7 +133,7 @@
               <tr *ngFor="let e of user.teams">
                 <td>
                   <i class="fas fa-search text-muted" *ngIf="!auth.canDoAction('detailTimu')"></i>
-                  <a routerLink="/team/detail/{{ e.id }}" *ngIf="auth.canDoAction('detailTimu')"
+                  <a routerLink="/team/detail/{{ e.id }}" aria-label="Detail podujatia" *ngIf="auth.canDoAction('detailTimu')"
                     ><i class="fas fa-search text-primary"></i
                   ></a>
                 </td>
@@ -185,7 +191,10 @@
               <tr *ngFor="let e of myEvents.ended">
                 <td>
                   <i class="fas fa-search text-muted" *ngIf="!auth.canDoAction('detailPodujatia')"></i>
-                  <a routerLink="/event/detail/{{ e.id }}" *ngIf="auth.canDoAction('detailPodujatia')"
+                  <a
+                    routerLink="/event/detail/{{ e.id }}"
+                    aria-label="Detail podujatia"
+                    *ngIf="auth.canDoAction('detailPodujatia')"
                     ><i class="fas fa-search text-primary"></i
                   ></a>
                 </td>

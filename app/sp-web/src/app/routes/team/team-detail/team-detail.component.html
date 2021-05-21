@@ -53,7 +53,9 @@
         <tbody>
           <tr *ngFor="let e of team?.active_events">
             <td>
-              <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
+              <a routerLink="/event/detail/{{ e.id }}" aria-label="Detail podujatia"
+                ><i class="fas fa-search text-primary"></i
+              ></a>
             </td>
             <td>{{ e.name }}</td>
             <td>{{ e.type?.label || '-' }}</td>
@@ -121,7 +123,7 @@
       <tbody>
         <tr *ngFor="let e of team?.future_events">
           <td>
-            <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
+            <a routerLink="/event/detail/{{ e.id }}" aria-label="Detail podujatia"><i class="fas fa-search text-primary"></i></a>
           </td>
           <td>{{ e.name }}</td>
           <td>{{ e.type?.label || '-' }}</td>
@@ -220,7 +222,7 @@
       <tbody>
         <tr *ngFor="let e of team?.ended_events">
           <td>
-            <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
+            <a routerLink="/event/detail/{{ e.id }}" aria-label="Detail podujatia"><i class="fas fa-search text-primary"></i></a>
           </td>
           <td>{{ e.name }}</td>
           <td>{{ e.type?.label || '-' }}</td>

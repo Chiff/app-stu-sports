@@ -25,7 +25,9 @@
         <tbody>
           <tr *ngFor="let e of activeEvents">
             <td *ngIf="!auth.isLogged()">
-              <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
+              <a routerLink="/event/detail/{{ e.id }}" aria-label="Detail podujatia"
+                ><i class="fas fa-search text-primary"></i
+              ></a>
             </td>
             <td *ngIf="auth.isLogged()">
               <i class="fas fa-search text-muted" *ngIf="!auth.canDoAction('detailPodujatia')"></i>

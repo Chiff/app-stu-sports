@@ -33,7 +33,6 @@ export class TeamNewComponent {
     this.team['task_id'] = this.auth.getTaskId('vytvoritTim');
     this.http.post<TeamDTO>('api/team/create', this.team).subscribe({
       next: (team) => {
-        console.warn(team);
         this.router.navigate([`/team/detail/${team.id}`]);
       },
       error: (err: CustomHttpError<ErrorResponse>) => {

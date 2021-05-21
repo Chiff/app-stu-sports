@@ -39,8 +39,6 @@ export class AuthGuard implements CanActivate {
     //     AccountPermissionEnum.APP_EDIT
     //   ]);
 
-    console.warn(`denied [${path}]`, this.auth.userSnapshot);
-
     // TODO: docasne vsetko povolit
     if (new RegExp('^/').test(path)) return true;
     return false;
