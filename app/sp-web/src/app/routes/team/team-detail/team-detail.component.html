@@ -8,7 +8,7 @@
   členom. Takýto tým nie je možné upravovať.
 </div>
 
-<h1 class="text-primary d-flex justify-content-between my-4">
+<h1 class="text-primary align-items-center d-flex justify-content-between my-4">
   Detail tímu
 
   <span class="text-end" *ngIf="team && auth.isLogged() && !team.disabled && !isSpecial()">
@@ -155,7 +155,7 @@
 
   <button
     class="btn btn-primary"
-    *ngIf="!addTeammate && !team?.disabled && team.owner.id === auth?.userSnapshot?.id && !isSpecial()"
+    *ngIf="!addTeammate && !team?.disabled && team?.owner?.id === auth?.userSnapshot?.id && !isSpecial()"
     (click)="addTeammate = true"
   >
     Pridať užívateľa

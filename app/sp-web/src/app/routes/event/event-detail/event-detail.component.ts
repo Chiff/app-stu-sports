@@ -34,6 +34,7 @@ export class EventDetailComponent implements OnDestroy {
   public availibleTeams: TeamDTO[] = [];
 
   public event: EventDTO;
+  public editingEvent: EventDTO;
 
   public addTeam: boolean = false;
   public teamId: string = null;
@@ -292,6 +293,7 @@ export class EventDetailComponent implements OnDestroy {
   editEvent() {
     clearInterval(this.refreshInterval);
     this.isEditing = true;
+    this.editingEvent = JSON.parse(JSON.stringify(this.event)) as EventDTO;
   }
 
   sendEditedEvent(): void {
@@ -307,9 +309,10 @@ export class EventDetailComponent implements OnDestroy {
     }
 
     // this.eventNewComponent.error = 'update not implemented!!!';
-    this.http.put(`api/event/${this.event.id}`, this.event).subscribe({
+    this.http.put(`api/event/${this.event.id}`, this.editingEvent).subscribe({
       next: (event: EventDTO) => {
         this.isEditing = false;
+        this.editingEvent = null;
         this.getEventById(event.id);
       },
       error: (err: CustomHttpError<ErrorResponse>) => {
