@@ -48,7 +48,7 @@ class TeamController extends Controller
         $exists = Team::whereTeamName($team_name)->first();
 
         if ($exists) {
-            throw new \Exception("Tím s rovnakým názvom už vlastníš. Zvoľ prosím iný názov tímu.", 403);
+            throw new \Exception("Tím s rovnakým názvom už existuje. Zvoľ prosím iný názov tímu.", 403);
         }
 
         return app('db')->transaction(function () use ($team, $request, $user) {
