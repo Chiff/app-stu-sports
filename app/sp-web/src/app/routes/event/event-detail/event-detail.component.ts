@@ -152,12 +152,12 @@ export class EventDetailComponent implements OnDestroy {
     return +now < +cmp;
   }
 
+  public isOnAnyTeam(): boolean {
+    return !this.event.teams_on_event.some((t) => t.users.some((u) => this.user?.id === u.id));
+  }
+
   public hasAction(action: Actions): boolean {
     const a = this.EVT_ACTIONS[action];
-
-    if (this.event.teams_on_event.some((t) => t.users.some((u) => this.user?.id === u.id))) {
-      return false;
-    }
 
     if (!this.event?.available_transitions?.taskReference?.length || !a) return false;
     return !!this.event.available_transitions.taskReference.find((e) => e.transitionId === a);
