@@ -360,12 +360,36 @@ class EventsController extends Controller
             $teams_on_event_owned_by_user = $event->teams->where('user_id', $user_id);
 
             $exists = $teams_on_event_owned_by_user->where('id', $team->id);
-
             if (sizeof($exists) > 0) {
                 $event->teams()->detach($team->id);
                 $this->eventService->runTask($taskId);
+
+                //notifikacia pre odhlaseny tim
+                $this->eventService->notificationService->createNotificationForTeam(
+                    "Tím bol odhlásený z podujatia <b>". $event->name ."</b>.",
+                    $team->id
+                );
+
+                //notifikacia pre event
+                $this->eventService->notificationService->createNotificationForEvent(
+                    "Tím <b>". $team->team_name ."</b> sa odhlásil z podujatia.",
+                    $event->id
+                );
+
                 return response()->json('Tím bol úspešne odhlásený z podujatia kapitánom tímu', 200);
             }
+
+            //notifikacia pre odhlaseny tim
+            $this->eventService->notificationService->createNotificationForTeam(
+                "Tím bol odhlásený z podujatia <b>". $event->name ."</b>.",
+                $team->id
+            );
+
+            //notifikacia pre event
+            $this->eventService->notificationService->createNotificationForEvent(
+                "Tím <b>". $team->team_name ."</b> sa odhlásil z podujatia.",
+                $event->id
+            );
 
             $this->eventService->runTask($taskId);
             return response()->json('Done');
