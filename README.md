@@ -9,3 +9,4 @@ Cielom tímového projektu je vytvoriť informačný systém pre správu športo
 ---
 * Zadávateľ tímového projektu: Martin Kranec, martin.kranec@stuba.sk
 * Web: [stu-sports.online](stu-sports.online)
+* App: [app.stu-sports.online](stu-sports.online)
