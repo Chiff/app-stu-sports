@@ -9,35 +9,38 @@
 
 <div class="card" *ngIf="activeEvents?.length">
   <div class="card-body p-0">
-    <table class="table table-bordered table-border-none mb-0">
-      <thead>
-        <tr>
-          <th width="1"></th>
-          <th>Názov podujatia</th>
-          <th>Registrácia</th>
-          <th>Začiatok</th>
-          <th>Koniec</th>
-          <th>Vytvoril</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let e of activeEvents">
-          <td *ngIf="!auth.isLogged()">
-            <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
-          </td>
-          <td *ngIf="auth.isLogged()">
-            <i class="fas fa-search text-muted" *ngIf="!auth.canDoAction('detailPodujatia')"></i>
-            <a routerLink="/event/detail/{{ e.id }}" *ngIf="auth.canDoAction('detailPodujatia')"
-              ><i class="fas fa-search text-primary"></i
-            ></a>
-          </td>
-          <td>{{ e.name }}</td>
-          <td>{{ e.registration_start | date }} - {{ e.registration_end | date }}</td>
-          <td>{{ e.event_start | date: 'short' }}</td>
-          <td>{{ e.event_end | date: 'short' }}</td>
-          <td class="text-capitalize">{{ e.owner?.firstname }} {{ e.owner.surname }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table class="table table-bordered table-border-none mb-0">
+        <thead>
+          <tr>
+            <th width="1"></th>
+            <th>Názov podujatia</th>
+            <th>Registrácia</th>
+            <th>Začiatok</th>
+            <th>Koniec</th>
+            <th>Vytvoril</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let e of activeEvents">
+            <td *ngIf="!auth.isLogged()">
+              <a routerLink="/event/detail/{{ e.id }}"><i class="fas fa-search text-primary"></i></a>
+            </td>
+            <td *ngIf="auth.isLogged()">
+              <i class="fas fa-search text-muted" *ngIf="!auth.canDoAction('detailPodujatia')"></i>
+              <a routerLink="/event/detail/{{ e.id }}" *ngIf="auth.canDoAction('detailPodujatia')"
+                ><i class="fas fa-search text-primary"></i
+              ></a>
+            </td>
+            <td>{{ e.name }}</td>
+            <td class="text-nowrap">{{ e.registration_start | date }} - {{ e.registration_end | date }}</td>
+            <td class="text-nowrap">{{ e.event_start | date: 'short' }}</td>
+            <td class="text-nowrap">{{ e.event_end | date: 'short' }}</td>
+            <td class="text-nowrap text-capitalize">{{ e.owner?.firstname }} {{ e.owner.surname }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
+<div class="bottom-spacer mt-4">&nbsp;</div>

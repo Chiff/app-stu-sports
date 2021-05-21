@@ -1,9 +1,9 @@
 <!--https://editor.freelogodesign.org/?category=34&companyName=SP-->
-<header class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-body border-bottom shadow-sm">
+<header class="d-flex flex-row align-items-center p-3 px-md-4 mb-3 bg-body border-bottom shadow-sm justify-content-between">
   <p class="h5 my-0 me-md-auto fw-normal">
     <img src="/assets/sports.svg" style="height: 50px" />
     &nbsp;
-    <span class="text-primary fw-bold">SP</span>
+    <span class="text-primary fw-bold d-none d-md-inline">SP</span>
   </p>
   <nav class="my-2 my-md-0 me-md-3">
     <a class="p-2 text-dark" routerLink="dashboard" *ngIf="auth.isLogged()">Dashboard</a>
@@ -12,7 +12,7 @@
   <a class="btn btn-outline-primary" *ngIf="!auth.isLogged()" routerLink="login">Prihlásiť</a>
   <a class="btn btn-primary" *ngIf="auth.isLogged()" (click)="auth.logout()">
     <i class="fas fa-power-off"></i>
-    {{ auth.userSnapshot.firstname }} {{ auth.userSnapshot.surname }}
+    <span class="d-none d-md-inline"> {{ auth.userSnapshot.firstname }} {{ auth.userSnapshot.surname }}</span>
   </a>
 </header>
 
